@@ -1,0 +1,28 @@
+CREATE TABLE adjuster_references (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    adjuster_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    contact_info VARCHAR(255) NOT NULL,
+    relationship VARCHAR(100),
+    notes TEXT,
+    FOREIGN KEY (adjuster_id) REFERENCES adjusters(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE adjuster_documents (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    adjuster_id BIGINT UNSIGNED NOT NULL,
+    doc_type ENUM('Resume','W-9','Background Check','Drug Screen','Proof of Insurance','COI','Other') NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (adjuster_id) REFERENCES adjusters(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE compliance_packets (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    adjuster_id BIGINT UNSIGNED NOT NULL,
+    packet_file VARCHAR(255) NOT NULL,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (adjuster_id) REFERENCES adjusters(id) ON DELETE CASCADE
+);
