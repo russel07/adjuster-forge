@@ -1,0 +1,170 @@
+.driver-forge-profile-login {
+    .login-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #dcdcdc;
+        border-radius: 4px;
+        background-color: #fff;
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 100px;
+        }
+
+        .register-link {
+            margin-top: 10px;
+            color: #60BBAC;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            color: #60BBAC;
+            cursor: pointer;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .el-form-item--label-top {
+            .el-form-item__label {
+                font-size: 16px;
+                color: #001324;
+            }
+        }
+
+        .el-form-item__content {
+
+            .el-input {
+                border: none;
+
+                .el-input__wrapper {
+                    padding: 0;
+
+                    .el-input__inner {
+                        height: 50px;
+                        border: 1px solid #BFC4C8;
+                        border-radius: 4px;
+
+                        &:focus {
+                            border-color: #60BBAC;
+                        }
+                    }
+                }
+            }
+        }
+
+        .login-button {
+            color: #fff;
+            background: #2E6668;
+            border: none;
+            padding: 20px 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+
+            &:hover {
+                background: #60BBAC;
+            }
+
+        }
+    }
+}
+
+.driver-forge-profile-register {
+    .register-form {
+        .form-section-header{
+            h1{
+                font-size: 32px;
+            }
+            p{
+                font-size: 16px;
+                color: #001324;
+            }
+        }
+        .login-link {
+            color: #60BBAC;
+            text-decoration: none;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .terms-conditions {
+            color: #60BBAC;
+            text-decoration: none;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .el-form-item--label-top {
+            .el-form-item__label {
+                font-size: 16px;
+                color: #001324;
+            }
+        }
+       
+        .el-form-item__content {
+
+            .el-input {
+                border: none;
+
+                .el-input__wrapper {
+                    padding: 0;
+
+                    .el-input__inner {
+                        height: 50px;
+                        border: 1px solid #BFC4C8;
+                        border-radius: 4px;
+
+                        &:focus {
+                            border-color: #60BBAC;
+                        }
+                    }
+
+                }
+            }
+
+            .el-select {
+                border: none;
+
+                .el-select__wrapper {
+                    height: 50px;
+
+                    &:focus {
+                        border-color: #60BBAC;
+                    }
+                }
+            }
+        }
+
+        .register-button {
+            color: #fff;
+            background: #60BBAC;
+
+            border: none;
+            padding: 20px 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+
+            &:hover {
+                background: #2E6668;
+            }
+
+        }
+
+    }
+
+}

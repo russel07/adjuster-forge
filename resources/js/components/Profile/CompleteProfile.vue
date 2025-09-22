@@ -1,0 +1,90 @@
+<template>
+  <div class="common-layout">
+    <el-container class="full-height">
+      <el-main class="main-center">
+        <Menu />
+        <div class="dashboard-container">
+          <DriverProfileSection
+            v-if="user_type === 'driver'"
+            :t_c_page_url="t_c_page_url"
+            :loading="loading"
+            @submit-profile="submitProfile"
+          />
+          <CompanyProfileSection
+            v-else-if="user_type === 'company'"
+            :t_c_page_url="t_c_page_url"
+            :loading="loading"
+            @submit-profile="submitProfile"
+          />
+        </div>
+      </el-main>
+    </el-container>
+  </div>
+</template>
+
+<script>
+import Menu from './Menu.vue';
+import DriverProfileSection from './DriverProfileSection.vue';
+import CompanyProfileSection from './CompanyProfileSection.vue';
+import { useRouter } from 'vue-router';
+import { useAppHelper } from '../../Composable/appHelper';
+import AlertMessage from '../../Composable/AlertMessage';
+import { loader } from '../../Composable/Loader';
+import { ref } from 'vue';
+
+export default {
+  name: 'CompleteProfile',
+  components: {
+    Menu,
+    DriverProfileSection,
+    CompanyProfileSection
+  },
+  setup() {
+    const router = useRouter();
+    const { post } = useAppHelper();
+    const { success, error } = AlertMessage();
+    const { startLoading, stopLoading } = loader();
+    const loading = ref(false);
+    const app_vars = window.driver_forge_app_vars || {};
+    const user_type = app_vars.user_data?.user_type || '';
+    const { t_c_page: t_c_page_url } = app_vars;
+    const { profile_page: profilePageURL } = app_vars;
+
+    const submitProfile = async (formData) => {
+      loading.value = true;
+      startLoading();
+      try {
+        const response = await post('complete-profile', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (response.status === 'success') {
+          success('Profile updated successfully');
+          if (user_type === 'company') {
+            //router.push({ name: 'subscription' });
+            setTimeout(() => {
+              window.location.href = profilePageURL;
+            }, 1200);
+          }
+        } else {
+          error(response.message || 'Something went wrong');
+        }
+      } catch (err) {
+        error(err.message || 'Unexpected error occurred');
+      } finally {
+        loading.value = false;
+        stopLoading();
+      }
+    };
+
+    return {
+      t_c_page_url,
+      user_type,
+      submitProfile,
+      loading,
+    };
+  },
+};
+</script>
+
+<style scoped>
+</style>

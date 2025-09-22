@@ -1,0 +1,15 @@
+
+/.idea
+/.vscode
+/vendor/
+/node_modules
+package-lock.json
+/assets/css
+/assets/
+mix-manifest.json
+.DS_Store
+/images
+/template
+template/data.json
+/selected-template
+/all-template
