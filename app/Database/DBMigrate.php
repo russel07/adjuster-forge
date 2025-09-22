@@ -7,7 +7,7 @@ use SmartySoft\AdjusterForge\Database\Migrations\UserSubscriptionMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\SubscriptionHistoryMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\DcMessagesMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\JobApplicationMigrator;
-use SmartySoft\AdjusterForge\Database\Migrations\DriverAvailabilityMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterAvailabilityMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\DriverLicencesMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\DriverEndorsementsMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\DriverEquipmentExperienceMigrator;
@@ -21,7 +21,7 @@ class DBMigrate
         SubscriptionHistoryMigrator::class,
         DcMessagesMigrator::class,
         JobApplicationMigrator::class,
-        DriverAvailabilityMigrator::class,
+        AdjusterAvailabilityMigrator::class,
         DriverLicencesMigrator::class,
         DriverEndorsementsMigrator::class,
         DriverEquipmentExperienceMigrator::class

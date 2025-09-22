@@ -5,7 +5,7 @@ namespace SmartySoft\AdjusterForge\Database\Migrations;
 class DcMessagesMigrator
 {
     protected static $tableName = 'af_dc_messages';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
     
     /**
      * Migrate the database to create the dc_messages table for one-to-one chat.

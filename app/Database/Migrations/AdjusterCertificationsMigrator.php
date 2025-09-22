@@ -4,10 +4,10 @@ namespace SmartySoft\AdjusterForge\Database\Migrations;
 
 use wpdb;
 
-class DriverEndorsementsMigrator
+class AdjusterCertificationsMigrator
 {
-    protected static $tableName = 'af_driver_endorsements';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $tableName = 'af_adjuster_certifications';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {
@@ -22,12 +22,13 @@ class DriverEndorsementsMigrator
             $table = $wpdb->prefix . esc_sql(static::$tableName);
 
             if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) !== $table) {
-                $sql = "CREATE TABLE {$table} (
+               $sql = "CREATE TABLE {$table} (
                     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    user_id BIGINT UNSIGNED NOT NULL,
-                    endorsement VARCHAR(100) NOT NULL,
-                    INDEX(user_id),
-                    INDEX(endorsement)
+                    adjuster_id BIGINT UNSIGNED NOT NULL,
+                    certification VARCHAR(50) NOT NULL,
+                    issued_date DATE NULL,
+                    certificate_file VARCHAR(255),
+                    FOREIGN KEY (adjuster_id) REFERENCES {$wpdb->prefix}adjusters(id) ON DELETE CASCADE
                 ) $charsetCollate;";
 
                 require_once ABSPATH . 'wp-admin/includes/upgrade.php';

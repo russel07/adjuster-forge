@@ -4,10 +4,10 @@ namespace SmartySoft\AdjusterForge\Database\Migrations;
 
 use wpdb;
 
-class DriverLicencesMigrator
+class AdjusterAvailabilityMigrator
 {
-    protected static $tableName = 'af_driver_license_classes';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $tableName = 'af_adjuster_availability';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {
@@ -24,9 +24,10 @@ class DriverLicencesMigrator
             if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) !== $table) {
                 $sql = "CREATE TABLE {$table} (
                     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    user_id BIGINT UNSIGNED NOT NULL,
-                    license_class VARCHAR(50) NOT NULL,
-                    INDEX(user_id)
+                    adjuster_id BIGINT UNSIGNED NOT NULL,
+                    availability VARCHAR(50) NOT NULL,
+                    INDEX(adjuster_id),
+                    INDEX(availability)
                 ) $charsetCollate;";
 
                 require_once ABSPATH . 'wp-admin/includes/upgrade.php';

@@ -4,10 +4,10 @@ namespace SmartySoft\AdjusterForge\Database\Migrations;
 
 use wpdb;
 
-class DriverAvailabilityMigrator
+class AdjusterCareerExperienceMigrator
 {
-    protected static $tableName = 'af_driver_availability';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $tableName = 'af_adjuster_carrier_experience';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {
@@ -22,13 +22,14 @@ class DriverAvailabilityMigrator
             $table = $wpdb->prefix . esc_sql(static::$tableName);
 
             if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) !== $table) {
-                $sql = "CREATE TABLE {$table} (
-                    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                    user_id BIGINT UNSIGNED NOT NULL,
-                    availability VARCHAR(50) NOT NULL,
-                    INDEX(user_id),
-                    INDEX(availability)
-                ) $charsetCollate;";
+                    $sql = "CREATE TABLE {$table} (
+                        id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        adjuster_id BIGINT UNSIGNED NOT NULL,
+                        carrier_name VARCHAR(255) NOT NULL,
+                        description TEXT,
+                        proof_file VARCHAR(255),
+                        FOREIGN KEY (adjuster_id) REFERENCES {$wpdb->prefix}adjusters(id) ON DELETE CASCADE
+                    ) $charsetCollate;";
 
                 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
                 dbDelta($sql);
