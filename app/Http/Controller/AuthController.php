@@ -21,7 +21,7 @@ class AuthController extends BaseController
         if ( is_user_logged_in() ) {
             $current_user = wp_get_current_user();
             return $this->response([
-                'message' => __( 'User is already logged in.', 'driver-forge' ),
+                'message' => __( 'User is already logged in.', 'adjuster-forge' ),
                 'data'    => [
                     'id'       => $current_user->ID,
                     'username' => $current_user->user_login,
@@ -40,7 +40,7 @@ class AuthController extends BaseController
         // Check if required fields are provided
         if ( empty( $email ) || empty( $password ) ) {
             return $this->response([
-                'message' => __( 'Email and password are required.', 'driver-forge' ),
+                'message' => __( 'Email and password are required.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -63,7 +63,7 @@ class AuthController extends BaseController
 
         // Prepare success response
         return $this->response([
-            'message' => __( 'Login successful.', 'driver-forge' ),
+            'message' => __( 'Login successful.', 'adjuster-forge' ),
             'data'    => [
                 'id'       => $user->ID,
                 'username' => $user->user_login,
@@ -176,7 +176,7 @@ class AuthController extends BaseController
         // Check if the user is logged in
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __( 'User is not logged in.', 'driver-forge' ),
+                'message' => __( 'User is not logged in.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -184,7 +184,7 @@ class AuthController extends BaseController
         wp_logout();
         // Return success response
         return $this->response([
-            'message' => __( 'Logout successful.', 'driver-forge' ),
+            'message' => __( 'Logout successful.', 'adjuster-forge' ),
             'status'  => 'success',
         ], 200);
     }
@@ -199,7 +199,7 @@ class AuthController extends BaseController
      * @return \WP_REST_Response The response object containing the password reset status.
      */
     public function forgot_password() {
-        $general_settings   = self::getOption('driver_forge_general_settings', []);
+        $general_settings   = self::getOption('adjuster_forge_general_settings', []);
         $auth_page_id       = $general_settings['auth_page_id'] ? $general_settings['auth_page_id'] : '';
         $auth_page_url      = get_permalink($auth_page_id);
         $email              = sanitize_email( $this->request->get( 'email' ) );
@@ -207,7 +207,7 @@ class AuthController extends BaseController
         // Check if the email is provided
         if ( empty( $email ) ) {
             return $this->response([
-                'message' => __( 'Email is required.', 'driver-forge' ),
+                'message' => __( 'Email is required.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -215,7 +215,7 @@ class AuthController extends BaseController
         $user = get_user_by( 'email', $email );
         if ( ! $user ) {
             return $this->response([
-                'message' => __( 'No user found with this email address.', 'driver-forge' ),
+                'message' => __( 'No user found with this email address.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -234,9 +234,9 @@ class AuthController extends BaseController
         $reset_url = $auth_page_url . '#/reset-password?token=' . urlencode($reset_key) . '&login=' . urlencode($user_login);
 
         // Prepare the email content
-        $subject = __( 'Password Reset Request', 'driver-forge' );
+        $subject = __( 'Password Reset Request', 'adjuster-forge' );
         $message = sprintf(
-            __( 'Hello %s, you requested a password reset. Click the link below to reset your password: %s', 'driver-forge' ),
+            __( 'Hello %s, you requested a password reset. Click the link below to reset your password: %s', 'adjuster-forge' ),
             $user->display_name,
             esc_url( $reset_url )
         );
@@ -244,12 +244,12 @@ class AuthController extends BaseController
         $sent = wp_mail( $email, $subject, $message );
         if ( ! $sent ) {
             return $this->response([
-                'message' => __( 'Failed to send password reset email.', 'driver-forge' ),
+                'message' => __( 'Failed to send password reset email.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200); }
         // Return success response
         return $this->response([
-            'message' => __( 'Password reset email sent successfully.', 'driver-forge' ),
+            'message' => __( 'Password reset email sent successfully.', 'adjuster-forge' ),
             'status'  => 'success',
             'url' =>$auth_page_url
         ], 200);
@@ -274,7 +274,7 @@ class AuthController extends BaseController
         // Check if token and new password are provided
         if ( empty( $token ) || empty( $new_password ) ) {
             return $this->response([
-                'message' => __( 'Token and new password are required.', 'driver-forge' ),
+                'message' => __( 'Token and new password are required.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -296,7 +296,7 @@ class AuthController extends BaseController
 
         // Return success response
         return $this->response([
-            'message' => __( 'Password has been reset successfully.', 'driver-forge' ),
+            'message' => __( 'Password has been reset successfully.', 'adjuster-forge' ),
             'status'  => 'success',
         ], 200);
     }

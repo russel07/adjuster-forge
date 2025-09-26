@@ -29,9 +29,9 @@
               :subscription-end-date="subscription_end_date"
             />
 
-            <ProfileDriverDetails 
-              v-if="user_type === 'driver'"
-              :driver-data="driverDetails"
+            <ProfileAdjusterDetails 
+              v-if="user_type === 'adjuster'"
+              :adjuster-data="adjusterDetails"
             />
 
             <CompanyDetails 
@@ -55,7 +55,7 @@ import Menu from './Menu.vue';
 import ProfilePicture from './ProfilePicture.vue';
 import ProfileInformation from './ProfileInformation.vue';
 import SubscriptionStatus from './SubscriptionStatus.vue';
-import ProfileDriverDetails from './ProfileDriverDetails.vue';
+import ProfileAdjusterDetails from './ProfileAdjusterDetails.vue';
 import CompanyDetails from './CompanyDetails.vue';
 // Import Element Plus icons
 import { CircleCloseFilled, CircleCheckFilled, Clock, WarningFilled, InfoFilled, RemoveFilled } from '@element-plus/icons-vue';
@@ -67,7 +67,7 @@ export default {
     ProfilePicture,
     ProfileInformation,
     SubscriptionStatus,
-    ProfileDriverDetails,
+    ProfileAdjusterDetails,
     CompanyDetails,
     CircleCloseFilled, 
     CircleCheckFilled, 
@@ -80,7 +80,7 @@ export default {
     const { get, post, getStatusLabel, getStatus } = useAppHelper();
     const { error, success } = AlertMessage();
     const { startLoading, stopLoading } = loader();
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const user_type = app_vars.user_data?.user_type || '';
     const subscriptionData = app_vars?.subscription_data || {};
     const subscription_end_date = app_vars?.subscription_data?.subscription_expire_at || '';
@@ -99,8 +99,8 @@ export default {
       state: '',
     });
 
-    // Driver details
-    const driverDetails = ref({
+    // Adjuster details
+    const adjusterDetails = ref({
       phone: '',
       resume: '',
       medical_card: '',
@@ -155,7 +155,7 @@ export default {
 
     // Handle image upload from ProfilePicture component
     const handleImageUpload = (response) => {
-      if (user_type === 'driver' && response.profile_picture) {
+      if (user_type === 'adjuster' && response.profile_picture) {
         existingImage.value = response.profile_picture;
       } else if (user_type === 'company' && response.logo) {
         existingImage.value = response.logo;
@@ -177,28 +177,28 @@ export default {
           status.value = response.status || '';
           existingImage.value = response.profile_picture || '';
 
-          if (user_type === 'driver') {
-            const driver_data = response.driver_data || {};
-            let references = driver_data.user_data.references || [];
+          if (user_type === 'adjuster') {
+            const adjuster_data = response.adjuster_data || {};
+            let references = adjuster_data.user_data.references || [];
             if (typeof references === 'string') {
               references = references.replace(/\\"/g, '"');
               try {
-                driver_data.references = JSON.parse(references);
+                adjuster_data.references = JSON.parse(references);
               } catch (e) {
-                driver_data.references = [];
+                adjuster_data.references = [];
               }
             }
             
-            Object.assign(driverDetails.value, {
-              phone: driver_data.user_data.phone || '',
-              resume: driver_data.user_data.resume || '',
-              medical_card: driver_data.user_data.medical_card || '',
-              mvr: driver_data.user_data.mvr || '',
-              references: Array.isArray(driver_data.references) ? driver_data.references : [],
-              availability: Array.isArray(driver_data.availability) ? driver_data.availability : [],
-              licenses: Array.isArray(driver_data.licenses) ? driver_data.licenses : [],
-              endorsements: Array.isArray(driver_data.endorsements) ? driver_data.endorsements : [],
-              experience: Array.isArray(driver_data.experience) ? driver_data.experience : [],
+            Object.assign(adjusterDetails.value, {
+              phone: adjuster_data.user_data.phone || '',
+              resume: adjuster_data.user_data.resume || '',
+              medical_card: adjuster_data.user_data.medical_card || '',
+              mvr: adjuster_data.user_data.mvr || '',
+              references: Array.isArray(adjuster_data.references) ? adjuster_data.references : [],
+              availability: Array.isArray(adjuster_data.availability) ? adjuster_data.availability : [],
+              licenses: Array.isArray(adjuster_data.licenses) ? adjuster_data.licenses : [],
+              endorsements: Array.isArray(adjuster_data.endorsements) ? adjuster_data.endorsements : [],
+              experience: Array.isArray(adjuster_data.experience) ? adjuster_data.experience : [],
             });
           } else if (user_type === 'company') {
             const company_data = response.company_data || {};
@@ -257,7 +257,7 @@ export default {
       img_url,
       existingImage,
       profileData,
-      driverDetails,
+      adjusterDetails,
       companyDetails,
       status,
       statusValue,

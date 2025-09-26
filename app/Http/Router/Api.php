@@ -23,7 +23,7 @@ Router::post('create-subscription', 'PaymentController@create_subscription');
 Router::post('cancel-subscription', 'PaymentController@cancel_subscription');
 Router::post('activate-free-trial', 'UserController@activate_free_trial');
 
-//Driver and Company Profile functionality
+//Adjuster and Company Profile functionality
 Router::get('get-profile', 'UserController@get_profile');
 Router::post('profile-picture', 'UserController@profile_picture');
 Router::post('complete-profile', 'UserController@complete_profile');
@@ -36,7 +36,7 @@ Router::get('get-saved-offers', 'UserController@get_saved_offers');
 Router::post('save-favourite/{postId}', 'UserController@save_favourite');
 Router::post('remove-favourite/{id}', 'UserController@remove_favourite');
 
-//Driver and Company Post functionality
+//Adjuster and Company Post functionality
 Router::get('jobs', 'JobController@get_public_jobs');
 Router::get('get-jobs', 'JobController@get_jobs');
 Router::post('create-job', 'JobController@create_post');
@@ -49,7 +49,7 @@ Router::post('update-applicant-status', 'JobController@update_applicant_status')
 Router::post('send-message', 'MessageController@send_message');
 Router::get('get-user-conversations', 'MessageController@get_user_conversations');
 Router::get('get-conversation/{partnerId}', 'MessageController@get_conversation');
-Router::get('active-drivers', 'UserController@drivers_list');
+Router::get('active-adjusters', 'UserController@adjusters_list');
 Router::get('payment-history', 'UserController@get_payment_history');
 
 //Admin Features
@@ -59,10 +59,10 @@ Router::get('get-payment-settings', 'PaymentController@get_payment_settings');
 Router::post('save-payment-settings', 'PaymentController@save_payment_settings');
 Router::get('purchased-list', 'AdminController@purchased_list');
 Router::get('search-purchased', 'AdminController@search_purchased_list');
-Router::get('drivers', 'AdminController@drivers_list');
-Router::get('driver/{user_id}', 'AdminController@driver_details');
-Router::post('toggle-driver', 'AdminController@toggle_driver');
-Router::get('search-drivers', 'AdminController@search_drivers_list');
+Router::get('adjusters', 'AdminController@adjusters_list');
+Router::get('adjuster/{user_id}', 'AdminController@adjuster_details');
+Router::post('toggle-adjuster', 'AdminController@toggle_adjuster');
+Router::get('search-adjusters', 'AdminController@search_adjusters_list');
 Router::get('companies', 'AdminController@companies_list');
 Router::get('search-companies', 'AdminController@search_companies_list');
 Router::post('permit-access', 'AdminController@permit_user_access');

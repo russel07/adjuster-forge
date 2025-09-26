@@ -59,7 +59,7 @@ class UserStatusService
         }
 
         $user_type = get_user_meta($user_id, 'af_user_type', true);
-        $subscription_meta = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $subscription_meta = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         $subscription_record = $this->getSubscriptionRecord($user_id);
 
         $status_data = [
@@ -223,7 +223,7 @@ class UserStatusService
 
         // Active users get most permissions
         if (in_array($status, [self::STATUS_ACTIVE, self::STATUS_APPROVED, self::STATUS_FREE_TRIAL])) {
-            if ($user_type === 'driver') {
+            if ($user_type === 'adjuster') {
                 $base_permissions['can_view_jobs'] = true;
                 $base_permissions['can_apply_jobs'] = true;
                 $base_permissions['can_message'] = true;
@@ -265,7 +265,7 @@ class UserStatusService
 
         $subscription_model = new Subscription();
         $existing_subscription = $subscription_model->getSubscriptionByUserId($user_id);
-        $meta_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $meta_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         
         if (!is_array($meta_data)) {
             $meta_data = [];
@@ -277,7 +277,7 @@ class UserStatusService
         $meta_data['account_status_at'] = current_time('mysql');
         $meta_data = array_merge($meta_data, $additional_data);
 
-        update_user_meta($user_id, 'driver_forge_subscription_data', $meta_data);
+        update_user_meta($user_id, 'adjuster_forge_subscription_data', $meta_data);
 
         // Update or create subscription record
         $subscription_data = [
@@ -337,7 +337,7 @@ class UserStatusService
         // Get all meta data at once
         $meta_query = $wpdb->prepare(
             "SELECT user_id, meta_value FROM {$wpdb->usermeta} 
-             WHERE meta_key = 'driver_forge_subscription_data' 
+             WHERE meta_key = 'adjuster_forge_subscription_data' 
              AND user_id IN ({$placeholders})",
             ...$user_ids
         );
@@ -372,7 +372,7 @@ class UserStatusService
     {
         $cache_key = "user_status_{$user_id}";
         unset(self::$statusCache[$cache_key]);
-        wp_cache_delete($cache_key, 'driver_forge_user_status');
+        wp_cache_delete($cache_key, 'adjuster_forge_user_status');
     }
 
     /**
@@ -381,7 +381,7 @@ class UserStatusService
     public function clearAllCache()
     {
         self::$statusCache = [];
-        wp_cache_flush_group('driver_forge_user_status');
+        wp_cache_flush_group('adjuster_forge_user_status');
     }
 
     /**

@@ -34,10 +34,10 @@ class AdminController extends BaseController
         $defaults = [
             'auth_page_id'                  => '',
             'profile_page_id'               => '',
-            'driver_subscription_amount'    => 9.99,
-            'driver_subscription_id'        => '',
-            'driver_yearly_subscription_amount' => 99.99,
-            'driver_yearly_subscription_id' => '',
+            'adjuster_subscription_amount'    => 9.99,
+            'adjuster_subscription_id'        => '',
+            'adjuster_yearly_subscription_amount' => 99.99,
+            'adjuster_yearly_subscription_id' => '',
             'standard_membership_amount'    => 59.0,
             'standard_membership_id'        => '',
             'standard_yearly_membership_amount' => 599.0,
@@ -52,7 +52,7 @@ class AdminController extends BaseController
             'selected_currency'             => 'USD',
         ];
 
-        $existingSettings = self::getOption('driver_forge_general_settings', []);
+        $existingSettings = self::getOption('adjuster_forge_general_settings', []);
 
         if ( !$existingSettings ) {
             return $this->response([
@@ -84,17 +84,17 @@ class AdminController extends BaseController
             return $this->response($errors, 403);
         }
 
-        $existingSettings = self::getOption('driver_forge_general_settings', []);
+        $existingSettings = self::getOption('adjuster_forge_general_settings', []);
 
 
         // Prepare the data array to store the settings.
         $data = array(
             'auth_page_id'                  => intval($this->request->get('auth_page_id')),
             'profile_page_id'               => intval($this->request->get('profile_page_id')),
-            'driver_subscription_amount'    => floatval($this->request->get('driver_subscription_amount')),
-            'driver_subscription_id'        => sanitize_text_field($this->request->get('driver_subscription_id')),
-            'driver_yearly_subscription_amount' => floatval($this->request->get('driver_yearly_subscription_amount')),
-            'driver_yearly_subscription_id' => sanitize_text_field($this->request->get('driver_yearly_subscription_id')),
+            'adjuster_subscription_amount'    => floatval($this->request->get('adjuster_subscription_amount')),
+            'adjuster_subscription_id'        => sanitize_text_field($this->request->get('adjuster_subscription_id')),
+            'adjuster_yearly_subscription_amount' => floatval($this->request->get('adjuster_yearly_subscription_amount')),
+            'adjuster_yearly_subscription_id' => sanitize_text_field($this->request->get('adjuster_yearly_subscription_id')),
             'standard_membership_amount'    => floatval($this->request->get('standard_membership_amount')),
             'standard_membership_id'        => sanitize_text_field($this->request->get('standard_membership_id')),
             'standard_yearly_membership_amount' => floatval($this->request->get('standard_yearly_membership_amount')),
@@ -108,7 +108,7 @@ class AdminController extends BaseController
         );
 
         // Update or insert the settings in the wp_options table.
-        self::updateOption('driver_forge_general_settings', $data);
+        self::updateOption('adjuster_forge_general_settings', $data);
 
         $settings = $data;
         $settings['wp_pages'] = self::getWPPages();
@@ -121,12 +121,12 @@ class AdminController extends BaseController
     }
 
     /**
-     * Get the list of drivers.
+     * Get the list of adjusters.
      *
      * @param \WP_REST_Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function drivers_list( \WP_REST_Request $request )
+    public function adjusters_list( \WP_REST_Request $request )
     {
         $page   = intval($request->get_param('page') );
         $limit  = intval($request->get_param('per_page') );
@@ -135,10 +135,10 @@ class AdminController extends BaseController
         $user = new User();
 
         if( ! empty( $search ) ) {
-            $users = $user->search( $limit, $offset, $search, 'driver' );
+            $users = $user->search( $limit, $offset, $search, 'adjuster' );
             $total_items = count( $users);
         } else {
-            $users = $user->getAllByLimit( $limit, $offset,  'driver' );
+            $users = $user->getAllByLimit( $limit, $offset,  'adjuster' );
             $total_items = count($user->getAll());
         }
 
@@ -148,49 +148,49 @@ class AdminController extends BaseController
             $page, 
             $limit, 
             $total_items, 
-            'drivers_list'
+            'adjusters_list'
         );
 
         return $this->response([
             'data' =>  $data,
-            'message' => 'drivers list retrieved successfully.',
+            'message' => 'adjusters list retrieved successfully.',
             'status' => 'success',
         ], 200);
     }
 
     /**
-     * Retrieve details of a specific driver by user ID.
+     * Retrieve details of a specific adjuster by user ID.
      * @param \WP_REST_Request $request The request object containing the user ID.
-     * @return mixed The response containing driver details or an error message.
+     * @return mixed The response containing adjuster details or an error message.
      * */
-    public function driver_details( \WP_REST_Request $request )
+    public function adjuster_details( \WP_REST_Request $request )
     {
         $user_id = intval($request->get_param('user_id'));
-        $driver = User::find($user_id);
+        $adjuster = User::find($user_id);
 
-        if ( ! $driver ) {
+        if ( ! $adjuster ) {
             return $this->response([
-                'message' => 'Driver not found.',
+                'message' => 'Adjuster not found.',
                 'status' => 'error',
             ], 404);
         }
 
         // Use the new transformer service
-        $data = $this->dataTransformer->transformDriverDetails($driver);
+        $data = $this->dataTransformer->transformAdjusterDetails($adjuster);
 
         return $this->response([
             'data' =>  $data,
-            'message' => 'Driver details retrieved successfully.',
+            'message' => 'Adjuster details retrieved successfully.',
             'status' => 'success',
         ], 200);
     }
 
     /**
-     * Toggle the driver's status (approve or reject).
+     * Toggle the adjuster's status (approve or reject).
      * @param \WP_REST_Request $request The request object containing the user ID and action.
      * @return mixed The response containing the status update or an error message.
      * */
-    public function toggle_driver( \WP_REST_Request $request )
+    public function toggle_adjuster( \WP_REST_Request $request )
     {
         $user_id = intval($request->get_param('user_id'));
         $action = sanitize_text_field($request->get_param('action'));
@@ -222,7 +222,7 @@ class AdminController extends BaseController
         $result = $this->statusService->updateUserStatus($user_id, $status, $additional_data);
 
         if ( $result ) {
-            do_action('diver_forge_after_driver_profile_'. $action, (object)[
+            do_action('diver_forge_after_adjuster_profile_'. $action, (object)[
                 'user_id' => $user_id,
                 'user_name' => $first_name,
                 'user_email' => $user_email,
@@ -230,13 +230,13 @@ class AdminController extends BaseController
             ]);
 
             return $this->response([
-                'message' => 'Driver status updated successfully.',
+                'message' => 'Adjuster status updated successfully.',
                 'status' => 'success',
             ], 200);
         }
 
         return $this->response([
-            'message' => 'Failed to update driver status.',
+            'message' => 'Failed to update adjuster status.',
             'status' => 'error',
         ], 500);
     }
@@ -278,18 +278,18 @@ class AdminController extends BaseController
     }
     
     /**
-     * Search for drivers based on pagination and search parameters.
+     * Search for adjusters based on pagination and search parameters.
      * @param \WP_REST_Request $request The request object containing pagination and search parameters.
-     * @return mixed The response containing the list of drivers or an error message.
+     * @return mixed The response containing the list of adjusters or an error message.
      * */
-    public function search_drivers_list( \WP_REST_Request $request )
+    public function search_adjusters_list( \WP_REST_Request $request )
     {
         $page   = intval($request->get_param('page') );
         $limit  = intval($request->get_param('per_page') );
         $offset = ($page - 1) * $limit;
         $search = sanitize_text_field($request->get_param('search'));
         $user = new User();
-        $users = $user->search( $limit, $offset, $search, 'driver' );
+        $users = $user->search( $limit, $offset, $search, 'adjuster' );
         $total_items = count($user->getAll());
         $users_data = [];
         foreach ($users as $key => $item) {
@@ -324,12 +324,12 @@ class AdminController extends BaseController
             'current_page' => 1,
             'per_page' => $limit,
             'total_items' => $total_items,
-            'drivers_list' => $users_data
+            'adjusters_list' => $users_data
         ];
 
         return $this->response([
             'data' =>  $data,
-            'message' => 'drivers list retrived successfully.',
+            'message' => 'adjusters list retrived successfully.',
             'status' => 'success',
         ], 200);
     }

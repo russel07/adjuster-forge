@@ -146,9 +146,9 @@ class UserDataTransformer
     }
 
     /**
-     * Transform driver with driver-specific data
+     * Transform adjuster with adjuster-specific data
      */
-    public function transformDriverDetails($user)
+    public function transformAdjusterDetails($user)
     {
         $base_data = $this->transformUser($user, true);
         if (!$base_data) {
@@ -156,14 +156,14 @@ class UserDataTransformer
         }
 
         $user_id = $user->ID;
-        $subscription_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $subscription_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         
         if (!is_array($subscription_data)) {
             $subscription_data = [];
         }
 
-        // Add driver-specific fields
-        $driver_data = [
+        // Add adjuster-specific fields
+        $adjuster_data = [
             'resume' => $subscription_data['resume'] ?? '',
             'medical_card' => $subscription_data['medical_card'] ?? '',
             'mvr' => $subscription_data['mvr'] ?? '',
@@ -174,7 +174,7 @@ class UserDataTransformer
             'availability' => $subscription_data['availability'] ?? [],
         ];
 
-        return (object) array_merge((array) $base_data, $driver_data);
+        return (object) array_merge((array) $base_data, $adjuster_data);
     }
 
     /**
@@ -188,7 +188,7 @@ class UserDataTransformer
         }
 
         $user_id = $user->ID;
-        $subscription_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $subscription_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         
         if (!is_array($subscription_data)) {
             $subscription_data = [];

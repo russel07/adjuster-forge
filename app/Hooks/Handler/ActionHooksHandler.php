@@ -19,24 +19,24 @@ class ActionHooksHandler
      * This function adds rewrite rules for custom query variables to handle URLs
      * like jobs/brand/samsung and jobs/brand/samsung/new-offers.
      */
-    public static function driver_forge_rewrite_rules() {
+    public static function adjuster_forge_rewrite_rules() {
         add_rewrite_rule(
             '^download/([^/]*)/?',
-            'index.php?driver_forge_download_file=$matches[1]',
+            'index.php?adjuster_forge_download_file=$matches[1]',
             'top'
         );
     }
 
-    public static function driver_forge_file_download_handler() {
-        if ( get_query_var( 'driver_forge_download_file' ) ) {
-            $file = sanitize_text_field( get_query_var( 'driver_forge_download_file' ) );
+    public static function adjuster_forge_file_download_handler() {
+        if ( get_query_var( 'adjuster_forge_download_file' ) ) {
+            $file = sanitize_text_field( get_query_var( 'adjuster_forge_download_file' ) );
 
             if( empty( $file ) ) {
                 wp_die( 'Invalid file name.' );
             }
 
             $file_name =  sanitize_file_name( $file );
-            $file_path = WP_CONTENT_DIR . '/uploads/' . DRIVER_FORGE_PLUGIN_ASSET_ID . '/' . $file_name;
+            $file_path = WP_CONTENT_DIR . '/uploads/' . ADJUSTER_FORGE_PLUGIN_ASSET_ID . '/' . $file_name;
           
             if ( $file_path && file_exists( $file_path ) ) {
                 $mime_type = mime_content_type( $file_path );
@@ -134,7 +134,7 @@ class ActionHooksHandler
 
         $profile_page = self::getProfilePageUrl();
 
-        if (in_array('driver', $roles) || in_array('company', $roles)) {
+        if (in_array('adjuster', $roles) || in_array('company', $roles)) {
             wp_redirect($profile_page);
             exit;
         }
@@ -154,8 +154,8 @@ class ActionHooksHandler
             return $redirect_to;
         }
 
-        // Redirect to profile page if user has 'driver' or 'company' role
-        if ( in_array('driver', $user->roles ) || in_array('company', $user->roles ) ) {
+        // Redirect to profile page if user has 'adjuster' or 'company' role
+        if ( in_array('adjuster', $user->roles ) || in_array('company', $user->roles ) ) {
             return self::getProfilePageUrl();
         }
 
@@ -182,7 +182,7 @@ class ActionHooksHandler
     /**
      * Hide admin bar for custom roles.
      *
-     * This function hides the admin bar for users with custom roles like 'driver' and 'company'.
+     * This function hides the admin bar for users with custom roles like 'adjuster' and 'company'.
      */
     public static function af_hide_admin_bar_for_custom_roles() {
         if ( is_user_logged_in() ) {
@@ -190,7 +190,7 @@ class ActionHooksHandler
             $roles = $user->roles;
 
             // Define custom roles that should not see the admin bar
-            $custom_roles = ['driver', 'company'];
+            $custom_roles = ['adjuster', 'company'];
 
             // Check if the user has any of the custom roles
             foreach ($roles as $role) {

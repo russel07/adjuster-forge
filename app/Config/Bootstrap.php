@@ -19,7 +19,7 @@ class Bootstrap
     {
         // Include REST API routes.
         add_action('rest_api_init', function () {
-            require_once DRIVER_FORGE_PLUGIN_BASE_PATH . 'app/Http/Router/Api.php';
+            require_once ADJUSTER_FORGE_PLUGIN_BASE_PATH . 'app/Http/Router/Api.php';
         });
 
         new Jobs();

@@ -94,14 +94,14 @@ class Router
         }
 
         register_rest_route(
-            'driver-forge/v2',
+            'adjuster-forge/v2',
             $url,
             [
                 'methods' => $type,
                 'callback' => [$controllerInstance, $method],
                 'permission_callback' => function () {
                     if (!isset($_SERVER['HTTP_X_WP_NONCE']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_SERVER['HTTP_X_WP_NONCE'])), 'wp_rest')) {
-                        return new WP_Error('rest_forbidden', __('You do not have permission to access this resource.', 'driver-forge'), ['status' => 403]);
+                        return new WP_Error('rest_forbidden', __('You do not have permission to access this resource.', 'adjuster-forge'), ['status' => 403]);
                     }
                     return true;
                 },
@@ -129,7 +129,7 @@ class Router
         }
 
         register_rest_route(
-            'driver-forge/v2',
+            'adjuster-forge/v2',
             $url,
             [
                 'methods' => $type,

@@ -41,14 +41,14 @@ class Mailer {
 
         // Start output buffering and include the email template
         ob_start();
-        if( 'driver' === $user_type ) {
+        if( 'adjuster' === $user_type ) {
             // Set email subject
             $subject = 'Welcome to I Will Drive 4 U – Next Steps';
-            include_once( DRIVER_FORGE_PLUGIN_DIR . '/app/Mail/driver-registration.php' );
+            include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/adjuster-registration.php' );
         } elseif( 'company' === $user_type ) {
             // Set email subject
             $subject = 'Welcome to I Will Drive 4 U – Your Account is Ready';
-            include_once( DRIVER_FORGE_PLUGIN_DIR . '/app/Mail/company-registration.php' );
+            include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/company-registration.php' );
         } 
         // Capture the output
         $message = ob_get_clean();
@@ -69,7 +69,7 @@ class Mailer {
 
         // Start output buffering and include the email template
         ob_start();
-        include_once( DRIVER_FORGE_PLUGIN_DIR . '/app/Mail/driver-approved.php' );
+        include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/adjuster-approved.php' );
         $message = ob_get_clean();
 
         // Set email subject
@@ -89,7 +89,7 @@ class Mailer {
 
         // Start output buffering and include the email template
         ob_start();
-        include_once( DRIVER_FORGE_PLUGIN_DIR . '/app/Mail/driver-rejected.php' );
+        include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/adjuster-rejected.php' );
         $message = ob_get_clean();
 
         // Set email subject

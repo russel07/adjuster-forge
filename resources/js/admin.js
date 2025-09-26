@@ -9,4 +9,4 @@ const app = createApp( Admin );
 app.use(router);
 app.use(ElementPlus);
 
-app.mount('#driver_forge_admin_app');
+app.mount('#adjuster_forge_admin_app');

@@ -7,7 +7,7 @@ use wpdb;
 class UserSubscriptionMigrator
 {
     protected static $tableName = 'af_user_subscriptions';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {

@@ -7,7 +7,7 @@ use wpdb;
 class JobApplicationMigrator
 {
     protected static $tableName = 'af_job_applications';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {

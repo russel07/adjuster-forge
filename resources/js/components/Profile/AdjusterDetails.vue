@@ -3,22 +3,22 @@
         <el-main class="main-center">
             <Menu />
             <div class="dashboard-container">
-                <h1 class="driver-title">Driver Details</h1>
+                <h1 class="adjuster-title">Adjuster Details</h1>
                 <el-button type="info" @click="goBack" class="back-btn">
-                    ← Go Back to Driver List
+                    ← Go Back to Adjuster List
                 </el-button>
-                <el-card v-if="driver" class="driver-details-card">
-                    <div class="driver-profile">
+                <el-card v-if="adjuster" class="adjuster-details-card">
+                    <div class="adjuster-profile">
                         <el-image
-                            :src="imageUrl( image_url, driver.profile_picture ) || 'https://ui-avatars.com/api/?name=' + driver.first_name + '+' + driver.last_name"
+                            :src="imageUrl( image_url, adjuster.profile_picture ) || 'https://ui-avatars.com/api/?name=' + adjuster.first_name + '+' + adjuster.last_name"
                             fit="cover"
-                            class="driver-image"
-                            :alt="driver.first_name + ' ' + driver.last_name"
+                            class="adjuster-image"
+                            :alt="adjuster.first_name + ' ' + adjuster.last_name"
                         />
-                        <div class="driver-name-status">
-                            <h2>{{ driver.first_name }} {{ driver.last_name }}</h2>
-                            <el-tag :type="driver.status === 'active' ? 'success' : driver.status === 'pending' ? 'warning' : 'info'">
-                                {{ driver.status }}
+                        <div class="adjuster-name-status">
+                            <h2>{{ adjuster.first_name }} {{ adjuster.last_name }}</h2>
+                            <el-tag :type="adjuster.status === 'active' ? 'success' : adjuster.status === 'pending' ? 'warning' : 'info'">
+                                {{ adjuster.status }}
                             </el-tag>
                         </div>
                     </div>
@@ -26,18 +26,18 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-descriptions :column="1" border>
-                                <el-descriptions-item label="Username">{{ driver.username }}</el-descriptions-item>
-                                <el-descriptions-item label="Email">{{ driver.user_email }}</el-descriptions-item>
-                                <el-descriptions-item label="Phone">{{ driver.phone || 'N/A' }}</el-descriptions-item>
-                                <el-descriptions-item label="City">{{ driver.city }}</el-descriptions-item>
-                                <el-descriptions-item label="State">{{ driver.state }}</el-descriptions-item>
+                                <el-descriptions-item label="Username">{{ adjuster.username }}</el-descriptions-item>
+                                <el-descriptions-item label="Email">{{ adjuster.user_email }}</el-descriptions-item>
+                                <el-descriptions-item label="Phone">{{ adjuster.phone || 'N/A' }}</el-descriptions-item>
+                                <el-descriptions-item label="City">{{ adjuster.city }}</el-descriptions-item>
+                                <el-descriptions-item label="State">{{ adjuster.state }}</el-descriptions-item>
                             </el-descriptions>
                         </el-col>
                         <el-col :span="12">
                             <el-descriptions :column="1" border>
                                 <el-descriptions-item label="Resume">
-                                    <template v-if="driver.resume">
-                                        <el-link :href="download_url(driver.resume)" target="_blank" type="primary" download>
+                                    <template v-if="adjuster.resume">
+                                        <el-link :href="download_url(adjuster.resume)" target="_blank" type="primary" download>
                                             Download
                                         </el-link>
                                     </template>
@@ -46,8 +46,8 @@
                                     </template>
                                 </el-descriptions-item>
                                 <el-descriptions-item label="Medical Card">
-                                    <template v-if="driver.medical_card">
-                                        <el-link :href="download_url(driver.medical_card)" target="_blank" type="primary" download>
+                                    <template v-if="adjuster.medical_card">
+                                        <el-link :href="download_url(adjuster.medical_card)" target="_blank" type="primary" download>
                                             Download
                                         </el-link>
                                     </template>
@@ -56,18 +56,18 @@
                                     </template>
                                 </el-descriptions-item>
                                 <el-descriptions-item label="MVR">
-                                    <template v-if="driver.mvr">
-                                        <el-link :href="download_url( driver.mvr )" target="_blank" type="primary" download>
+                                    <template v-if="adjuster.mvr">
+                                        <el-link :href="download_url( adjuster.mvr )" target="_blank" type="primary" download>
                                             Download
                                         </el-link>
                                     </template>
                                     <template v-else>
-                                        <el-tag type="info" size="small">No MVR {{ driver.mvr }}</el-tag>
+                                        <el-tag type="info" size="small">No MVR {{ adjuster.mvr }}</el-tag>
                                     </template>
                                 </el-descriptions-item>
                                 <el-descriptions-item label="Profile Completed">
-                                    <el-tag :type="driver.profile_completed ? 'success' : 'info'">
-                                        {{ driver.profile_completed ? 'Yes' : 'No' }}
+                                    <el-tag :type="adjuster.profile_completed ? 'success' : 'info'">
+                                        {{ adjuster.profile_completed ? 'Yes' : 'No' }}
                                     </el-tag>
                                 </el-descriptions-item>
                             </el-descriptions>
@@ -79,13 +79,13 @@
                         <el-button
                             type="primary"
                             size="large"
-                            @click="openMessageDialog(driver)"
+                            @click="openMessageDialog(adjuster)"
                         >
                             Send Message
                         </el-button>
                     </div>
                 </el-card>
-                <el-empty v-else description="No driver data found." />
+                <el-empty v-else description="No adjuster data found." />
             </div>
         </el-main>
     </el-container>
@@ -93,12 +93,12 @@
     <!-- Send Message Dialog -->
     <el-dialog
         v-model="showMessageDialog"
-        title="Send Message to Driver"
+        title="Send Message to Adjuster"
         width="600px"
     >
-        <div v-if="selectedDriver" class="dialog-driver-info">
-            <h3>{{ selectedDriver.first_name }} {{ selectedDriver.last_name }}</h3>
-            <p>{{ selectedDriver.user_email }}</p>
+        <div v-if="selectedAdjuster" class="dialog-adjuster-info">
+            <h3>{{ selectedAdjuster.first_name }} {{ selectedAdjuster.last_name }}</h3>
+            <p>{{ selectedAdjuster.user_email }}</p>
         </div>
         <el-form
             :model="messageForm"
@@ -137,7 +137,7 @@ import { loader } from '../../Composable/Loader';
 import Menu from "./Menu.vue";
 
 export default {
-    name: "DriverDetails",
+    name: "AdjusterDetails",
     components: {
         Menu,
     },
@@ -147,13 +147,13 @@ export default {
         const { get, post, imageUrl } = useAppHelper();
         const { error, success } = AlertMessage();
         const { startLoading, stopLoading } = loader();
-        const driver = ref({});
+        const adjuster = ref({});
         const showMessageDialog = ref(false);
-        const selectedDriver = ref(null);
+        const selectedAdjuster = ref(null);
         const messageForm = ref({ message: '' });
         const messageFormRef = ref(null);
         const messageLoading = ref(false);
-        const app_vars = window.driver_forge_app_vars;
+        const app_vars = window.adjuster_forge_app_vars;
         const home_url = `${app_vars.home_url ? app_vars.home_url : ''}`;
         const image_url = `${app_vars.image_url ? app_vars.image_url : ''}`;
         const user_status = `${app_vars.user_status ? app_vars.user_status : ''}`;
@@ -167,12 +167,12 @@ export default {
             ]
         };
 
-        const fetchDriverData = async () => {
+        const fetchAdjusterData = async () => {
             startLoading();
             try {
-                const response = await get(`driver/${route.params.user_id}`);
+                const response = await get(`adjuster/${route.params.user_id}`);
                 if (response.status === 'success') {
-                    driver.value = response.data;
+                    adjuster.value = response.data;
                 } else {
                     error(response.message);
                 }
@@ -187,8 +187,8 @@ export default {
             router.back();
         };
 
-        const openMessageDialog = (driver) => {
-            selectedDriver.value = driver;
+        const openMessageDialog = (adjuster) => {
+            selectedAdjuster.value = adjuster;
             messageForm.value.message = ''; // Reset message form
             showMessageDialog.value = true;
         };
@@ -200,7 +200,7 @@ export default {
                 messageLoading.value = true;
                 try {
                     const response = await post('send-message', {
-                        recipient_id: selectedDriver.value.user_id,
+                        recipient_id: selectedAdjuster.value.user_id,
                         message: messageForm.value.message
                     });
                     if (response && response.status === 'success') {
@@ -222,15 +222,15 @@ export default {
         };
 
         onMounted(() => {
-            fetchDriverData();
+            fetchAdjusterData();
         });
 
         return {
-            driver,
+            adjuster,
             goBack,
             openMessageDialog,
             showMessageDialog,
-            selectedDriver,
+            selectedAdjuster,
             messageForm,
             messageFormRef,
             messageLoading,
@@ -248,7 +248,7 @@ export default {
 </script>
 
 <style scoped>
-.driver-title {
+.adjuster-title {
     font-size: 2rem;
     font-weight: 700;
     color: #1a1a1a;
@@ -258,7 +258,7 @@ export default {
     margin-bottom: 18px;
     border-radius: 8px;
 }
-.driver-details-card {
+.adjuster-details-card {
     width: 90%;
     margin: 0 auto;
     padding: 32px 24px;
@@ -266,13 +266,13 @@ export default {
     box-shadow: 0 4px 24px rgba(102,126,234,0.08);
     background: #fff;
 }
-.driver-profile {
+.adjuster-profile {
     display: flex;
     align-items: center;
     gap: 28px;
     margin-bottom: 16px;
 }
-.driver-image {
+.adjuster-image {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -280,12 +280,12 @@ export default {
     border: 2px solid #e4e7ed;
     box-shadow: 0 2px 8px rgba(102,126,234,0.12);
 }
-.driver-name-status h2 {
+.adjuster-name-status h2 {
     margin: 0 0 8px 0;
     font-size: 1.6em;
     font-weight: 600;
 }
-.driver-name-status .el-tag {
+.adjuster-name-status .el-tag {
     margin-top: 4px;
 }
 .action-btn-group {
@@ -297,24 +297,24 @@ export default {
 .el-divider {
     margin: 24px 0;
 }
-.dialog-driver-info {
+.dialog-adjuster-info {
     margin-bottom: 16px;
     text-align: center;
 }
-.dialog-driver-info h3 {
+.dialog-adjuster-info h3 {
     margin: 0;
     font-size: 1.5em;
     font-weight: 500;
 }
-.dialog-driver-info p {
+.dialog-adjuster-info p {
     margin: 4px 0 0 0;
     color: #666;
 }
 @media (max-width: 700px) {
-    .driver-details-card {
+    .adjuster-details-card {
         padding: 16px 8px;
     }
-    .driver-profile {
+    .adjuster-profile {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;

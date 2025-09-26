@@ -5,7 +5,7 @@
         :router="true">
         <el-menu-item index="general" :to="{ path: '/general' }">General Settings</el-menu-item>
         <el-menu-item index="payment" :to="{ path: '/payment' }">Stripe Settings</el-menu-item>
-        <el-menu-item index="drivers" :to="{ path: '/drivers' }">Drivers</el-menu-item>
+        <el-menu-item index="adjusters" :to="{ path: '/adjusters' }">Adjusters</el-menu-item>
         <el-menu-item index="companies" :to="{ path: '/companies' }">Companies</el-menu-item>
       </el-menu>
       <div class="h-6" />
@@ -34,10 +34,10 @@ export default {
         activeIndex.value = 'subscriber';
       } else if (path.includes('/purchased')) {
         activeIndex.value = 'purchased';
-      } else if (path.includes('/drivers')) {
-        activeIndex.value = 'drivers';
-      } else if (path.includes('/driver-details')) {
-        activeIndex.value = 'drivers';
+      } else if (path.includes('/adjusters')) {
+        activeIndex.value = 'adjusters';
+      } else if (path.includes('/adjuster-details')) {
+        activeIndex.value = 'adjusters';
       } else if (path.includes('/companies')) {
         activeIndex.value = 'companies';
       } else {

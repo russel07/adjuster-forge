@@ -24,7 +24,7 @@ class CsvWriter
     public function _getDir()
     {
         $uploadDir = wp_upload_dir();
-        return $uploadDir['basedir'] . '/' . DRIVER_FORGE_PLUGIN_ASSET_ID;
+        return $uploadDir['basedir'] . '/' . ADJUSTER_FORGE_PLUGIN_ASSET_ID;
     }
 
     public function _mkdir()

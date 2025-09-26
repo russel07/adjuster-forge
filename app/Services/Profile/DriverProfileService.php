@@ -11,7 +11,7 @@ use SmartySoft\AdjusterForge\Http\Model\License;
 use SmartySoft\AdjusterForge\Http\Model\Endorsement;
 use SmartySoft\AdjusterForge\Http\Model\Experience;
 
-class DriverProfileService implements CompleteProfileService
+class AdjusterProfileService implements CompleteProfileService
 {
     use AppHelper;
     public function save(array $data, $user_id): bool
@@ -73,7 +73,7 @@ class DriverProfileService implements CompleteProfileService
         $references_json = $data['references'];
         $references_arr = json_decode( wp_unslash( $references_json ), true );
         $user_data['references'] = $references_arr;
-        $settings = self::getOption('driver_forge_general_settings', []);
+        $settings = self::getOption('adjuster_forge_general_settings', []);
 
         $subscription_data = [
             'profile_completed' => true,
@@ -90,9 +90,9 @@ class DriverProfileService implements CompleteProfileService
         //keep the subscription data
         if ( ! empty( $subscription_data ) ) {
             $profile_data = array_merge($user_data, $subscription_data);
-            update_user_meta( $user_id, 'driver_forge_subscription_data', $profile_data );
+            update_user_meta( $user_id, 'adjuster_forge_subscription_data', $profile_data );
         } else {
-            update_user_meta( $user_id, 'driver_forge_subscription_data', $user_data );
+            update_user_meta( $user_id, 'adjuster_forge_subscription_data', $user_data );
         }
         // Trigger custom action for profile completion (for hooks/emails/logging)
         do_action('diver_forge_after_complete_profile', (object) $user_data);
@@ -157,7 +157,7 @@ class DriverProfileService implements CompleteProfileService
     }
 
     /**
-     * Clear existing driver-specific data before updating
+     * Clear existing adjuster-specific data before updating
      */
     private function clearExistingData($user_id)
     {
@@ -170,7 +170,7 @@ class DriverProfileService implements CompleteProfileService
 
     public function get_data( $user_id ) 
     {
-        $user_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $user_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         $availability = (new Availability())->findByUserId($user_id);
         $availability = array_map(function($item) {
             return $item->availability;

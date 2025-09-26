@@ -6,7 +6,7 @@ defined('ABSPATH') || exit; // Prevent direct access
 
 class Endorsement extends Model
 {
-    protected $tableName = 'af_driver_endorsements';
+    protected $tableName = 'af_adjuster_endorsements';
 
     protected $fillable = [
         'user_id',

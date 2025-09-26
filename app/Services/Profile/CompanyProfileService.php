@@ -11,7 +11,7 @@ class CompanyProfileService implements CompleteProfileService
     use AppHelper;
     public function save(array $data, $user_id): bool
     {
-        $settings = self::getOption('driver_forge_general_settings', []);
+        $settings = self::getOption('adjuster_forge_general_settings', []);
 
         $free_verification = !empty($settings['allow_free_verification']) && $settings['allow_free_verification'] === 'yes';
 
@@ -30,7 +30,7 @@ class CompanyProfileService implements CompleteProfileService
         //keep the subscription data
         if ( ! empty( $subscription_data ) ) {
             $profile_data = array_merge($data, $subscription_data);
-            update_user_meta( $user_id, 'driver_forge_subscription_data', $profile_data );
+            update_user_meta( $user_id, 'adjuster_forge_subscription_data', $profile_data );
         }
         // Trigger custom action for profile completion (for hooks/emails/logging)
         do_action('diver_forge_after_complete_profile', (object) $data);

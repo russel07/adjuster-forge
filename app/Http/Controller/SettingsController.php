@@ -12,7 +12,7 @@ class SettingsController extends BaseController
             // Get the user ID
             $user_id = get_current_user_id();
 
-            $af_general_settings = self::getOption('driver_forge_general_settings', []);
+            $af_general_settings = self::getOption('adjuster_forge_general_settings', []);
             $currency           = isset($af_general_settings['selected_currency']) ? $af_general_settings['selected_currency'] : 'GBP';
             $currency_symbol    = self::getAllowedCurrencySymble();
             $selected_symbol    = isset($currency_symbol[$currency]) ? $currency_symbol[$currency] : '£';

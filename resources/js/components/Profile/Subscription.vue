@@ -12,8 +12,8 @@
 
           <!-- Subscription Plans -->
           <div class="subscription-plans" v-if="!showPaymentForm && !loading">
-            <template v-if="user_data.user_type === 'driver'">
-              <h3 class="section-title">Activate Your Driver profile</h3>
+            <template v-if="user_data.user_type === 'adjuster'">
+              <h3 class="section-title">Activate Your Adjuster profile</h3>
               <div class="plan-switch-row">
                 <span class="switch-label">Billing:</span>
                 <el-switch
@@ -22,7 +22,7 @@
                   inactive-text="Monthly"
                   active-color="#409eff"
                   inactive-color="#e4e7ed"
-                  @change="handleDriverIntervalChange"
+                  @change="handleAdjusterIntervalChange"
                 />
               </div>
               <div class="plans-grid">
@@ -186,7 +186,7 @@ export default {
       const { get, post } = useAppHelper();
       const { error, success } = AlertMessage();
       const { startLoading, stopLoading } = loader();
-      const app_vars = window.driver_forge_app_vars;
+      const app_vars = window.adjuster_forge_app_vars;
       const { profile_page: profilePageURL } = app_vars;
       const stripe_public_key = ref(app_vars.stripe_public_key)
       const stripePromise = loadStripe(stripe_public_key.value)
@@ -297,9 +297,9 @@ export default {
                   user_data.user_name = response.data.user_data.user_name || '';
                   user_data.customer_id = response.data.user_data.customer_id || '';
 
-                  if (user_data.user_type === 'driver' && subscription_plans.value.length > 0) {
-                    // Automatically select the first plan for drivers
-                    selectDriverPlan();
+                  if (user_data.user_type === 'adjuster' && subscription_plans.value.length > 0) {
+                    // Automatically select the first plan for adjusters
+                    selectAdjusterPlan();
                   }
               } else {
                   error(response.message || 'Failed to load subscription plans')
@@ -396,16 +396,16 @@ export default {
           selectedPlan.features = plan.features
       }
 
-      const handleDriverIntervalChange = () => {
+      const handleAdjusterIntervalChange = () => {
         if (subscription_plans.value.length > 0) {
-          selectDriverPlan();
+          selectAdjusterPlan();
         }
       };
 
-      const selectDriverPlan = () => {
+      const selectAdjusterPlan = () => {
         if (subscription_plans.value.length === 0) return;
         
-        const plan = subscription_plans.value[0]; // First plan for drivers
+        const plan = subscription_plans.value[0]; // First plan for adjusters
         
         // Check if plan has both monthly and yearly options
         if (plan.monthly_id && plan.yearly_id) {
@@ -572,7 +572,7 @@ export default {
           initStripeForm,
           getFeatureIcon,
           activateFreeTrial,
-          handleDriverIntervalChange // Add this
+          handleAdjusterIntervalChange // Add this
       }
     }
 }

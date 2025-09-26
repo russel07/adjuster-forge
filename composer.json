@@ -1,5 +1,5 @@
 {
-    "name": "smarty-soft/driver-forge",
+    "name": "smarty-soft/adjuster-forge",
     "description": "Simple WP Plugin to manage campaign and generate Leads",
     "type": "project",
     "autoload": {

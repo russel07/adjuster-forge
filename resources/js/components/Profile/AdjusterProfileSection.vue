@@ -216,7 +216,7 @@ import { ref } from 'vue';
 import { Delete, Document, Picture, CircleCheck, CirclePlus } from '@element-plus/icons-vue';
 
 export default {
-  name: 'DriverProfileSection',
+  name: 'AdjusterProfileSection',
   props: [
     'error',
     't_c_page_url',
@@ -315,7 +315,7 @@ export default {
       }
     };
 
-    // Driver file handlers
+    // Adjuster file handlers
     const resumeFileChange = (file, uploadedFiles) => {
       if (!file.raw.type === 'application/pdf' && !file.raw.name.toLowerCase().endsWith('.pdf')) {
         ResumeFileList.value = [];
@@ -397,7 +397,7 @@ export default {
       });
     };
 
-    // Custom references validation (driver only)
+    // Custom references validation (adjuster only)
     const validateReferences = () => {
       const references = profileForm.value.references;
       if (!Array.isArray(references) || references.length < 2) {

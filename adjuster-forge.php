@@ -35,7 +35,7 @@ defined('ADJUSTER_FORGE_PLUGIN_BASE_PATH') || define('ADJUSTER_FORGE_PLUGIN_BASE
 if ( file_exists(__DIR__ . '/vendor/autoload.php' ) ) {
     require_once __DIR__ . '/vendor/autoload.php';
 } else {
-    wp_die( esc_html__( 'Autoload file is missing.', 'driver-forge' ) );
+    wp_die( esc_html__( 'Autoload file is missing.', 'adjuster-forge' ) );
 }
 
 // Register activation hook with a callable array method.
@@ -47,14 +47,14 @@ register_deactivation_hook(__FILE__, array('SmartySoft\AdjusterForge\Config\Boot
 /**
  * Initializes the DriveForYou plugin.
  */
-function smarty_soft_driver_forge_init()
+function smarty_soft_adjuster_forge_init()
 {
     if (class_exists('SmartySoft\AdjusterForge\Config\Bootstrap')) {
         $bootstrap = new SmartySoft\AdjusterForge\Config\Bootstrap();
         $bootstrap->boot();
     } else {
-        wp_die( esc_html__( 'Drive for you plugin is not properly installed.', 'driver-forge' ) );
+        wp_die( esc_html__( 'Drive for you plugin is not properly installed.', 'adjuster-forge' ) );
     }
 }
 
-add_action( 'plugins_loaded', 'smarty_soft_driver_forge_init' );
+add_action( 'plugins_loaded', 'smarty_soft_adjuster_forge_init' );

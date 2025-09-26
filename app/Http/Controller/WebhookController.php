@@ -148,7 +148,7 @@ class WebhookController extends BaseController
                 'created_at'        => current_time('mysql'),
             ]); 
 
-            $existing_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+            $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
             if ( ! empty( $existing_data ) ) {
                 $existing_data['subscription_canceled'] = true;
                 $existing_data['subscription_canceled_at'] = current_time('mysql');
@@ -161,7 +161,7 @@ class WebhookController extends BaseController
                 ];
             }
 
-            update_user_meta($user_id, 'driver_forge_subscription_data', $existing_data);
+            update_user_meta($user_id, 'adjuster_forge_subscription_data', $existing_data);
 
             return $this->response([
                 'message' => 'Subscription cancelled, user meta updated',
@@ -239,7 +239,7 @@ class WebhookController extends BaseController
                 'created_at'        => current_time('mysql'),
             ]); 
 
-            $existing_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+            $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
             if ( ! empty( $existing_data ) ) {
                 $existing_data['subscription_canceled'] = true;
                 $existing_data['subscription_canceled_at'] = current_time('mysql');
@@ -252,7 +252,7 @@ class WebhookController extends BaseController
                 ];
             }
 
-            update_user_meta($user_id, 'driver_forge_subscription_data', $existing_data);
+            update_user_meta($user_id, 'adjuster_forge_subscription_data', $existing_data);
         }
 
         return $this->response([

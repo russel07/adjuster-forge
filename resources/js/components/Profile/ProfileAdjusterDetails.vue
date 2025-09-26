@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h3 style="margin-top:30px;">Driver Details</h3>
+    <h3 style="margin-top:30px;">Adjuster Details</h3>
     <el-descriptions border :column="2">
-      <el-descriptions-item label="Phone">{{ driverData.phone }}</el-descriptions-item>
+      <el-descriptions-item label="Phone">{{ adjusterData.phone }}</el-descriptions-item>
       <el-descriptions-item label="Resume">
-        <template v-if="driverData.resume">
+        <template v-if="adjusterData.resume">
           <div class="document-item">
-            <el-button type="primary" size="small" @click="downloadFile(driverData.resume)">
+            <el-button type="primary" size="small" @click="downloadFile(adjusterData.resume)">
               📄 Download
             </el-button>
           </div>
@@ -16,9 +16,9 @@
         </template>
       </el-descriptions-item>
       <el-descriptions-item label="Medical Card">
-        <template v-if="driverData.medical_card">
+        <template v-if="adjusterData.medical_card">
           <div class="document-item">
-            <el-button type="success" size="small" @click="downloadFile(driverData.medical_card)">
+            <el-button type="success" size="small" @click="downloadFile(adjusterData.medical_card)">
               🏥 Download
             </el-button>
           </div>
@@ -28,9 +28,9 @@
         </template>
       </el-descriptions-item>
       <el-descriptions-item label="Motor Vehicle Record (MVR)">
-        <template v-if="driverData.mvr">
+        <template v-if="adjusterData.mvr">
           <div class="document-item">
-            <el-button type="warning" size="small" @click="downloadFile(driverData.mvr)">
+            <el-button type="warning" size="small" @click="downloadFile(adjusterData.mvr)">
               🚗 Download
             </el-button>
           </div>
@@ -40,9 +40,9 @@
         </template>
       </el-descriptions-item>
       <el-descriptions-item label="Professional References">
-        <template v-if="driverData.references && driverData.references.length">
+        <template v-if="adjusterData.references && adjusterData.references.length">
           <ul>
-            <li v-for="(ref, idx) in driverData.references" :key="idx">
+            <li v-for="(ref, idx) in adjusterData.references" :key="idx">
               <strong>{{ ref.name }}</strong> - {{ ref.phone }} ({{ ref.years_known }} years)
             </li>
           </ul>
@@ -51,34 +51,34 @@
       </el-descriptions-item>
       <el-descriptions-item label="License Classes">
         <div class="tag-container">
-          <el-tag v-for="(license, index) in driverData.licenses" :key="index" type="primary" class="detail-tag">
+          <el-tag v-for="(license, index) in adjusterData.licenses" :key="index" type="primary" class="detail-tag">
             {{ license }}
           </el-tag>
-          <span v-if="!driverData.licenses?.length" class="no-data">Not specified</span>
+          <span v-if="!adjusterData.licenses?.length" class="no-data">Not specified</span>
         </div>
       </el-descriptions-item>
       <el-descriptions-item label="Endorsements">
         <div class="tag-container">
-          <el-tag v-for="(endorsement, index) in driverData.endorsements" :key="index" type="warning" class="detail-tag">
+          <el-tag v-for="(endorsement, index) in adjusterData.endorsements" :key="index" type="warning" class="detail-tag">
             {{ endorsement }}
           </el-tag>
-          <span v-if="!driverData.endorsements?.length" class="no-data">None</span>
+          <span v-if="!adjusterData.endorsements?.length" class="no-data">None</span>
         </div>
       </el-descriptions-item>
       <el-descriptions-item label="Experience">
         <div class="tag-container">
-          <el-tag v-for="(experience, index) in driverData.experience" :key="index" type="info" class="detail-tag">
+          <el-tag v-for="(experience, index) in adjusterData.experience" :key="index" type="info" class="detail-tag">
             {{ experience.type }} ({{ experience.years }} years)
           </el-tag>
-          <span v-if="!driverData.experience?.length" class="no-data">No experience listed</span>
+          <span v-if="!adjusterData.experience?.length" class="no-data">No experience listed</span>
         </div>
       </el-descriptions-item>
       <el-descriptions-item label="Availability">
         <div class="tag-container">
-          <el-tag v-for="(slot, index) in driverData.availability" :key="index" type="success" class="detail-tag">
+          <el-tag v-for="(slot, index) in adjusterData.availability" :key="index" type="success" class="detail-tag">
             {{ slot }}
           </el-tag>
-          <span v-if="!driverData.availability?.length" class="no-data">Not specified</span>
+          <span v-if="!adjusterData.availability?.length" class="no-data">Not specified</span>
         </div>
       </el-descriptions-item>
     </el-descriptions>
@@ -87,9 +87,9 @@
 
 <script>
 export default {
-  name: 'ProfileDriverDetails',
+  name: 'ProfileAdjusterDetails',
   props: {
-    driverData: {
+    adjusterData: {
       type: Object,
       required: true
     }

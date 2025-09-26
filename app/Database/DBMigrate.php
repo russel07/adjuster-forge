@@ -3,14 +3,15 @@
 namespace SmartySoft\AdjusterForge\Database;
 
 defined('ABSPATH') || exit; // Prevent direct access
-use SmartySoft\AdjusterForge\Database\Migrations\UserSubscriptionMigrator;
-use SmartySoft\AdjusterForge\Database\Migrations\SubscriptionHistoryMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterAvailabilityMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterCareerExperienceMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterCertificationsMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterEquipmentExperienceMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterLicencesMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\DcMessagesMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\JobApplicationMigrator;
-use SmartySoft\AdjusterForge\Database\Migrations\AdjusterAvailabilityMigrator;
-use SmartySoft\AdjusterForge\Database\Migrations\DriverLicencesMigrator;
-use SmartySoft\AdjusterForge\Database\Migrations\DriverEndorsementsMigrator;
-use SmartySoft\AdjusterForge\Database\Migrations\DriverEquipmentExperienceMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\SubscriptionHistoryMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\UserSubscriptionMigrator;
 
 require_once( ABSPATH.'wp-admin/includes/upgrade.php' );
 
@@ -22,9 +23,10 @@ class DBMigrate
         DcMessagesMigrator::class,
         JobApplicationMigrator::class,
         AdjusterAvailabilityMigrator::class,
-        DriverLicencesMigrator::class,
-        DriverEndorsementsMigrator::class,
-        DriverEquipmentExperienceMigrator::class
+        AdjusterCareerExperienceMigrator::class,
+        AdjusterCertificationsMigrator::class,
+        AdjusterLicencesMigrator::class,
+        AdjusterEquipmentExperienceMigrator::class
     ];
 
     public static function run(){

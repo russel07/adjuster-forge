@@ -1,11 +1,11 @@
 <template>
-  <div class="driver-forge-profile-wrapper">
+  <div class="adjuster-forge-profile-wrapper">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: "DriverForgeProfile",
+  name: "AdjusterForgeProfile",
 };
 </script>

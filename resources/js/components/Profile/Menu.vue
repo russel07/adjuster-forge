@@ -12,8 +12,8 @@
         <el-menu-item index="inbox" :to="{ path: '/inbox' }">
           <el-icon v-if="user_status !== 'active' || plan_type === 'free_trial'"><Lock /></el-icon> Inbox</el-menu-item>
 
-        <!-- Driver specific menu items -->
-        <template v-if="user_type === 'driver' ">
+        <!-- Adjuster specific menu items -->
+        <template v-if="user_type === 'adjuster' ">
           <el-menu-item index="my-jobs" :to="{ path: '/my-jobs' }">
             <el-icon v-if="user_status !== 'active'"><Lock /></el-icon>My Jobs
           </el-menu-item>
@@ -30,8 +30,8 @@
           <el-menu-item index="post-job" :to="{ path: '/post-job' }">
             <el-icon v-if="user_status !== 'active' || plan_type !== 'premium'"><Lock /></el-icon> Post Job
           </el-menu-item>
-          <el-menu-item index="drivers" :to="{ path: '/drivers' }">
-            <el-icon v-if="user_status !== 'active' "><Lock /></el-icon> Drivers
+          <el-menu-item index="adjusters" :to="{ path: '/adjusters' }">
+            <el-icon v-if="user_status !== 'active' "><Lock /></el-icon> Adjusters
           </el-menu-item>
         </template>
         
@@ -63,7 +63,7 @@ export default {
     const route = useRoute(); // Get the current route
     const router = useRouter();
     const activeIndex = ref('my-profile');
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const is_logged_in = `${app_vars.is_logged_in}`;
     const logo_url = `${app_vars.app_logo}`;
     const home_url = `${app_vars.home_url}`;
@@ -86,8 +86,8 @@ export default {
         activeIndex.value = 'jobs';
       } else if ( path.includes('post-job') ) {
         activeIndex.value = 'post-job';
-      }  else if ( path.includes('drivers') ) {
-        activeIndex.value = 'drivers';
+      }  else if ( path.includes('adjusters') ) {
+        activeIndex.value = 'adjusters';
       } else if ( path.includes('/payment-history') ) {
         activeIndex.value = 'payment-history';
       }  else if ( path.includes('/change-password') ) {

@@ -278,7 +278,7 @@ export default {
         const { error, success } = AlertMessage();
         const { startLoading, stopLoading } = loader();
         // Get current user ID from global app_vars
-        const app_vars = window.driver_forge_app_vars || {};
+        const app_vars = window.adjuster_forge_app_vars || {};
         const image_url = `${app_vars.image_url ? app_vars.image_url : ''}`;
         const currentUserId = app_vars.user_data ? app_vars.user_data.user_id : null;
         const isAuthor = computed(() => {

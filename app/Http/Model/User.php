@@ -13,7 +13,7 @@ class User extends Model
 {
     protected $tableName = 'users';
 
-    public function getAll( $date =  null, $role = 'driver')
+    public function getAll( $date =  null, $role = 'adjuster')
     {
         if( $date ){
             $date = date( 'Y-m', strtotime( $date ) );
@@ -35,7 +35,7 @@ class User extends Model
         return $results ? $results : [];
     }
 
-    public function getAllByLimit( $limit, $offset, $role = 'driver' ) {
+    public function getAllByLimit( $limit, $offset, $role = 'adjuster' ) {
         $query = "SELECT u.ID, u.user_login, u.user_email 
                 FROM {$this->tableName} u
                 INNER JOIN {$this->_wpdb->usermeta} um ON u.ID = um.user_id
@@ -48,7 +48,7 @@ class User extends Model
     }
 
 
-    public function search($limit, $offset, $query, $role = 'driver')
+    public function search($limit, $offset, $query, $role = 'adjuster')
     {
         $like_query = '%' . $this->_wpdb->esc_like($query) . '%';
         $query_string = "SELECT * FROM {$this->tableName} WHERE (user_login LIKE %s OR user_email LIKE %s) AND ID IN (SELECT user_id FROM {$this->_wpdb->usermeta} WHERE meta_key = %s AND meta_value LIKE %s) LIMIT %d OFFSET %d";
@@ -59,7 +59,7 @@ class User extends Model
         return $results ? $results : [];
     }
 
-    public function filterUsers( $limit, $offset, $params, $role = 'driver')
+    public function filterUsers( $limit, $offset, $params, $role = 'adjuster')
     {
         $where = [];
         $query_args = [];

@@ -13,8 +13,8 @@ class FilterHooksHandler
 {
     use AppHelper;
 
-    public static function driver_forge_query_vars( $vars ) {
-        $vars[] = 'driver_forge_download_file';
+    public static function adjuster_forge_query_vars( $vars ) {
+        $vars[] = 'adjuster_forge_download_file';
         return $vars;
     }
 }
