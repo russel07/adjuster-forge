@@ -412,7 +412,7 @@
                         <h2>Terms & Submit</h2>
                         <p>Final steps</p>
                     </div>
-                    <el-form-item prop="declaration_agreed" :required="true">
+                    <el-form-item prop="declaration_agreed" :required="true" :rules="rules.declaration_agreed">
                         <el-checkbox v-model="profileForm.declaration_agreed">
                             I confirm all information is accurate and I consent to a background check.
                         </el-checkbox>
@@ -425,12 +425,11 @@
                     </div>
 
                     <el-form-item>
-                        <div class="button-container">
-                            <el-button type="primary" class="submit-button" @click="handleSubmit" :loading="loading">
-                                Submit Application
-                            </el-button>
-                            <el-button type="text" class="save-draft">Save as Draft</el-button>
-                        </div>
+                      <div class="button-container">
+                        <el-button type="primary" class="submit-button" @click="handleSubmit" :loading="loading">
+                            Submit
+                        </el-button>
+                      </div>
                     </el-form-item>
                 </div>
             </el-form>
@@ -542,7 +541,18 @@ export default {
           trigger: 'blur',
         },
       ],
-      declaration_agreed: [{ required: true, message: 'You must confirm the provided information is correct', trigger: 'change' }],
+      declaration_agreed: [
+        { 
+          required: true, 
+          validator: (rule, value, callback) => {
+            if (value !== true) {
+              return callback(new Error('You must confirm the provided information is correct'));
+            }
+            return callback();
+          }, 
+          trigger: 'change' 
+        }
+      ],
     };
 
     const profileFormRef = ref(null);
@@ -701,6 +711,12 @@ export default {
 
     // Submit handler
     const handleSubmit = () => {
+      // First check if declaration is agreed
+      if (!profileForm.value.declaration_agreed) {
+        error('You must confirm that all provided information is correct before submitting.');
+        return;
+      }
+      
       profileFormRef.value.validate(async (valid) => {
         if (!valid) return;
         if (!validateReferences()) return;
@@ -1161,22 +1177,6 @@ export default {
   color: #f56c6c;
   font-size: 0.85em;
   margin-top: 4px;
-}
-
-/* Button Styling */
-.submit-button {
-  background: var(--accent) !important;
-  border-color: var(--accent) !important;
-  color: #061018 !important;
-  font-weight: 700 !important;
-  min-width: 200px;
-  padding: 12px 24px !important;
-}
-
-.save-draft {
-  background: transparent !important;
-  color: var(--muted) !important;
-  text-decoration: underline;
 }
 
 .button-container {
