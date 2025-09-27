@@ -21,7 +21,7 @@
                 <p class="badge-subtitle">Exclusive. Vetted. Deployable.</p>
             </div>
         </header>
-
+        <el-divider content-position="left"></el-divider>
         <el-form
             :model="profileForm"
             ref="profileFormRef"
@@ -34,10 +34,7 @@
 
             <!-- Personal & Contact Information -->
             <div class="form-section">
-                <div class="section-legend">
-                    <h2>Personal & Contact</h2>
-                    <p>Tell us who you are</p>
-                </div>
+                <el-divider content-position="left">Contact Information</el-divider>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Phone Number" prop="phone">
@@ -55,34 +52,17 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <el-form-item label="Location (City, State)" prop="location">
-                            <el-row :gutter="10">
-                                <el-col :span="14">
-                                    <el-input v-model="profileForm.city" placeholder="Houston"></el-input>
-                                </el-col>
-                                <el-col :span="10">
-                                    <el-select v-model="profileForm.state" placeholder="Select State">
-                                        <el-option label="TX" value="TX" />
-                                        <el-option label="FL" value="FL" />
-                                        <el-option label="LA" value="LA" />
-                                        <el-option label="CA" value="CA" />
-                                        <el-option label="NY" value="NY" />
-                                        <el-option label="Other" value="Other" />
-                                    </el-select>
-                                </el-col>
-                            </el-row>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
             </div>
 
                 <!-- Experience & Eligibility -->
                 <div class="form-section">
-                    <div class="section-legend">
-                        <h2>Experience & Eligibility</h2>
-                        <p>Minimum requirements and quick summary</p>
+                    <el-divider content-position="left">Experience & Eligibility</el-divider>
+                    <!-- Requirements Checklist -->
+                    <div class="requirements-checklist">
+                        <div class="check-item">
+                            <el-icon class="check-icon"><CircleCheck /></el-icon>
+                            <span><strong>3+ years licensed</strong> OR <strong>2+ CAT deployments</strong> with verifiable references</span>
+                        </div>
                     </div>
                     <el-row :gutter="20">
                         <el-col :span="12">
@@ -107,88 +87,76 @@
                         ></el-input>
                         <div class="helper-text">Minimum 60 characters. Please include verifiable deployment details when possible.</div>
                     </el-form-item>
-
-                    <!-- Requirements Checklist -->
-                    <div class="requirements-checklist">
-                        <div class="check-item">
-                            <el-icon class="check-icon"><CircleCheck /></el-icon>
-                            <span><strong>3+ years licensed</strong> OR <strong>2+ CAT deployments</strong> with verifiable references</span>
-                        </div>
-                        <div class="check-item">
-                            <el-icon class="check-icon"><CircleCheck /></el-icon>
-                            <span><strong>At least one active state license</strong> (TX, FL, LA, CA, NY recommended)</span>
-                        </div>
-                        <div class="check-item">
-                            <el-icon class="check-icon"><CircleCheck /></el-icon>
-                            <span><strong>Required documents</strong> (Resume, W-9, Background check, References, E&O/COI)</span>
-                        </div>
-                    </div>
                 </div>
 
                 <el-divider content-position="left">Licensing</el-divider>
                 <!-- Licensing -->
                 <div class="form-section">
-                    <div class="section-legend">
-                        <h2>Licensing</h2>
-                        <p>At least one active license in a high-demand state is required</p>
-                    </div>
-                    <div v-for="(license, idx) in profileForm.licenses" :key="idx" class="license-entry">
-                        <div class="license-header">
-                            <span class="license-label">License {{ idx + 1 }}</span>
-                            <el-tooltip v-if="idx > 0" content="Remove License" placement="top">
-                                <el-icon @click="removeLicense(idx)" class="remove-button"><Delete /></el-icon>
-                            </el-tooltip>
-                        </div>
-                        <el-row :gutter="10">
-                            <el-col :span="8">
-                                <el-select v-model="license.state" placeholder="State" :required="idx === 0">
-                                    <el-option label="TX" value="TX" />
-                                    <el-option label="FL" value="FL" />
-                                    <el-option label="LA" value="LA" />
-                                    <el-option label="CA" value="CA" />
-                                    <el-option label="NY" value="NY" />
-                                    <el-option label="Other" value="Other" />
-                                </el-select>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-input v-model="license.number" placeholder="License number" :required="idx === 0" />
-                            </el-col>
-                            <el-col :span="8">
-                                <el-date-picker 
-                                    v-model="license.expiration" 
-                                    type="date" 
-                                    placeholder="Expiration date"
-                                    :required="idx === 0"
-                                    style="width: 100%"
-                                />
-                            </el-col>
-                        </el-row>
-                        <el-form-item :label="idx === 0 ? 'Upload License Copy *' : 'Upload License Copy'" style="margin-top: 10px">
-                            <el-upload
-                                :on-change="(file, files) => licenseFileChange(file, files, idx)"
-                                :file-list="license.fileList || []"
-                                :auto-upload="false"
-                                accept=".pdf,.jpg,.png"
-                                :limit="1"
-                                drag
-                                class="license-upload"
-                            >
-                                <el-icon><Document /></el-icon>
-                                <div>Click or drag license copy to upload</div>
-                            </el-upload>
-                        </el-form-item>
-                    </div>
-                    <el-button type="primary" @click="addLicense" style="margin-top: 10px;">
-                        + Add License
-                    </el-button>
+                  <div class="requirements-checklist">
+                      <div class="check-item">
+                          <el-icon class="check-icon"><CircleCheck /></el-icon>
+                          <span><strong>At least one active state license</strong> (TX, FL, LA, CA, NY recommended)</span>
+                      </div>
+                  </div>
+                  <div v-for="(license, idx) in profileForm.licenses" :key="idx" class="license-entry">
+                      <div class="license-header">
+                          <span class="license-label">License {{ idx + 1 }}</span>
+                          <el-tooltip v-if="idx > 0" content="Remove License" placement="top">
+                              <el-icon @click="removeLicense(idx)" class="remove-button"><Delete /></el-icon>
+                          </el-tooltip>
+                      </div>
+                      <el-row :gutter="10">
+                          <el-col :span="8">
+                              <el-select v-model="license.state" placeholder="State" :required="idx === 0">
+                                  <el-option label="TX" value="TX" />
+                                  <el-option label="FL" value="FL" />
+                                  <el-option label="LA" value="LA" />
+                                  <el-option label="CA" value="CA" />
+                                  <el-option label="NY" value="NY" />
+                                  <el-option label="Other" value="Other" />
+                              </el-select>
+                          </el-col>
+                          <el-col :span="8">
+                              <el-input v-model="license.number" placeholder="License number" :required="idx === 0" />
+                          </el-col>
+                          <el-col :span="8">
+                              <el-date-picker 
+                                  v-model="license.expiration" 
+                                  type="date" 
+                                  placeholder="Expiration date"
+                                  :required="idx === 0"
+                                  style="width: 100%"
+                              />
+                          </el-col>
+                      </el-row>
+                      <el-form-item :label="idx === 0 ? 'Upload License Copy *' : 'Upload License Copy'" style="margin-top: 10px">
+                          <el-upload
+                              :on-change="(file, files) => licenseFileChange(file, files, idx)"
+                              :file-list="license.fileList || []"
+                              :auto-upload="false"
+                              accept=".pdf,.jpg,.png"
+                              :limit="1"
+                              drag
+                              class="license-upload"
+                          >
+                              <el-icon><Document /></el-icon>
+                              <div>Click or drag license copy to upload</div>
+                          </el-upload>
+                      </el-form-item>
+                  </div>
+                  <el-button type="primary" @click="addLicense" style="margin-top: 10px;">
+                      + Add License
+                  </el-button>
                 </div>
 
                 <el-divider content-position="left">Certifications & Badges</el-divider>
                 <!-- Certifications & Badges -->
                 <div class="form-section">
-                    <div class="section-legend">
-                        <h2>Certifications & Badges</h2>
-                        <p>Select at least one proficiency (stackable)</p>
+                    <div class="requirements-checklist">
+                      <div class="check-item">
+                          <el-icon class="check-icon"><CircleCheck /></el-icon>
+                          <span>Badges represent skills and compliance — they do not indicate membership tiers.</span>
+                      </div>
                     </div>
                     <div class="badges-grid">
                         <div 
@@ -212,17 +180,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="helper-text">Badges represent skills and compliance — they do not indicate membership tiers.</div>
                 </div>
 
                 <el-divider content-position="left">Carrier & IA Experience</el-divider>
                 
                 <!-- Carrier & IA Experience -->
                 <div class="form-section">
-                    <div class="section-legend">
-                        <h2>Carrier & IA Experience</h2>
-                        <p>Show prior work with major carriers</p>
-                    </div>
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="Carrier Experience" prop="carrier_experience">
@@ -270,10 +233,6 @@
                 <el-divider content-position="left">Verification Documents</el-divider>
                 <!-- Verification Documents -->
                 <div class="form-section">
-                    <div class="section-legend">
-                        <h2>Verification Documents (required)</h2>
-                        <p>Upload all required documents for manual review</p>
-                    </div>
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="Resume / CV" prop="resume">
@@ -408,10 +367,6 @@
                 
                 <!-- Terms & Submit -->
                 <div class="form-section">
-                    <div class="section-legend">
-                        <h2>Terms & Submit</h2>
-                        <p>Final steps</p>
-                    </div>
                     <el-form-item prop="declaration_agreed" :required="true" :rules="rules.declaration_agreed">
                         <el-checkbox v-model="profileForm.declaration_agreed">
                             I confirm all information is accurate and I consent to a background check.
@@ -490,7 +445,7 @@ export default {
         { name: '', phone: '', relationship: '' },
       ],
       
-      declaration_agreed: false,
+      declaration_agreed: true,
     });
 
     const availableBadges = [
@@ -852,8 +807,14 @@ export default {
 }
 
 .adjuster-application-container {
-  background: linear-gradient(180deg, var(--bg) 0%, #05132a 100%);
-  color: var(--white);
+  max-width: 90%;
+  margin: 0 auto;
+  margin-top: 10px;
+  padding: 30px 20px;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 4px 24px rgba(102,126,234,0.08);
   min-height: 100vh;
   padding: 40px 20px;
 }
@@ -928,7 +889,6 @@ export default {
 .profile-complete-form {
   background: var(--card);
   border-radius: var(--radius);
-  padding: 28px;
   box-shadow: var(--shadow);
   border: 1px solid rgba(255,255,255,0.03);
   max-width: 1100px;
@@ -947,25 +907,6 @@ export default {
 .form-section:hover {
   transform: translateY(-2px);
   transition: transform 160ms;
-}
-
-.section-legend {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.section-legend h2 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--white);
-}
-
-.section-legend p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
 }
 
 /* Element Plus Overrides */
@@ -1252,15 +1193,6 @@ export default {
   }
 }
 
-/* Divider Styling */
-.el-divider {
-  border-color: rgba(255,255,255,0.06) !important;
-}
-
-.el-divider__text {
-  color: var(--white) !important;
-  background-color: var(--card) !important;
-}
 
 /* Date Picker Styling */
 .el-date-editor.el-input {

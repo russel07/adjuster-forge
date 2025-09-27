@@ -26,3 +26,4 @@ CREATE TABLE compliance_packets (
     generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (adjuster_id) REFERENCES adjusters(id) ON DELETE CASCADE
 );
+c
