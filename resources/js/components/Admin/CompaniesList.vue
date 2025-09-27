@@ -92,7 +92,7 @@ export default {
         const { get, post, imageUrl, getStatusLabel } = useAppHelper();
         const { error, success } = AlertMessage();
         const { startLoading, stopLoading } = loader();
-        const app_vars = window.driver_forge_app_vars;
+        const app_vars = window.adjuster_forge_app_vars;
         const image_url = `${app_vars.image_url ? app_vars.image_url : ''}`;
         const currency = `${app_vars.currency}`;
         const currentPage = ref(1);

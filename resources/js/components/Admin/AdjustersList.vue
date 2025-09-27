@@ -3,11 +3,11 @@
         <el-main class="main-center">
             <Header />
             <div class="dashboard-container">
-                <h1>List of Driver Users</h1>
+                <h1>List of Adjuster Users</h1>
 
                 <el-card>
                     <div class="table-responsive">
-                        <el-table :data="driversData" style="width: 100%">
+                        <el-table :data="adjustersData" style="width: 100%">
                             <el-table-column label="Profile" width="100px" align="center">
                                 <template #default="scope">
                                     <el-image
@@ -93,7 +93,7 @@ import { loader } from '../../Composable/Loader';
 import Header from "../Header";
 
 export default {
-    name: "DriversList",
+    name: "AdjustersList",
     components: {
         Header,
     },
@@ -102,31 +102,31 @@ export default {
         const { get, post, imageUrl, getStatusLabel } = useAppHelper();
         const { error, success } = AlertMessage();
         const { startLoading, stopLoading } = loader();
-        const app_vars = window.driver_forge_app_vars;
+        const app_vars = window.adjuster_forge_app_vars;
         const image_url = `${app_vars.image_url ? app_vars.image_url : ''}`;
         const currentPage = ref(1);
         const pageSize = ref(10);
         const totalItems = ref(10);
-        const driversData = ref([]);
+        const adjustersData = ref([]);
         const search = ref('');
 
         const viewDetails = (row) => {
             router.push({
-                name: 'driver-details',
+                name: 'adjuster-details',
                 params: { user_id: row.user_id },
             });
         };
 
-        const fetchDriversData = async () => {
+        const fetchAdjustersData = async () => {
             startLoading();
             try {
-                const response = await get(`drivers?page=${currentPage.value}&per_page=${pageSize.value}&search=${search.value}`);
+                const response = await get(`adjusters?page=${currentPage.value}&per_page=${pageSize.value}&search=${search.value}`);
                 if (response.status === 'success') {
                     const data = response.data;
                     currentPage.value = data.current_page;
                     pageSize.value = data.per_page;
                     totalItems.value = data.total_items;
-                    driversData.value = data.drivers_list;
+                    adjustersData.value = data.adjusters_list;
                 } else {
                     error(response.message)
                 }
@@ -139,7 +139,7 @@ export default {
 
         const handlePageChange = (newPage) => {
             currentPage.value = newPage;
-            fetchDriversData();
+            fetchAdjustersData();
         };
 
         const handleSizeChange = (newPageSize) => {
@@ -147,7 +147,7 @@ export default {
             if (pageSize.value > totalItems.value) {
                 currentPage.value = 1;
             }
-            fetchDriversData();
+            fetchAdjustersData();
         };
 
         // Function to format date
@@ -168,7 +168,7 @@ export default {
 
                 if (response.status === 'success') {
                     success(response.message);
-                    fetchDriversData();
+                    fetchAdjustersData();
                 } else {
                     error(response.message);
                 }
@@ -191,16 +191,16 @@ export default {
         };
 
         watch(search, debounce((newQuery) => {
-            fetchDriversData();
+            fetchAdjustersData();
         }, 1000));
 
         onMounted(() => {
-            fetchDriversData();
+            fetchAdjustersData();
         });
 
         return {
             search,
-            driversData,
+            adjustersData,
             currentPage,
             pageSize,
             totalItems,

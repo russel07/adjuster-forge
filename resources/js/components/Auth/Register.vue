@@ -1,5 +1,5 @@
 <template>
-  <div class="driver-forge-profile-register">
+  <div class="adjuster-forge-profile-register">
     <el-form :model="registerForm" ref="registerFormRef" :rules="rules" label-position="top" label-width="auto"
       class="register-form" validate-on-blur validate-on-change>
       <el-row>
@@ -11,7 +11,7 @@
 
       <el-form-item label="I am a" prop="user_type">
         <el-radio-group v-model="registerForm.user_type">
-          <el-radio label="driver">Driver</el-radio>
+          <el-radio label="adjuster">Adjuster</el-radio>
           <el-radio label="company">Company</el-radio>
         </el-radio-group>
       </el-form-item>
@@ -82,7 +82,7 @@ export default {
     const { post } = useAppHelper();
     const { error, success } = AlertMessage();
     const { startLoading, stopLoading } = loader();
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const is_logged_in = app_vars.is_logged_in;
     const profile_page_url = app_vars.profile_page;
     const t_c_page_url = app_vars.t_c_page;

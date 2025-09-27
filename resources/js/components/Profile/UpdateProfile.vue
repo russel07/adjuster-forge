@@ -51,8 +51,8 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <template v-if="user_type === 'driver'">
-                <el-divider content-position="left">Driver Specific Details</el-divider>
+              <template v-if="user_type === 'adjuster'">
+                <el-divider content-position="left">Adjuster Specific Details</el-divider>
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <el-form-item label="Availability" prop="availability">
@@ -212,7 +212,7 @@ export default {
     const { get, post } = useAppHelper();
     const { error, success } = AlertMessage();
     const { startLoading, stopLoading } = loader();
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const user_type = app_vars.user_data?.user_type || '';
     const loading = ref(false);
     const formRef = ref(null);
@@ -223,7 +223,7 @@ export default {
       state: '',
       country: '',
       phone: '',
-      ...(user_type === 'driver'
+      ...(user_type === 'adjuster'
     ? {
         bio: '',
         availability: [],
@@ -254,7 +254,7 @@ export default {
         { required: true, message: 'Mobile number is required', trigger: 'blur' },
         { pattern: /^[0-9+\-\s()]{7,20}$/, message: 'Please enter a valid mobile number', trigger: 'blur' }
       ],
-      ...(user_type === 'driver'
+      ...(user_type === 'adjuster'
       ? {
           availability: [{ required: false, message: 'Please select at least one availability option', trigger: 'change' }],
           license_classes: [{ required: true, message: 'Please select at least one license class', trigger: 'change' }],
@@ -318,25 +318,25 @@ export default {
           form.value.country = response.country || '';
           form.value.phone = response.phone || '';
 
-          if (user_type === 'driver') {
+          if (user_type === 'adjuster') {
             form.value.about = response.bio || '';
-            const driver_data = response.driver_data || {};
-            // Set driver-specific form data
-            form.value.availability = Array.isArray(driver_data.availability) 
-              ? driver_data.availability.map(item => item.name || item) 
+            const adjuster_data = response.adjuster_data || {};
+            // Set adjuster-specific form data
+            form.value.availability = Array.isArray(adjuster_data.availability) 
+              ? adjuster_data.availability.map(item => item.name || item) 
               : [];
             
-            form.value.license_classes = Array.isArray(driver_data.licenses) 
-              ? driver_data.licenses.map(item => item.name || item) 
+            form.value.license_classes = Array.isArray(adjuster_data.licenses) 
+              ? adjuster_data.licenses.map(item => item.name || item) 
               : [];
             
-            form.value.endorsements = Array.isArray(driver_data.endorsements) 
-              ? driver_data.endorsements.map(item => item.name || item) 
+            form.value.endorsements = Array.isArray(adjuster_data.endorsements) 
+              ? adjuster_data.endorsements.map(item => item.name || item) 
               : [];
             
             // Set equipment experience
-            if (Array.isArray(driver_data.experience) && driver_data.experience.length > 0) {
-              form.value.equipment_experience = driver_data.experience.map(item => ({
+            if (Array.isArray(adjuster_data.experience) && adjuster_data.experience.length > 0) {
+              form.value.equipment_experience = adjuster_data.experience.map(item => ({
                 type: item.name || item.type || '',
                 years: item.years || null
               }));
@@ -345,7 +345,7 @@ export default {
             }
 
             // Set references
-            let references = driver_data.user_data?.references || [];
+            let references = adjuster_data.user_data?.references || [];
             if (typeof references === 'string') {
               references = references.replace(/\\"/g, '"');
               try {

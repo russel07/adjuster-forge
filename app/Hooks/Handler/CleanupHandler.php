@@ -21,10 +21,10 @@ class CleanupHandler
         foreach ($users as $user) {
             // Check if the subscription is expired
             if (self::is_subscription_expired($user)) {
-                $subscription_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+                $subscription_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
                 if ($subscription_data) {
                     $subscription_data['account_status'] = 'expired';
-                    update_user_meta($user_id, 'driver_forge_subscription_data', $subscription_data);
+                    update_user_meta($user_id, 'adjuster_forge_subscription_data', $subscription_data);
                 }
 
                 (new Subscription())->update(['status' => 'expired'],  $user->ID);

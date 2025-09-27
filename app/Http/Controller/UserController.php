@@ -31,7 +31,7 @@ class UserController extends BaseController
             $first_name         = get_user_meta($user_id, 'af_first_name', true);
             $last_name          = get_user_meta($user_id, 'af_last_name', true);
             $user_type          = get_user_meta($user_id, 'af_user_type', true);
-            $subscription_data  = get_user_meta( $user_id, 'driver_forge_subscription_data', true );
+            $subscription_data  = get_user_meta( $user_id, 'adjuster_forge_subscription_data', true );
 
             $user_status = isset($subscription_data['subscription_canceled']) && $subscription_data['subscription_canceled'] ? 'cancelled' : '';
             // Get the user meta data
@@ -50,13 +50,13 @@ class UserController extends BaseController
                 'status'            => empty($user_status) ? self::get_user_status($subscription_data) : $user_status,
             ];
 
-            if( 'driver' === $user_type ) {
+            if( 'adjuster' === $user_type ) {
                 $service = ProfileService::getProfileService($user_type);
                 $additional_data = $service->get_data( $user_id );
                 if ( ! is_array($additional_data) ) {
-                    $data['driver_data'] = [];
+                    $data['adjuster_data'] = [];
                 }
-                $data['driver_data'] = $additional_data;
+                $data['adjuster_data'] = $additional_data;
             } elseif( 'company' === $user_type ) {
                 if ( ! is_array($subscription_data) ) {
                     $subscription_data = [];
@@ -125,7 +125,7 @@ class UserController extends BaseController
                 'profile_link' => self::getProfilePageUrl(),
             ];
             $new_data = [];
-            if( $user_type == 'driver' ) {
+            if( $user_type == 'adjuster' ) {
                 // Get form data from the request
                 $phone              = sanitize_text_field( $this->request->get( 'phone' ) );
                 $availability       =  $this->request->get( 'availability' );
@@ -240,7 +240,7 @@ class UserController extends BaseController
         update_user_meta( $user_id, 'af_country', $country );
 
         // Get existing subscription data
-        $existing_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         if ( ! is_array($existing_data) ) {
             $existing_data = [];
         }
@@ -248,9 +248,9 @@ class UserController extends BaseController
         // Update phone in subscription data
         $existing_data['phone'] = $phone;
 
-        if ( $user_type === 'driver' ) {
+        if ( $user_type === 'adjuster' ) {
             update_user_meta( $user_id, 'af_bio', $about );
-            // Handle driver-specific data
+            // Handle adjuster-specific data
             $availability = $this->request->get( 'availability', [] );
             $license_classes = $this->request->get( 'license_classes', [] );
             $endorsements = $this->request->get( 'endorsements', [] );
@@ -258,7 +258,7 @@ class UserController extends BaseController
             $references = $this->request->get( 'references', [] );
 
             // Prepare data for ProfileService
-            $driver_data = [
+            $adjuster_data = [
                 'first_name'   => $first_name,
                 'last_name'    => $last_name,
                 'email'        => wp_get_current_user()->user_email,
@@ -274,13 +274,13 @@ class UserController extends BaseController
             // Update references in subscription data
             $existing_data['references'] = $references;
 
-            // Use ProfileService to update driver data
+            // Use ProfileService to update adjuster data
             $service = ProfileService::getProfileService($user_type);
-            $save = $service->update($driver_data, $user_id);
+            $save = $service->update($adjuster_data, $user_id);
 
             if ( ! $save ) {
                 return $this->response([
-                    'message' => 'Failed to update driver profile',
+                    'message' => 'Failed to update adjuster profile',
                     'status' => 'error',
                 ], 200);
             }
@@ -301,7 +301,7 @@ class UserController extends BaseController
         }
 
         // Update subscription data
-        update_user_meta( $user_id, 'driver_forge_subscription_data', $existing_data );
+        update_user_meta( $user_id, 'adjuster_forge_subscription_data', $existing_data );
 
         return $this->response([
             'message' => 'Profile updated successfully',
@@ -340,7 +340,7 @@ class UserController extends BaseController
         }
     }
 
-    public function drivers_list( \WP_REST_Request $request )
+    public function adjusters_list( \WP_REST_Request $request )
     {
         $page   = intval($request->get_param('page') );
         $limit  = intval($request->get_param('per_page') );
@@ -372,17 +372,17 @@ class UserController extends BaseController
         //If request has filters
         $filteredParams = array_filter($params);
         if( ! empty( $filteredParams ) ) {
-            $users = $user->filterUsers( $limit, $offset, $filteredParams, 'driver' );
+            $users = $user->filterUsers( $limit, $offset, $filteredParams, 'adjuster' );
             $total_items = count( $users);
         } else {
-            $users = $user->getAllByLimit( $limit, $offset,  'driver' );
+            $users = $user->getAllByLimit( $limit, $offset,  'adjuster' );
             $total_items = count($user->getAll());
         }
 
         
         $users_data = [];
         foreach ($users as $key => $item) {
-            $profile_data = get_user_meta($item->ID, 'driver_forge_subscription_data', true);
+            $profile_data = get_user_meta($item->ID, 'adjuster_forge_subscription_data', true);
             if ( ! is_array($profile_data) ) {
                 $profile_data = [];
             }
@@ -432,12 +432,12 @@ class UserController extends BaseController
             'current_page' => $page,
             'per_page' => $limit,
             'total_items' => $total_items,
-            'drivers_list' => $users_data
+            'adjusters_list' => $users_data
         ];
 
         return $this->response([
             'data' =>  $data,
-            'message' => 'drivers list retrived successfully.',
+            'message' => 'adjusters list retrived successfully.',
             'status' => 'success',
         ], 200);
     }
@@ -515,7 +515,7 @@ class UserController extends BaseController
             'created_at' => current_time('mysql'),
         ]);
 
-        $existing_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
 
         $plan_type = 'free_trial';
         if ( ! empty( $existing_data ) ) {
@@ -542,7 +542,7 @@ class UserController extends BaseController
                 'plan_type'                 => $plan_type,
             ];
         }
-        update_user_meta($user_id, 'driver_forge_subscription_data', $existing_data);
+        update_user_meta($user_id, 'adjuster_forge_subscription_data', $existing_data);
 
         return $this->response([
             'message' => 'Free trial activated successfully.',

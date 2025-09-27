@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Registration Confirmation</title>
+    <title>Adjuster Registration Confirmation</title>
     <style>
        body {
             margin: 0;
@@ -94,7 +94,7 @@
             <td class="content">
                 <p class="greeting">Hi <?php echo esc_html($user_name); ?>,</p>
                 
-                <p>Thank you for registering with I Will Drive 4 U, the professional network built exclusively for verified, premium drivers.</p>
+                <p>Thank you for registering with I Will Drive 4 U, the professional network built exclusively for verified, premium adjusters.</p>
                 
                 <p class="next-steps">What's next?</p>
                 <div class="steps">

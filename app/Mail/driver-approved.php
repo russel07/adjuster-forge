@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Driver Approved Email</title>
+    <title>Adjuster Approved Email</title>
     <style>
         body {
             margin: 0;
@@ -83,7 +83,7 @@
 
                 <p>Congratulations – your verification has been successfully completed.</p>
 
-                <p>Your profile is now live on <strong>I Will Drive 4 U</strong> and visible to companies looking for professional drivers.</p>
+                <p>Your profile is now live on <strong>I Will Drive 4 U</strong> and visible to companies looking for professional adjusters.</p>
 
                 <p><strong>What you can do now:</strong></p>
                 <ul class="checklist">

@@ -80,7 +80,7 @@ export default {
       } else if (props.planType === 'premium') {
         return 'Premium Plan';
       }
-      return 'Driver Plan';
+      return 'Adjuster Plan';
     });
 
     return {

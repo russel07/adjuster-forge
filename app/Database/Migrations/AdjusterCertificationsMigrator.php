@@ -28,7 +28,7 @@ class AdjusterCertificationsMigrator
                     certification VARCHAR(50) NOT NULL,
                     issued_date DATE NULL,
                     certificate_file VARCHAR(255),
-                    FOREIGN KEY (adjuster_id) REFERENCES {$wpdb->prefix}adjusters(id) ON DELETE CASCADE
+                    FOREIGN KEY (adjuster_id) REFERENCES {$wpdb->prefix}users(id) ON DELETE CASCADE
                 ) $charsetCollate;";
 
                 require_once ABSPATH . 'wp-admin/includes/upgrade.php';

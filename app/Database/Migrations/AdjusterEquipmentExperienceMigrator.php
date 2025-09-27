@@ -4,10 +4,10 @@ namespace SmartySoft\AdjusterForge\Database\Migrations;
 
 use wpdb;
 
-class DriverEquipmentExperienceMigrator
+class AdjusterEquipmentExperienceMigrator
 {
-    protected static $tableName = 'af_driver_equipment_experience';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $tableName = 'af_adjuster_equipment_experience';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {

@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const eGiftCardRestRequest = (method, route, data = {}) => {
-    const url = `${window.driver_forge_app_vars.rest_info.rest_url}/${route}`;
+    const url = `${window.adjuster_forge_app_vars.rest_info.rest_url}/${route}`;
 
     const headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'X-WP-Nonce': window.driver_forge_app_vars.rest_info.nonce
+        'X-WP-Nonce': window.adjuster_forge_app_vars.rest_info.nonce
     };
 
     // Set query timestamp if data is not empty
@@ -66,7 +66,7 @@ export function useRestApi() {
 (() => {
     // Request Interceptor: Add the current nonce to every request header
     axios.interceptors.request.use(config => {
-        config.headers['X-WP-Nonce'] = window.driver_forge_app_vars.rest_info.nonce;
+        config.headers['X-WP-Nonce'] = window.adjuster_forge_app_vars.rest_info.nonce;
         return config;
     }, error => {
         return Promise.reject(error);
@@ -77,7 +77,7 @@ export function useRestApi() {
         // Check and update nonce from response headers
         const nonce = response.headers['x-wp-nonce'];
         if (nonce) {
-            window.driver_forge_app_vars.rest_info.nonce = nonce;
+            window.adjuster_forge_app_vars.rest_info.nonce = nonce;
         }
         return response;
     }, error => {
@@ -95,9 +95,9 @@ export function useRestApi() {
             } else if (error.response.data && error.response.data.code === 'rest_cookie_invalid_nonce') {
                 // Handle invalid nonce error: Renew the nonce with an AJAX request
                 return axios.post(
-                    window.driver_forge_app_vars.ajax_url,
+                    window.adjuster_forge_app_vars.ajax_url,
                     new URLSearchParams({
-                        action: 'driver_forge_renew_rest_nonce',
+                        action: 'adjuster_forge_renew_rest_nonce',
                     }),
                     {
                         headers: {
@@ -107,7 +107,7 @@ export function useRestApi() {
                 )
                     .then(response => {
                         // Update the nonce in global variables
-                        window.driver_forge_app_vars.rest_info.nonce = response.data.nonce;
+                        window.adjuster_forge_app_vars.rest_info.nonce = response.data.nonce;
 
                         // Retry the original request with the updated nonce
                         error.config.headers['X-WP-Nonce'] = response.data.nonce;

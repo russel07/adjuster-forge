@@ -25,7 +25,7 @@ class PaymentController extends BaseController
             'paypal_secret_key'      => '',
         ];
 
-        $existingSettings = self::getOption('driver_forge_payment_settings', []);
+        $existingSettings = self::getOption('adjuster_forge_payment_settings', []);
 
         if ( !$existingSettings ) {
             return $this->response([
@@ -57,7 +57,7 @@ class PaymentController extends BaseController
             'paypal_secret_key'      => sanitize_text_field($this->request->get('paypal_secret_key')),
         );
 
-        self::updateOption('driver_forge_payment_settings', $data);
+        self::updateOption('adjuster_forge_payment_settings', $data);
 
         return $this->response([
             'message' => 'Payment settings updated successfully.',
@@ -76,7 +76,7 @@ class PaymentController extends BaseController
         $customer_email = sanitize_email( $this->request->get( 'email' ) );
         $customer_name  = sanitize_text_field( $this->request->get( 'name' ) );
 
-        $setings = self::getOption('driver_forge_payment_settings', []);
+        $setings = self::getOption('adjuster_forge_payment_settings', []);
 
         if ( empty( $setings ) ) {
             return $this->response([
@@ -145,7 +145,7 @@ class PaymentController extends BaseController
         }
 
         // Get payment settings
-        $settings = self::getOption('driver_forge_payment_settings', []);
+        $settings = self::getOption('adjuster_forge_payment_settings', []);
         if (empty($settings) || !isset($settings['stripe_secret_key']) || empty($settings['stripe_secret_key'])) {
             return $this->response([
                 'message' => 'Stripe secret key not configured.',
@@ -207,7 +207,7 @@ class PaymentController extends BaseController
                 $subscription_model->update( $updatedData, $subscriber->id );
             }
 
-            $existing_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+            $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
             $plan_type = self::get_plan_type( $plan_id );
             if ( ! empty( $existing_data ) ) {
                 $existing_data['paid_subscription_fee'] = true;
@@ -234,7 +234,7 @@ class PaymentController extends BaseController
                     'plan_type'                 => $plan_type,
                 ];
             }
-            update_user_meta($user_id, 'driver_forge_subscription_data', $existing_data );
+            update_user_meta($user_id, 'adjuster_forge_subscription_data', $existing_data );
 
         return $this->response([
             'subscription_id' => $subscription_data['id'],
@@ -288,7 +288,7 @@ class PaymentController extends BaseController
         }
 
         // Get payment settings
-        $settings = self::getOption('driver_forge_payment_settings', []);
+        $settings = self::getOption('adjuster_forge_payment_settings', []);
         //if settings are not found
         if (empty($settings) || !isset($settings['stripe_secret_key']) || empty($settings['stripe_secret_key'])) {
             return $this->response([
@@ -303,7 +303,7 @@ class PaymentController extends BaseController
             $stripe = new StripePayment($secret_key);
             $cancelled_subscription = $stripe->cancelSubscription($subscription_id);
 
-            $existing_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+            $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
             if ( ! empty( $existing_data ) ) {
                 $existing_data['subscription_canceled'] = true;
                 $existing_data['subscription_canceled_at'] = current_time('mysql');
@@ -316,7 +316,7 @@ class PaymentController extends BaseController
                 ];
             }
 
-            update_user_meta($user_id, 'driver_forge_subscription_data', $existing_data);
+            update_user_meta($user_id, 'adjuster_forge_subscription_data', $existing_data);
             // Store cancellation in subscription history
             $subscriptionHModel->store([
                 'user_id' => $user_id,
@@ -359,14 +359,14 @@ class PaymentController extends BaseController
         $user_id            = $current_user->ID;
         $user_type          = get_user_meta($user_id, 'af_user_type', true);
 
-        $subscription_data = get_user_meta($user_id, 'driver_forge_subscription_data', true);
+        $subscription_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
         if ( ! empty( $subscription_data ) ) {
             $customer_id = isset($subscription_data['customer_id']) ? $subscription_data['customer_id'] : '';
         } else {
             $customer_id = '';
         }
 
-        $settings = self::getOption('driver_forge_general_settings', []);
+        $settings = self::getOption('adjuster_forge_general_settings', []);
         if ( empty( $settings ) ) {
             return $this->response([
                 'message' => 'Subscription plans not configured.',
@@ -374,7 +374,7 @@ class PaymentController extends BaseController
             ], 400);
         }
         // Define subscription plans
-        $driver_plan = self::drivers_stripe_plan( $settings );
+        $adjuster_plan = self::adjusters_stripe_plan( $settings );
 
         $company_plans = self::companies_stripe_plan( $settings );
 
@@ -386,7 +386,7 @@ class PaymentController extends BaseController
                 'user_type' => $user_type,
                 'customer_id' => $customer_id,
             ],
-            'plans' => $user_type === 'driver' ? [$driver_plan] : $company_plans,
+            'plans' => $user_type === 'adjuster' ? [$adjuster_plan] : $company_plans,
         ];
 
         return $this->response([

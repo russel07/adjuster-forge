@@ -1,5 +1,5 @@
 <template>
-  <div class="driver-forge-profile-login">
+  <div class="adjuster-forge-profile-login">
     <div>
       <el-form
         :model="passwordForm"

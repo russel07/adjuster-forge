@@ -43,7 +43,7 @@ export default {
     const { error, success } = AlertMessage();
     const { startLoading, stopLoading } = loader();
     
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const img_url = `${app_vars.image_url}/`;
     const fileList = ref([]);
 

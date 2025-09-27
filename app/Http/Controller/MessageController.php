@@ -15,7 +15,7 @@ class MessageController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __('You must be logged in to send messages.', 'driver-forge'),
+                'message' => __('You must be logged in to send messages.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 401);
         }
@@ -29,7 +29,7 @@ class MessageController extends BaseController
         // Validate inputs
         if ( ! $recipient_id || empty( $message )) {
             return $this->response([
-                'message' => __('Recipient and message are required.', 'driver-forge'),
+                'message' => __('Recipient and message are required.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }
@@ -45,7 +45,7 @@ class MessageController extends BaseController
 
         if ( ! $message_id ) {
             return $this->response([
-                'message' => __('Failed to send message.', 'driver-forge'),
+                'message' => __('Failed to send message.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 500);
         }
@@ -61,7 +61,7 @@ class MessageController extends BaseController
         }
 
         return $this->response([
-            'message' => __('Message sent successfully!', 'driver-forge'),
+            'message' => __('Message sent successfully!', 'adjuster-forge'),
             'data'    => $messages,
             'status'  => 'success',
         ], 200);
@@ -71,7 +71,7 @@ class MessageController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __('You must be logged in to view chat partners.', 'driver-forge'),
+                'message' => __('You must be logged in to view chat partners.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 401);
         }
@@ -93,7 +93,7 @@ class MessageController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __('You must be logged in.', 'driver-forge'),
+                'message' => __('You must be logged in.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 401);
         }
@@ -103,7 +103,7 @@ class MessageController extends BaseController
 
         if ( ! $recipient_id ) {
             return $this->response([
-                'message' => __('Partner ID is required.', 'driver-forge'),
+                'message' => __('Partner ID is required.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }

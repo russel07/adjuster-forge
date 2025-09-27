@@ -29,7 +29,7 @@ export default {
     const { page, user_status, user_type, plan_type } = toRefs(props);
 
     const componentToShow = computed(() => {
-      if( user_type.value === 'driver' ) {
+      if( user_type.value === 'adjuster' ) {
         if (['inactive', 'pending', ''].includes(user_status.value)){
           return NotActive;
         } else if (user_status.value === 'rejected') {

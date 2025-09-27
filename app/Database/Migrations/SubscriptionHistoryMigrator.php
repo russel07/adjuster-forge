@@ -7,7 +7,7 @@ use wpdb;
 class SubscriptionHistoryMigrator
 {
     protected static $tableName = 'af_subscription_history';
-    protected static $cacheGroup = 'driver_forge_table_updates';
+    protected static $cacheGroup = 'adjuster_forge_table_updates';
 
     public static function migrate()
     {
@@ -30,8 +30,8 @@ class SubscriptionHistoryMigrator
                 $sql = "CREATE TABLE {$table} (
                     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
                     user_id BIGINT(20) UNSIGNED NOT NULL,
-                    user_type VARCHAR(20) NOT NULL, -- 'driver', 'company'
-                    plan_name VARCHAR(50) NOT NULL, -- e.g., 'driver_init', 'driver_monthly', 'company_premium'
+                    user_type VARCHAR(20) NOT NULL, -- 'adjuster', 'company'
+                    plan_name VARCHAR(50) NOT NULL, -- e.g., 'adjuster_init', 'adjuster_monthly', 'company_premium'
                     amount DECIMAL(10,2) NOT NULL, -- e.g., 9.99 or 49.00
                     currency VARCHAR(10) DEFAULT 'USD',
                     payment_status VARCHAR(20) DEFAULT 'paid',-- 'paid', 'failed', 'pending', 'refunded'

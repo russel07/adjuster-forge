@@ -1,5 +1,5 @@
 <template>
-  <div class="driver-forge-auth-wrapper">
+  <div class="adjuster-forge-auth-wrapper">
     <router-view></router-view>
   </div>
 </template>

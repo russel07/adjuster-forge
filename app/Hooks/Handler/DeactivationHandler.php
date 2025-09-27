@@ -29,18 +29,18 @@ class DeactivationHandler
     public function deactivate()
     {
         // Remove custom user roles.
-        remove_role('driver');
+        remove_role('adjuster');
         remove_role('company');
 
-        $version = get_option('driver_forge_plugin_version');
+        $version = get_option('adjuster_forge_plugin_version');
 
         // If the plugin version option exists, delete it.
         if( $version ) {
-            delete_option('driver_forge_plugin_version');
+            delete_option('adjuster_forge_plugin_version');
         }
         
         // Clear scheduled events if needed.
-        wp_clear_scheduled_hook('driver_forge_daily_tasks');
+        wp_clear_scheduled_hook('adjuster_forge_daily_tasks');
 
         flush_rewrite_rules();
     }

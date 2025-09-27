@@ -24,8 +24,8 @@ class ActivationHandler
         // Activate the plugin.
         $this->activate();
         
-        if (! wp_next_scheduled('driver_forge_daily_tasks')) {
-            wp_schedule_event(time(), 'daily', 'driver_forge_daily_tasks');
+        if (! wp_next_scheduled('adjuster_forge_daily_tasks')) {
+            wp_schedule_event(time(), 'daily', 'adjuster_forge_daily_tasks');
         }
     }
 
@@ -36,14 +36,14 @@ class ActivationHandler
      */
     public function activate()
     {
-        $version = get_option('driver_forge_plugin_version');
+        $version = get_option('adjuster_forge_plugin_version');
 
         // Check if the plugin version option doesn't exist and set it.
         if ( ! $version ) {
-            update_option('driver_forge_plugin_version', DRIVER_FORGE_VERSION);
+            update_option('adjuster_forge_plugin_version', ADJUSTER_FORGE_VERSION);
         }
 
-        add_role( 'driver', 'Driver', [
+        add_role( 'adjuster', 'Adjuster', [
             'read' => true,
             'upload_files' => true,
         ] );

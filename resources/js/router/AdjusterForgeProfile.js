@@ -12,8 +12,8 @@ import AllJobs from "../components/Jobs/AllJobs.vue";
 import JobDetails from "../components/Jobs/JobDetails.vue"
 import AppliedJobs from "../components/Jobs/AppliedJobs.vue"
 import JobApplicants from "../components/Jobs/JobApplicants.vue"
-import DriversList from "../components/Profile/DriversList.vue";
-import DriverDetails from "../components/Profile/DriverDetails.vue";
+import AdjustersList from "../components/Profile/AdjustersList.vue";
+import AdjusterDetails from "../components/Profile/AdjusterDetails.vue";
 import PaymentHistory from "../components/Profile/PaymentHistory.vue"
 
 const routes = [
@@ -89,14 +89,14 @@ const routes = [
         component: JobDetails,
     },
     {
-        path: '/drivers',
-        name: 'DriversList',
-        component: DriversList
+        path: '/adjusters',
+        name: 'AdjustersList',
+        component: AdjustersList
     },
     {
-        path: '/driver-details/:user_id',
-        name: 'driver-details',
-        component: DriverDetails,
+        path: '/adjuster-details/:user_id',
+        name: 'adjuster-details',
+        component: AdjusterDetails,
         props: true
     },
 ]
@@ -107,7 +107,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const is_remaining_days = `${app_vars.remaining_days}`;
     const is_logged_in = `${app_vars.is_logged_in}`;
     const auth_page = `${app_vars.auth_page}`;
@@ -120,7 +120,7 @@ router.beforeEach((to, from, next) => {
         user_type = `${app_vars.user_data?.user_type}`;
     }
 
-    if ( 'driver' === user_type ) {
+    if ( 'adjuster' === user_type ) {
         //Did not complete the profile? force to complete
         if( ! subscription_data ||  ! subscription_data.profile_completed ) {
             if ( to.path !== '/complete-profile' ) {

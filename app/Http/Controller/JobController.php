@@ -18,15 +18,15 @@ class JobController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __( 'You must be logged in to get job list.', 'driver-forge' ),
+                'message' => __( 'You must be logged in to get job list.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 401);
         }
 
         $user = wp_get_current_user();
-        if ( in_array( 'driver', (array) $user->roles ) ) {
+        if ( in_array( 'adjuster', (array) $user->roles ) ) {
             return $this->response([
-                'message' => __( 'You do not have permission to get job list.', 'driver-forge' ),
+                'message' => __( 'You do not have permission to get job list.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -88,7 +88,7 @@ class JobController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __( 'You must be logged in to create a job.', 'driver-forge' ),
+                'message' => __( 'You must be logged in to create a job.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 401);
         }
@@ -97,7 +97,7 @@ class JobController extends BaseController
         $user_type = get_user_meta($author_id, 'af_user_type', true);
         $user_roles = (array) $user->roles;
         $plan_type = '';
-        $subscription_data = get_user_meta($author_id, 'driver_forge_subscription_data', true);
+        $subscription_data = get_user_meta($author_id, 'adjuster_forge_subscription_data', true);
         if ( is_array($subscription_data ) && isset($subscription_data['plan_type'])) {
             $plan_type = $subscription_data['plan_type'];
         }
@@ -111,20 +111,20 @@ class JobController extends BaseController
                 $job_count = self::get_user_job_count_for_current_month($author_id);
                 if ($job_count >= 1) {
                     return $this->response([
-                        'message' => __( 'Premium users can only post one job per month.', 'driver-forge' ),
+                        'message' => __( 'Premium users can only post one job per month.', 'adjuster-forge' ),
                         'status'  => 'error',
                     ], 200);
                 }
             } else {
                 return $this->response([
-                    'message' => __( 'Only premium company users can create jobs.', 'driver-forge' ),
+                    'message' => __( 'Only premium company users can create jobs.', 'adjuster-forge' ),
                     'status'  => 'error',
                 ], 200);
             }
         } else {
-            // Not a company or driver, block
+            // Not a company or adjuster, block
             return $this->response([
-                'message' => __( 'You do not have permission to create a job.', 'driver-forge' ),
+                'message' => __( 'You do not have permission to create a job.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 200);
         }
@@ -133,7 +133,7 @@ class JobController extends BaseController
         $content = sanitize_textarea_field( $this->request->get( 'content' ) );
         if ( empty( $title ) || empty( $content ) ) {
             return $this->response([
-                'message' => __( 'Title and content are required.', 'driver-forge' ),
+                'message' => __( 'Title and content are required.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 400);
         }
@@ -170,7 +170,7 @@ class JobController extends BaseController
                 }
                 // Use wp_upload_dir to get the upload directory
                 $upload_dir = wp_upload_dir();
-                $job_attachment_url = trailingslashit($upload_dir['baseurl']) . DRIVER_FORGE_PLUGIN_ASSET_ID . '/' . ltrim($job_attachment, '/');
+                $job_attachment_url = trailingslashit($upload_dir['baseurl']) . ADJUSTER_FORGE_PLUGIN_ASSET_ID . '/' . ltrim($job_attachment, '/');
                 // Update the post meta with the job attachment URL
                 update_post_meta( $post_id, '_job_attachment', $job_attachment_url );
             }
@@ -203,7 +203,7 @@ class JobController extends BaseController
 
         $query = new \WP_Query($args);
 
-        $thumbnail      = DRIVER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg';
+        $thumbnail      = ADJUSTER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg';
         $jobs = [];
         foreach ($query->posts as $post) {
             $attachment = get_post_meta($post->ID, '_job_attachment', true);
@@ -242,7 +242,7 @@ class JobController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __( 'You must be logged in to get applied jobs.', 'driver-forge' ),
+                'message' => __( 'You must be logged in to get applied jobs.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 401);
         }
@@ -275,7 +275,7 @@ class JobController extends BaseController
 
         $query = new \WP_Query($args);
 
-        $thumbnail      = DRIVER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg';
+        $thumbnail      = ADJUSTER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg';
         $jobs = [];
         foreach ($query->posts as $post) {
             $attachment = get_post_meta($post->ID, '_job_attachment', true);
@@ -318,7 +318,7 @@ class JobController extends BaseController
         
         if (!$job_id) {
             return $this->response([
-                'message' => __('Job ID is required.', 'driver-forge'),
+                'message' => __('Job ID is required.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }
@@ -327,7 +327,7 @@ class JobController extends BaseController
         
         if (!$post || $post->post_type !== 'job' || $post->post_status !== 'publish') {
             return $this->response([
-                'message' => __('Job not found.', 'driver-forge'),
+                'message' => __('Job not found.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 404);
         }
@@ -335,11 +335,11 @@ class JobController extends BaseController
         $attachment         = get_post_meta($post->ID, '_job_attachment', true);
         $applicant_count    = get_post_meta($post->ID, '_job_applicant_count', true);
         $author_meta        = get_userdata($post->post_author);
-        $thumbnail          = $attachment ? $attachment : DRIVER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg';
+        $thumbnail          = $attachment ? $attachment : ADJUSTER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg';
         $existing_application = (new JobApplication())->getByJobId($job_id);
         $application        = (new JobApplication())->getByJobId($post->ID);
         $author_id          = $post->post_author;
-        $subscription_data  = get_user_meta($author_id, 'driver_forge_subscription_data', true);
+        $subscription_data  = get_user_meta($author_id, 'adjuster_forge_subscription_data', true);
         if ( ! is_array( $subscription_data ) ) {
             $subscription_data = [];
         }
@@ -375,7 +375,7 @@ class JobController extends BaseController
     {
         if (!is_user_logged_in()) {
             return $this->response([
-                'message' => __('You must be logged in to apply for a job.', 'driver-forge'),
+                'message' => __('You must be logged in to apply for a job.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 401);
         }
@@ -386,7 +386,7 @@ class JobController extends BaseController
 
         if ( ! $job_id ) {
             return $this->response([
-                'message' => __('Job ID is required.', 'driver-forge'),
+                'message' => __('Job ID is required.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }
@@ -395,7 +395,7 @@ class JobController extends BaseController
         $job = get_post($job_id);
         if ( !$job || $job->post_type !== 'job' ) {
             return $this->response([
-                'message' => __('Job not found.', 'driver-forge'),
+                'message' => __('Job not found.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 404);
         }
@@ -407,7 +407,7 @@ class JobController extends BaseController
 
         if ( ! empty( $existing_application ) ) {
             return $this->response([
-                'message' => __('You have already applied for this job.', 'driver-forge'),
+                'message' => __('You have already applied for this job.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }
@@ -429,13 +429,13 @@ class JobController extends BaseController
 
         if ($application_id === false) {
             return $this->response([
-                'message' => __('Failed to submit application.', 'driver-forge'),
+                'message' => __('Failed to submit application.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }
 
         return $this->response([
-            'message' => __('Application submitted successfully!', 'driver-forge'),
+            'message' => __('Application submitted successfully!', 'adjuster-forge'),
             'data'    => $application_id,
             'status'  => 'success',
         ], 201);
@@ -450,7 +450,7 @@ class JobController extends BaseController
 
         if (!$job_id) {
             return $this->response([
-                'message' => __('Job ID is required.', 'driver-forge'),
+                'message' => __('Job ID is required.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 400);
         }
@@ -459,7 +459,7 @@ class JobController extends BaseController
         
         if (!$post || $post->post_type !== 'job' || $post->post_status !== 'publish') {
             return $this->response([
-                'message' => __('Job not found.', 'driver-forge'),
+                'message' => __('Job not found.', 'adjuster-forge'),
                 'status'  => 'error',
             ], 404);
         }
@@ -469,14 +469,14 @@ class JobController extends BaseController
             'content'    => $post->post_content,
             'author'     => get_userdata($post->post_author)->display_name,
             'date'       => $post->post_date,
-            'thumbnail'  => get_post_meta($post->ID, '_job_attachment', true) ?: DRIVER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg',
+            'thumbnail'  => get_post_meta($post->ID, '_job_attachment', true) ?: ADJUSTER_FORGE_PLUGIN_URL . 'assets/img/thumbnail.jpg',
             'applicant'  => $applicant_count ? intval($applicant_count) : 0,
         ];
         $applicant_count = get_post_meta($post->ID, '_job_applicant_count', true);
         $applicants = [];
         if (! $applicant_count || $applicant_count <= 0) {
             return $this->response([
-                'message' => __('No applicants found for this job.', 'driver-forge'),
+                'message' => __('No applicants found for this job.', 'adjuster-forge'),
                 'status'  => 'success',
                 'data'    => [
                     'jobDetails' => $jobDetails,
@@ -489,7 +489,7 @@ class JobController extends BaseController
 
         if (empty($applicants)) {
             return $this->response([
-                'message' => __('No applicants found for this job.', 'driver-forge'),
+                'message' => __('No applicants found for this job.', 'adjuster-forge'),
                 'status'  => 'success',
                 'data'    => [
                     'jobDetails' => $jobDetails,
@@ -511,7 +511,7 @@ class JobController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __( 'You must be logged in to add a note.', 'driver-forge' ),
+                'message' => __( 'You must be logged in to add a note.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 401);
         }
@@ -521,7 +521,7 @@ class JobController extends BaseController
 
         if ( ! $applicant_id || empty($note) ) {
             return $this->response([
-                'message' => __( 'Applicant ID and Note are required.', 'driver-forge' ),
+                'message' => __( 'Applicant ID and Note are required.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 400);
         }
@@ -530,7 +530,7 @@ class JobController extends BaseController
 
         if( ! $application ) {
             return $this->response([
-                'message' => __( 'Application not found.', 'driver-forge' ),
+                'message' => __( 'Application not found.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 404);
         }
@@ -543,7 +543,7 @@ class JobController extends BaseController
         ], $applicant_id);
         
         return $this->response([
-            'message' => __( 'Note added successfully.', 'driver-forge' ),
+            'message' => __( 'Note added successfully.', 'adjuster-forge' ),
             'status'  => 'success',
         ], 200);
     }
@@ -552,7 +552,7 @@ class JobController extends BaseController
     {
         if ( ! is_user_logged_in() ) {
             return $this->response([
-                'message' => __( 'You must be logged in to update applicant status.', 'driver-forge' ),
+                'message' => __( 'You must be logged in to update applicant status.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 401);
         }
@@ -562,7 +562,7 @@ class JobController extends BaseController
 
         if ( ! $applicant_id || empty($status) ) {
             return $this->response([
-                'message' => __( 'Applicant ID and Status are required.', 'driver-forge' ),
+                'message' => __( 'Applicant ID and Status are required.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 400);
         }
@@ -571,7 +571,7 @@ class JobController extends BaseController
 
         if ( ! $application ) {
             return $this->response([
-                'message' => __( 'Application not found.', 'driver-forge' ),
+                'message' => __( 'Application not found.', 'adjuster-forge' ),
                 'status'  => 'error',
             ], 404);
         }
@@ -584,7 +584,7 @@ class JobController extends BaseController
         ], $applicant_id);
 
         return $this->response([
-            'message' => __( 'Applicant status updated successfully.', 'driver-forge' ),
+            'message' => __( 'Applicant status updated successfully.', 'adjuster-forge' ),
             'status'  => 'success',
         ], 200);
     }

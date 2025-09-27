@@ -27,7 +27,7 @@ class Application
          * If the current page is the plugin's admin page and the user is an admin,
          * enqueue scripts and styles using the 'load_admin_assets' method.
          */
-        if ( isset($_GET['page']) && $_GET['page'] === DRIVER_FORGE_PLUGIN_ASSET_ID && is_admin() ) {
+        if ( isset($_GET['page']) && $_GET['page'] === ADJUSTER_FORGE_PLUGIN_ASSET_ID && is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'load_admin_assets' ], 1 );
         }
 
@@ -59,8 +59,8 @@ class Application
             $this->addAction('admin_menu', MenuHandler::class, 'init', 10, 1);
         }
 
-        require_once DRIVER_FORGE_PLUGIN_BASE_PATH . 'app/Hooks/actions.php';
-        require_once DRIVER_FORGE_PLUGIN_BASE_PATH . 'app/Hooks/filters.php';
+        require_once ADJUSTER_FORGE_PLUGIN_BASE_PATH . 'app/Hooks/actions.php';
+        require_once ADJUSTER_FORGE_PLUGIN_BASE_PATH . 'app/Hooks/filters.php';
 
         $this->run();
 
@@ -72,10 +72,10 @@ class Application
     public function load_admin_assets()
     {
         // Enqueue styles admin area
-        wp_enqueue_style( DRIVER_FORGE_PLUGIN_ASSET_ID.'-style', DRIVER_FORGE_PLUGIN_URL . 'assets/css/driver_forge_admin.css' );
+        wp_enqueue_style( ADJUSTER_FORGE_PLUGIN_ASSET_ID.'-style', ADJUSTER_FORGE_PLUGIN_URL . 'assets/css/ADJUSTER_forge_admin.css' );
 
         // Enqueue JavaScript for admin
-        wp_enqueue_script( DRIVER_FORGE_PLUGIN_ASSET_ID, DRIVER_FORGE_PLUGIN_URL . 'assets/js/driver_forge_admin.js', array('jquery', 'moment'), DRIVER_FORGE_VERSION, true);
-        wp_localize_script( DRIVER_FORGE_PLUGIN_ASSET_ID, DRIVER_FORGE_PLUGIN_ASSET_VARS. '_app_vars', $this->driver_forge_app_vars());
+        wp_enqueue_script( ADJUSTER_FORGE_PLUGIN_ASSET_ID, ADJUSTER_FORGE_PLUGIN_URL . 'assets/js/ADJUSTER_forge_admin.js', array('jquery', 'moment'), ADJUSTER_FORGE_VERSION, true);
+        wp_localize_script( ADJUSTER_FORGE_PLUGIN_ASSET_ID, ADJUSTER_FORGE_PLUGIN_ASSET_VARS. '_app_vars', $this->ADJUSTER_forge_app_vars());
     }
 }

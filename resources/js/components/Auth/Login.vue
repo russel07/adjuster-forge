@@ -1,5 +1,5 @@
 <template>
-  <div class="driver-forge-profile-login">
+  <div class="adjuster-forge-profile-login">
     <el-form
       :model="loginForm"
       ref="loginFormRef"
@@ -63,7 +63,7 @@ export default {
     const { post } = useAppHelper();
     const { error, success } = AlertMessage();
     const { startLoading, stopLoading } = loader();
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const is_logged_in = app_vars.is_logged_in;
     const lost_password_url = app_vars.lost_password;
     const profile_page_url = app_vars.profile_page;

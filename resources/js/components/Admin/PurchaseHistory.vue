@@ -74,7 +74,7 @@ export default {
         const { get, post } = useAppHelper();
         const { error, success } = AlertMessage();
         const { startLoading, stopLoading } = loader();
-        const app_vars = window.driver_forge_app_vars;
+        const app_vars = window.adjuster_forge_app_vars;
         const currency = `${app_vars.currency}`;
         const currentPage = ref(1);
         const pageSize = ref(10);

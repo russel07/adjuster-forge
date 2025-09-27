@@ -100,8 +100,8 @@
                 <div class="steps">
                     <ol>
                         <li>Log in to your account to choose a membership plan</li>
-                        <li>Once your plan is activated, you’ll gain immediate access to our network of verified premium drivers</li>
-                        <li>You can search drivers, view profiles, and start messaging qualified candidates</li>
+                        <li>Once your plan is activated, you’ll gain immediate access to our network of verified premium adjusters</li>
+                        <li>You can search adjusters, view profiles, and start messaging qualified candidates</li>
                     </ol>
                 </div>
                 

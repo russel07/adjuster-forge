@@ -4,8 +4,8 @@
       <el-main class="main-center">
         <Menu />
         <div class="dashboard-container">
-          <DriverProfileSection
-            v-if="user_type === 'driver'"
+          <AdjusterProfileSection
+            v-if="user_type === 'adjuster'"
             :t_c_page_url="t_c_page_url"
             :loading="loading"
             @submit-profile="submitProfile"
@@ -24,7 +24,7 @@
 
 <script>
 import Menu from './Menu.vue';
-import DriverProfileSection from './DriverProfileSection.vue';
+import AdjusterProfileSection from './AdjusterProfileSection.vue';
 import CompanyProfileSection from './CompanyProfileSection.vue';
 import { useRouter } from 'vue-router';
 import { useAppHelper } from '../../Composable/appHelper';
@@ -36,7 +36,7 @@ export default {
   name: 'CompleteProfile',
   components: {
     Menu,
-    DriverProfileSection,
+    AdjusterProfileSection,
     CompanyProfileSection
   },
   setup() {
@@ -45,7 +45,7 @@ export default {
     const { success, error } = AlertMessage();
     const { startLoading, stopLoading } = loader();
     const loading = ref(false);
-    const app_vars = window.driver_forge_app_vars || {};
+    const app_vars = window.adjuster_forge_app_vars || {};
     const user_type = app_vars.user_data?.user_type || '';
     const { t_c_page: t_c_page_url } = app_vars;
     const { profile_page: profilePageURL } = app_vars;

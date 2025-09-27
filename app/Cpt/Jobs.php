@@ -25,17 +25,17 @@ class Jobs {
      */
     public function register_job_cpt() {
         $labels = [
-            'name'               => __( 'Jobs', 'driver-forge' ),
-            'singular_name'      => __( 'Job', 'driver-forge' ),
-            'add_new'            => __( 'Add New', 'driver-forge' ),
-            'add_new_item'       => __( 'Add New Job', 'driver-forge' ),
-            'edit_item'          => __( 'Edit Job', 'driver-forge' ),
-            'new_item'           => __( 'New Job', 'driver-forge' ),
-            'view_item'          => __( 'View Job', 'driver-forge' ),
-            'search_items'       => __( 'Search Jobs', 'driver-forge' ),
-            'not_found'          => __( 'No Jobs found', 'driver-forge' ),
-            'not_found_in_trash' => __( 'No Jobs found in trash', 'driver-forge' ),
-            'menu_name'          => __( 'Jobs', 'driver-forge' ),
+            'name'               => __( 'Jobs', 'adjuster-forge' ),
+            'singular_name'      => __( 'Job', 'adjuster-forge' ),
+            'add_new'            => __( 'Add New', 'adjuster-forge' ),
+            'add_new_item'       => __( 'Add New Job', 'adjuster-forge' ),
+            'edit_item'          => __( 'Edit Job', 'adjuster-forge' ),
+            'new_item'           => __( 'New Job', 'adjuster-forge' ),
+            'view_item'          => __( 'View Job', 'adjuster-forge' ),
+            'search_items'       => __( 'Search Jobs', 'adjuster-forge' ),
+            'not_found'          => __( 'No Jobs found', 'adjuster-forge' ),
+            'not_found_in_trash' => __( 'No Jobs found in trash', 'adjuster-forge' ),
+            'menu_name'          => __( 'Jobs', 'adjuster-forge' ),
         ];
 
         $args = [

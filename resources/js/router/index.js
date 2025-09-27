@@ -2,9 +2,9 @@ import { createWebHashHistory, createRouter } from "vue-router";
 import Settings from '../components/Admin/Settings.vue';
 import PaymentSettings from '../components/Admin/PaymentSettings.vue';
 import CompaniesList from '../components/Admin/CompaniesList.vue';
-import DriversList from '../components/Admin/DriversList.vue';
+import AdjustersList from '../components/Admin/AdjustersList.vue';
 import PurchaseHistory from '../components/Admin/PurchaseHistory.vue';
-import DriverDetails from "../components/Admin/DriverDetails.vue";
+import AdjusterDetails from "../components/Admin/AdjusterDetails.vue";
 
 const routes = [
     {
@@ -32,14 +32,14 @@ const routes = [
         component: CompaniesList
     },
     {
-        path: '/drivers',
-        name: 'DriversList',
-        component: DriversList
+        path: '/adjusters',
+        name: 'AdjustersList',
+        component: AdjustersList
     },
     {
-        path: '/driver-details/:user_id',
-        name: 'driver-details',
-        component: DriverDetails,
+        path: '/adjuster-details/:user_id',
+        name: 'adjuster-details',
+        component: AdjusterDetails,
         props: true
     },
 ];

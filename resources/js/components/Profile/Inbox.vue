@@ -185,7 +185,7 @@ export default {
     const { error, success } = AlertMessage();
     const { startLoading, stopLoading } = loader();
     const { get, post } = useAppHelper();
-    const app_vars = window.driver_forge_app_vars;
+    const app_vars = window.adjuster_forge_app_vars;
     const user_status = `${app_vars.user_status ? app_vars.user_status : ''}`;
     const user_type = `${app_vars.user_data? app_vars.user_data.user_type : ''}`;
     const plan_type = `${app_vars.plan_type ? app_vars.plan_type : ''}`;

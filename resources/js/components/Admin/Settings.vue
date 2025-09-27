@@ -22,20 +22,20 @@
                   </el-select>
                 </el-form-item>
                 
-                <el-form-item label="Driver Subscription Amount" prop="driver_subscription_amount">
-                  <el-input v-model="form.driver_subscription_amount" type="number" :min="0" step="0.01" placeholder="Enter driver subscription amount"></el-input>
+                <el-form-item label="Adjuster Subscription Amount" prop="adjuster_subscription_amount">
+                  <el-input v-model="form.adjuster_subscription_amount" type="number" :min="0" step="0.01" placeholder="Enter adjuster subscription amount"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Driver Subscription ID" prop="driver_subscription_id">
-                  <el-input v-model="form.driver_subscription_id" placeholder="Enter driver subscription Stripe ID"></el-input>
+                <el-form-item label="Adjuster Subscription ID" prop="adjuster_subscription_id">
+                  <el-input v-model="form.adjuster_subscription_id" placeholder="Enter adjuster subscription Stripe ID"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Driver Yearly Subscription Amount" prop="driver_yearly_subscription_amount">
-                  <el-input v-model="form.driver_yearly_subscription_amount" type="number" :min="0" step="0.01" placeholder="Enter driver yearly subscription amount"></el-input>
+                <el-form-item label="Adjuster Yearly Subscription Amount" prop="adjuster_yearly_subscription_amount">
+                  <el-input v-model="form.adjuster_yearly_subscription_amount" type="number" :min="0" step="0.01" placeholder="Enter adjuster yearly subscription amount"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Driver Yearly Subscription ID" prop="driver_yearly_subscription_id">
-                  <el-input v-model="form.driver_yearly_subscription_id" placeholder="Enter driver yearly subscription Stripe ID"></el-input>
+                <el-form-item label="Adjuster Yearly Subscription ID" prop="adjuster_yearly_subscription_id">
+                  <el-input v-model="form.adjuster_yearly_subscription_id" placeholder="Enter adjuster yearly subscription Stripe ID"></el-input>
                 </el-form-item>
 
                 <el-form-item label="Allow Free Verification" prop="allow_free_verification">
@@ -117,10 +117,10 @@ export default {
     const form = ref({
       auth_page_id: '',
       profile_page_id: '',
-      driver_subscription_amount: '',
-      driver_subscription_id: '',
-      driver_yearly_subscription_amount: '',
-      driver_yearly_subscription_id: '',
+      adjuster_subscription_amount: '',
+      adjuster_subscription_id: '',
+      adjuster_yearly_subscription_amount: '',
+      adjuster_yearly_subscription_id: '',
       standard_membership_amount: '',
       standard_membership_id: '',
       standard_yearly_membership_amount: '',
@@ -141,17 +141,17 @@ export default {
       profile_page_id: [
         { required: true, message: "Profile Page is required", trigger: "change" },
       ],
-      driver_subscription_amount: [
-        { required: true, message: "Driver Subscription Amount is required", trigger: "blur" },
+      adjuster_subscription_amount: [
+        { required: true, message: "Adjuster Subscription Amount is required", trigger: "blur" },
       ],
-      driver_subscription_id: [
-        { required: true, message: "Driver Subscription ID is required", trigger: "blur" },
+      adjuster_subscription_id: [
+        { required: true, message: "Adjuster Subscription ID is required", trigger: "blur" },
       ],
-      driver_yearly_subscription_amount: [
-        { required: true, message: "Driver Yearly Subscription Amount is required", trigger: "blur" },
+      adjuster_yearly_subscription_amount: [
+        { required: true, message: "Adjuster Yearly Subscription Amount is required", trigger: "blur" },
       ],
-      driver_yearly_subscription_id: [
-        { required: true, message: "Driver Yearly Subscription ID is required", trigger: "blur" },
+      adjuster_yearly_subscription_id: [
+        { required: true, message: "Adjuster Yearly Subscription ID is required", trigger: "blur" },
       ],
       standard_membership_amount: [
         { required: true, message: "Standard Membership Amount is required", trigger: "blur" },
@@ -198,10 +198,10 @@ export default {
           currencies.value = settings.currencies;
           form.value.auth_page_id = String(settings.auth_page_id);
           form.value.profile_page_id = String(settings.profile_page_id);
-          form.value.driver_subscription_amount = settings.driver_subscription_amount;
-          form.value.driver_subscription_id = settings.driver_subscription_id;
-          form.value.driver_yearly_subscription_amount = settings.driver_yearly_subscription_amount;
-          form.value.driver_yearly_subscription_id = settings.driver_yearly_subscription_id;
+          form.value.adjuster_subscription_amount = settings.adjuster_subscription_amount;
+          form.value.adjuster_subscription_id = settings.adjuster_subscription_id;
+          form.value.adjuster_yearly_subscription_amount = settings.adjuster_yearly_subscription_amount;
+          form.value.adjuster_yearly_subscription_id = settings.adjuster_yearly_subscription_id;
           form.value.standard_membership_amount = settings.standard_membership_amount;
           form.value.standard_membership_id = settings.standard_membership_id;
           form.value.standard_yearly_membership_amount = settings.standard_yearly_membership_amount;

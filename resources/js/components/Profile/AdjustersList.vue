@@ -94,44 +94,44 @@
                             <el-main style="margin-top: 20px;">
                                 <el-row :gutter="24" class="card-row">
                                     <el-col
-                                        v-for="driver in driversData"
-                                        :key="driver.user_id"
+                                        v-for="adjuster in adjustersData"
+                                        :key="adjuster.user_id"
                                         :span="8"
                                     >
-                                        <el-card class="modern-driver-card clickable-card" shadow="always">
-                                            <div class="driver-avatar-section">
+                                        <el-card class="modern-adjuster-card clickable-card" shadow="always">
+                                            <div class="adjuster-avatar-section">
                                                 <el-avatar
-                                                    :src="driver.profile_picture || 'https://ui-avatars.com/api/?name=' + driver.first_name + '+' + driver.last_name"
+                                                    :src="adjuster.profile_picture || 'https://ui-avatars.com/api/?name=' + adjuster.first_name + '+' + adjuster.last_name"
                                                     :size="70"
-                                                    class="driver-avatar"
+                                                    class="adjuster-avatar"
                                                 />
-                                                <div class="driver-status">
+                                                <div class="adjuster-status">
                                                     <el-tag
-                                                        :type="driver.status === 'active' ? 'success' : driver.status === 'pending' ? 'warning' : 'info'"
+                                                        :type="adjuster.status === 'active' ? 'success' : adjuster.status === 'pending' ? 'warning' : 'info'"
                                                         effect="dark"
                                                     >
-                                                        {{ driver.status }}
+                                                        {{ adjuster.status }}
                                                     </el-tag>
                                                 </div>
                                             </div>
-                                            <div class="driver-info-section">
-                                                <h3 class="driver-name">{{ driver.first_name }} {{ driver.last_name }}</h3>
-                                                <p class="driver-username">@{{ driver.username }}</p>
-                                                <p class="driver-email">
+                                            <div class="adjuster-info-section">
+                                                <h3 class="adjuster-name">{{ adjuster.first_name }} {{ adjuster.last_name }}</h3>
+                                                <p class="adjuster-username">@{{ adjuster.username }}</p>
+                                                <p class="adjuster-email">
                                                     <el-icon><i class="el-icon-message"></i></el-icon>
-                                                    {{ driver.user_email }}
+                                                    {{ adjuster.user_email }}
                                                 </p>
-                                                <div class="driver-location">
+                                                <div class="adjuster-location">
                                                     <span>
                                                         <el-icon><i class="el-icon-location"></i></el-icon>
-                                                        {{ driver.city }}, {{ driver.state }}
+                                                        {{ adjuster.city }}, {{ adjuster.state }}
                                                     </span>
                                                 </div>
                                             </div>
 
                                             <!-- Hover Overlay -->
                                             <div class="hover-overlay">
-                                                <el-button type="primary" size="large" round @click.stop="viewDetails(driver)">
+                                                <el-button type="primary" size="large" round @click.stop="viewDetails(adjuster)">
                                                     View Details
                                                 </el-button>
                                             </div>
@@ -139,7 +139,7 @@
                                     </el-col>
                                 </el-row>
 
-                                <el-empty v-if="driversData.length === 0" description="No drivers found." />
+                                <el-empty v-if="adjustersData.length === 0" description="No adjusters found." />
 
                                 <el-pagination
                                     v-if="totalItems > pageSize"
@@ -170,7 +170,7 @@ import { loader } from '../../Composable/Loader';
 import Menu from "./Menu.vue";
 import Message from '../Messages/Message.vue';
 export default {
-    name: "DriversList",
+    name: "AdjustersList",
     components: {
         Menu,
         Message
@@ -180,14 +180,14 @@ export default {
         const { get } = useAppHelper();
         const { error } = AlertMessage();
         const { startLoading, stopLoading } = loader();
-        const app_vars = window.driver_forge_app_vars;
+        const app_vars = window.adjuster_forge_app_vars;
         const user_status = `${app_vars.user_status ? app_vars.user_status : ''}`;
         const user_type = `${app_vars.user_data? app_vars.user_data.user_type : ''}`;
         const plan_type = `${app_vars.plan_type ? app_vars.plan_type : ''}`;
         const currentPage = ref(1);
         const pageSize = ref(10);
         const totalItems = ref(10);
-        const driversData = ref([]);
+        const adjustersData = ref([]);
         const filter_form = ref({
             search: '',
             city: '',
@@ -200,7 +200,7 @@ export default {
         });
         const viewDetails = (row) => {
             router.push({
-                name: 'driver-details',
+                name: 'adjuster-details',
                 params: { user_id: row.user_id },
             });
         };
@@ -221,17 +221,17 @@ export default {
             return new URLSearchParams(params).toString();
         };
 
-        const fetchDriversData = async () => {
+        const fetchAdjustersData = async () => {
             startLoading();
             try {
                 const query = buildQueryParams();
-                const response = await get(`active-drivers?${query}`);
+                const response = await get(`active-adjusters?${query}`);
                 if (response.status === 'success') {
                     const data = response.data;
                     currentPage.value = data.current_page;
                     pageSize.value = data.per_page;
                     totalItems.value = data.total_items;
-                    driversData.value = data.drivers_list;
+                    adjustersData.value = data.adjusters_list;
                 } else {
                     error(response.message)
                 }
@@ -244,7 +244,7 @@ export default {
 
         const handlePageChange = (newPage) => {
             currentPage.value = newPage;
-            fetchDriversData();
+            fetchAdjustersData();
         };
 
         const handleSizeChange = (newPageSize) => {
@@ -252,7 +252,7 @@ export default {
             if (pageSize.value > totalItems.value) {
                 currentPage.value = 1;
             }
-            fetchDriversData();
+            fetchAdjustersData();
         };
 
         // Function to format date
@@ -274,16 +274,16 @@ export default {
 
         // Debounced watchers for search, city, state, experience
         watch(() => filter_form.value.search, debounce(() => {
-            fetchDriversData();
+            fetchAdjustersData();
         }, 600));
         watch(() => filter_form.value.city, debounce(() => {
-            fetchDriversData();
+            fetchAdjustersData();
         }, 600));
         watch(() => filter_form.value.state, debounce(() => {
-            fetchDriversData();
+            fetchAdjustersData();
         }, 600));
         watch(() => filter_form.value.experience, debounce(() => {
-            fetchDriversData();
+            fetchAdjustersData();
         }, 600));
 
         // Immediate watcher for other fields (array/value changes)
@@ -294,16 +294,16 @@ export default {
                 filter_form.value.vehicles.slice(),
                 filter_form.value.availability.slice()
             ],
-            fetchDriversData,
+            fetchAdjustersData,
             { deep: true }
         );
 
         onMounted(() => {
-            fetchDriversData();
+            fetchAdjustersData();
         });
 
         return {
-            driversData,
+            adjustersData,
             currentPage,
             pageSize,
             totalItems,
@@ -338,34 +338,34 @@ export default {
     margin-top: 15px;
 }
 
-.driver-card {
+.adjuster-card {
     transition: transform 0.2s;
 }
 
-.driver-card:hover {
+.adjuster-card:hover {
     transform: scale(1.02);
 }
 
-.driver-card-header {
+.adjuster-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.driver-card-name {
+.adjuster-card-name {
     flex-grow: 1;
     margin-left: 10px;
 }
 
-.driver-card-info {
+.adjuster-card-info {
     margin: 10px 0;
 }
 
-.driver-card-actions {
+.adjuster-card-actions {
     text-align: right;
 }
 
-.drivers-title {
+.adjusters-title {
     font-size: 2.2rem;
     font-weight: 700;
     color: #2c3e50;
@@ -394,7 +394,7 @@ export default {
     margin-bottom: 30px;
 }
 
-.modern-driver-card {
+.modern-adjuster-card {
     border-radius: 18px;
     box-shadow: 0 4px 24px rgba(60, 120, 200, 0.08);
     transition: box-shadow 0.2s, transform 0.2s;
@@ -406,46 +406,46 @@ export default {
     min-height: 340px;
 }
 
-.modern-driver-card:hover {
+.modern-adjuster-card:hover {
     box-shadow: 0 8px 32px rgba(60, 120, 200, 0.18);
     transform: translateY(-4px) scale(1.03);
 }
 
-.driver-avatar-section {
+.adjuster-avatar-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 12px;
 }
 
-.driver-avatar {
+.adjuster-avatar {
     margin-bottom: 8px;
     box-shadow: 0 2px 8px rgba(60, 120, 200, 0.12);
 }
 
-.driver-status {
+.adjuster-status {
     margin-bottom: 2px;
 }
 
-.driver-info-section {
+.adjuster-info-section {
     text-align: center;
     margin-bottom: 16px;
 }
 
-.driver-name {
+.adjuster-name {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 4px;
     color: #34495e;
 }
 
-.driver-username {
+.adjuster-username {
     font-size: 0.98em;
     color: #888;
     margin-bottom: 6px;
 }
 
-.driver-email {
+.adjuster-email {
     font-size: 0.97em;
     color: #409eff;
     margin-bottom: 6px;
@@ -455,7 +455,7 @@ export default {
     gap: 4px;
 }
 
-.driver-location {
+.adjuster-location {
     font-size: 0.97em;
     color: #666;
     margin-bottom: 2px;
@@ -465,7 +465,7 @@ export default {
     gap: 4px;
 }
 
-.driver-actions {
+.adjuster-actions {
     margin-top: 12px;
     text-align: center;
 }
@@ -536,7 +536,7 @@ export default {
         flex: 0 0 100%;
         max-width: 100%;
     }
-    .modern-driver-card {
+    .modern-adjuster-card {
         min-height: 280px;
         padding: 18px 6px;
     }

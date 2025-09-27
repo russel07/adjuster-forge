@@ -25,7 +25,7 @@ export function useAppHelper() {
         switch (value) {
             case 'pending': return 'Pending';
             case 'completed': return 'Completed';
-            case 'submitted': return user_type === 'driver' ? 'Under Review' : 'Submitted for Review';
+            case 'submitted': return user_type === 'adjuster' ? 'Under Review' : 'Submitted for Review';
             case 'rejected': return 'Rejected';
             case 'revoked': return 'Revoked';
             case 'active': return 'Active';
@@ -33,7 +33,7 @@ export function useAppHelper() {
             case 'due_subscription': return 'Due Subscription';
             case 'approved': return 'Approved';
             case 'deactivated': return 'Deactivated';
-            case 'profile_completed': return user_type === 'driver' ? 'Under Review' : 'Due Subscription';
+            case 'profile_completed': return user_type === 'adjuster' ? 'Under Review' : 'Due Subscription';
             case 'not_completed': return 'Not Completed';
             default: return value || 'Unknown';
         }
@@ -43,7 +43,7 @@ export function useAppHelper() {
         switch (value) {
             case 'pending': return 'pending';
             case 'completed': return 'completed';
-            case 'submitted': return user_type === 'driver' ? 'under_review' : 'submitted_for_review';
+            case 'submitted': return user_type === 'adjuster' ? 'under_review' : 'submitted_for_review';
             case 'rejected': return 'rejected';
             case 'revoked': return 'revoked';
             case 'active': return 'active';
@@ -51,7 +51,7 @@ export function useAppHelper() {
             case 'due_subscription': return 'due_subscription';
             case 'approved': return 'approved';
             case 'deactivated': return 'deactivated';
-            case 'profile_completed': return user_type === 'driver' ? 'under_review' : 'due_subscription';
+            case 'profile_completed': return user_type === 'adjuster' ? 'under_review' : 'due_subscription';
             case 'not_completed': return 'not_completed';
             default: return value || 'unknown';
         }

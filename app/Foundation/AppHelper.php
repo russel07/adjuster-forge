@@ -6,12 +6,12 @@ use SmartySoft\AdjusterForge\Http\Model\Subscription;
 use SmartySoft\AdjusterForge\Services\UserStatusService;
 trait AppHelper
 {
-    public static function driver_forge_app_vars()
+    public static function adjuster_forge_app_vars()
     {
-        $af_general_settings = self::getOption('driver_forge_general_settings', []);
+        $af_general_settings = self::getOption('adjuster_forge_general_settings', []);
         $home_url           = home_url();
         $upload_dir         = wp_upload_dir();
-        $uploadUrl          = esc_url($upload_dir['baseurl']) . '/' . DRIVER_FORGE_PLUGIN_ASSET_ID;
+        $uploadUrl          = esc_url($upload_dir['baseurl']) . '/' . ADJUSTER_FORGE_PLUGIN_ASSET_ID;
         $lost_password_url  = wp_lostpassword_url();
         $logout_url         = wp_logout_url();
         $profile_page_id    = isset($af_general_settings['profile_page_id']) ? $af_general_settings['profile_page_id'] : '';
@@ -25,7 +25,7 @@ trait AppHelper
         $subscription_data  = [];
         $user_status        = '';
         $plan_type          = '';
-        $app_logo           = DRIVER_FORGE_PLUGIN_URL . 'assets/img/logo.svg';
+        $app_logo           = ADJUSTER_FORGE_PLUGIN_URL . 'assets/img/logo.svg';
         if ( is_user_logged_in() ) {
             $current_user       = wp_get_current_user();
             $user_id = $current_user->ID;
@@ -52,7 +52,7 @@ trait AppHelper
             
             if (isset($subscription_data['plan_type'])) {
                 $plan_type = $subscription_data['plan_type'];
-            } elseif ($user_type === 'driver') {
+            } elseif ($user_type === 'adjuster') {
                 $plan_type = '';
             } else {
                 $plan_type = 'no_plan';
@@ -67,7 +67,7 @@ trait AppHelper
         $is_expired        = $expire_timestamp < $now_timestamp ? true : false;
         $day_remaining     = floor(($expire_timestamp - $now_timestamp) / (60 * 60 * 24));
         $expire_date       = is_date($expire_at) ? date_i18n(get_option('date_format'), $expire_timestamp) : date_i18n(get_option('date_format'), $now_timestamp);
-        $payment_settings  = self::getOption('driver_forge_payment_settings', []);
+        $payment_settings  = self::getOption('adjuster_forge_payment_settings', []);
         $stripe_public_key = isset($payment_settings['stripe_public_key']) ? $payment_settings['stripe_public_key'] : '';
         
         if( $user_status === "cancelled" && ! $is_expired ) {
@@ -77,8 +77,8 @@ trait AppHelper
         return array(
             'home_url'          => $home_url,
             'ajax_url'          => admin_url('admin-ajax.php'),
-            'slug'              => 'driver-forge',
-            'plugin_assets'     => DRIVER_FORGE_PLUGIN_URL . 'assets/',
+            'slug'              => 'adjuster-forge',
+            'plugin_assets'     => ADJUSTER_FORGE_PLUGIN_URL . 'assets/',
             'image_url'         => $uploadUrl,
             'is_logged_in'      => is_user_logged_in(),
             'user_data'         => $user_data,
@@ -97,9 +97,9 @@ trait AppHelper
             'job_this_month'    => isset($job_this_month) ? $job_this_month : 0,
             'rest_info'         => array (
                 'base_url'      => esc_url_raw( rest_url() ),
-                'rest_url'      => rest_url('driver-forge' . '/v2'),
+                'rest_url'      => rest_url('adjuster-forge' . '/v2'),
                 'nonce'         => wp_create_nonce('wp_rest'),
-                'namespace'     => 'driver-forge',
+                'namespace'     => 'adjuster-forge',
                 'version'       => 'v2',
             ),
             'app_logo'          => $app_logo,
@@ -215,7 +215,7 @@ trait AppHelper
      */
     public static function getProfilePageUrl()
     {
-        $settings = self::getOption('driver_forge_general_settings', []);
+        $settings = self::getOption('adjuster_forge_general_settings', []);
 
         if (!empty($settings) && isset($settings['profile_page_id'])) {
             $page_id = $settings['profile_page_id'];
@@ -234,7 +234,7 @@ trait AppHelper
      * @param string $file_key
      * @return string|WP_Error The file name of the uploaded file, or WP_Error on failure
      */
-    public static function handle_file_upload( $file_key, $upload_directory = DRIVER_FORGE_PLUGIN_ASSET_ID )
+    public static function handle_file_upload( $file_key, $upload_directory = ADJUSTER_FORGE_PLUGIN_ASSET_ID )
     {
         if (!function_exists('wp_handle_upload')) {
             require_once(ABSPATH . 'wp-admin/includes/file.php');
@@ -357,7 +357,7 @@ trait AppHelper
         return self::check_subscription_expiry($meta);
     }
 
-    private static function get_driver_status($meta)
+    private static function get_adjuster_status($meta)
     {
         // Check verification fee first
         if (empty($meta['paid_verification_fee'])) {
@@ -403,26 +403,26 @@ trait AppHelper
         return ($expire_at >= $today) ? 'active' : 'expired';
     }
 
-    public static function drivers_stripe_plan( $settings = [] ) {
-        return apply_filters('diver_forge_drivers_stripe_plan', [
+    public static function adjusters_stripe_plan( $settings = [] ) {
+        return apply_filters('diver_forge_adjusters_stripe_plan', [
             'id' => '1',
             'name' => 'Free Trial',
             'price' => 0.00,
             'interval' => 'Monthly',
             'description' => 'Free Trial for new companies',
-            'monthly_id' => isset($settings['driver_subscription_id']) ? $settings['driver_subscription_id'] : '',
-            'monthly_name' => 'Driver Monthly Fee',
-            'monthly_price' => isset($settings['driver_subscription_amount']) ? floatval($settings['driver_subscription_amount']) : 9.99,
+            'monthly_id' => isset($settings['adjuster_subscription_id']) ? $settings['adjuster_subscription_id'] : '',
+            'monthly_name' => 'Adjuster Monthly Fee',
+            'monthly_price' => isset($settings['adjuster_subscription_amount']) ? floatval($settings['adjuster_subscription_amount']) : 9.99,
             'monthly_interval' => 'Monthly',
-            'yearly_id' => isset($settings['driver_yearly_subscription_id']) ? $settings['driver_yearly_subscription_id'] : '',
-            'yearly_name' => 'Driver Yearly Fee',
-            'yearly_price' => isset($settings['driver_yearly_subscription_amount']) ? floatval($settings['driver_yearly_subscription_amount']) : 99.99,
+            'yearly_id' => isset($settings['adjuster_yearly_subscription_id']) ? $settings['adjuster_yearly_subscription_id'] : '',
+            'yearly_name' => 'adjuster Yearly Fee',
+            'yearly_price' => isset($settings['adjuster_yearly_subscription_amount']) ? floatval($settings['adjuster_yearly_subscription_amount']) : 99.99,
             'yearly_interval' => 'Yearly',
-            'description' => 'Essential features for new drivers',
+            'description' => 'Essential features for new adjusters',
             'features' => [
                 [
                     'icon' => 'check',
-                    'title' => 'View up to 3 premium driver profiles (with limited visibility)',
+                    'title' => 'View up to 3 premium adjuster profiles (with limited visibility)',
                 ],
                 [
                     'icon' => 'cross',
@@ -450,7 +450,7 @@ trait AppHelper
             'features' => [
                 [
                     'icon' => 'check',
-                    'title' => 'View up to 3 premium driver profiles (with limited visibility)',
+                    'title' => 'View up to 3 premium adjuster profiles (with limited visibility)',
                 ],
                 [
                     'icon' => 'cross',
@@ -481,11 +481,11 @@ trait AppHelper
                 'features' => [
                     [
                         'icon' => 'check',
-                        'title' => 'Unlimited viewing of premium driver profiles',
+                        'title' => 'Unlimited viewing of premium adjuster profiles',
                     ],
                     [
                         'icon' => 'check',
-                        'title' => ' Unlimited direct messaging with drivers',
+                        'title' => ' Unlimited direct messaging with adjusters',
                     ],
                     [
                         'icon' => 'cross',
@@ -510,7 +510,7 @@ trait AppHelper
                 'features' => [
                     [
                         'icon' => 'check',
-                        'title' => 'Unlimited viewing and messaging of premium drivers',
+                        'title' => 'Unlimited viewing and messaging of premium adjusters',
                     ],
                     [
                         'icon' => 'check',
@@ -518,11 +518,11 @@ trait AppHelper
                     ],
                     [
                         'icon' => 'check',
-                        'title' => 'Schedule interviews directly with drivers',
+                        'title' => 'Schedule interviews directly with adjusters',
                     ],
                     [
                         'icon' => 'check',
-                        'title' => 'Priority access to newly verified drivers',
+                        'title' => 'Priority access to newly verified adjusters',
                     ],
                     [
                         'icon' => 'check',
@@ -546,10 +546,10 @@ trait AppHelper
     /**
      * Get the plan type based on the plan ID.
      * @param string $plan_id The plan ID to check.
-     * @return string The plan type ('free_trial', 'standard', 'premium', or 'driver').
+     * @return string The plan type ('free_trial', 'standard', 'premium', or 'adjuster').
      */
     public static function get_plan_type( $plan_id ) {
-        $settings = self::getOption('driver_forge_general_settings', []);
+        $settings = self::getOption('adjuster_forge_general_settings', []);
         if ( empty( $settings ) || empty( $plan_id ) ) {
             return 'free_trial';
         }
@@ -565,6 +565,6 @@ trait AppHelper
                 return 'premium';
             }
         }
-        return 'driver';
+        return 'adjuster';
     }
 }
