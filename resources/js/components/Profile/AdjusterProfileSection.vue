@@ -44,10 +44,10 @@
                     <el-col :span="12">
                         <el-form-item label="Current Availability" prop="availability">
                             <el-select v-model="profileForm.availability" multiple placeholder="Select availability">
-                                <el-option label="Immediate" value="immediate" />
-                                <el-option label="7–14 days" value="7-14" />
-                                <el-option label="1 month" value="1-month" />
-                                <el-option label="Not currently available" value="not-available" />
+                                <el-option label="Available" value="available" />
+                                <el-option label="Contractual" value="contractual" />
+                                <el-option label="Permanent" value="permanent" />
+                                <el-option label="Not Available" value="not-available" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -76,6 +76,23 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item label="Experience Types" prop="experience_types">
+                                <el-select v-model="profileForm.experience_types" multiple placeholder="Select your experience types" style="width: 100%">
+                                    <el-option label="Contents" value="Contents" />
+                                    <el-option label="Auto" value="Auto" />
+                                    <el-option label="Property" value="Property" />
+                                    <el-option label="Large Loss" value="Large Loss" />
+                                    <el-option label="Commercial" value="Commercial" />
+                                    <el-option label="Worker Comp" value="Worker Comp" />
+                                    <el-option label="CAT" value="CAT" />
+                                    <el-option label="Desk Adjuster" value="Desk Adjuster" />
+                                    <el-option label="Field Adjuster" value="Field Adjuster" />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <el-form-item label="Brief Bio / Summary" prop="bio">
                         <el-input 
                             v-model="profileForm.bio" 
@@ -95,19 +112,19 @@
                   <div class="requirements-checklist">
                       <div class="check-item">
                           <el-icon class="check-icon"><CircleCheck /></el-icon>
-                          <span><strong>At least one active state license</strong> (TX, FL, LA, CA, NY recommended)</span>
+                          <span>Minimum <strong>2 High Demand State licenses</strong> required (TX, FL, LA, CA, NY recommended)</span>
                       </div>
                   </div>
                   <div v-for="(license, idx) in profileForm.licenses" :key="idx" class="license-entry">
                       <div class="license-header">
                           <span class="license-label">License {{ idx + 1 }}</span>
-                          <el-tooltip v-if="idx > 0" content="Remove License" placement="top">
+                          <el-tooltip v-if="idx > 1" content="Remove License" placement="top">
                               <el-icon @click="removeLicense(idx)" class="remove-button"><Delete /></el-icon>
                           </el-tooltip>
                       </div>
                       <el-row :gutter="10">
                           <el-col :span="8">
-                              <el-select v-model="license.state" placeholder="State" :required="idx === 0">
+                              <el-select v-model="license.state" placeholder="State" :required="idx < 2">
                                   <el-option label="TX" value="TX" />
                                   <el-option label="FL" value="FL" />
                                   <el-option label="LA" value="LA" />
@@ -117,19 +134,19 @@
                               </el-select>
                           </el-col>
                           <el-col :span="8">
-                              <el-input v-model="license.number" placeholder="License number" :required="idx === 0" />
+                              <el-input v-model="license.number" placeholder="License number" :required="idx < 2" />
                           </el-col>
                           <el-col :span="8">
                               <el-date-picker 
                                   v-model="license.expiration" 
                                   type="date" 
                                   placeholder="Expiration date"
-                                  :required="idx === 0"
+                                  :required="idx < 2"
                                   style="width: 100%"
                               />
                           </el-col>
                       </el-row>
-                      <el-form-item :label="idx === 0 ? 'Upload License Copy *' : 'Upload License Copy'" style="margin-top: 10px">
+                      <el-form-item :label="idx < 2 ? 'Upload License Copy *' : 'Upload License Copy'" style="margin-top: 10px">
                           <el-upload
                               :on-change="(file, files) => licenseFileChange(file, files, idx)"
                               :file-list="license.fileList || []"
@@ -137,7 +154,7 @@
                               accept=".pdf,.jpg,.png"
                               :limit="1"
                               drag
-                              class="license-upload"
+                              class="upload-box"
                           >
                               <el-icon><Document /></el-icon>
                               <div>Click or drag license copy to upload</div>
@@ -159,25 +176,56 @@
                       </div>
                     </div>
                     <div class="badges-grid">
-                        <div 
+                        <el-tag
                             v-for="badge in availableBadges" 
                             :key="badge.id"
-                            :class="['badge-selector', { active: profileForm.badges.includes(badge.id) }]"
+                            :type="profileForm.badges.includes(badge.id) ? 'primary' : ''"
+                            :effect="profileForm.badges.includes(badge.id) ? 'dark' : 'plain'"
+                            size="large"
+                            style="cursor: pointer; margin: 4px;"
                             @click="toggleBadge(badge.id)"
                         >
                             {{ badge.name }}
-                        </div>
+                        </el-tag>
                     </div>
                     <div class="badge-preview" v-if="profileForm.badges.length">
                         <div class="preview-label">Selected Badges:</div>
                         <div class="badge-pills">
-                            <div 
+                            <el-tag
                                 v-for="badgeId in profileForm.badges" 
                                 :key="badgeId" 
-                                class="badge-pill"
+                                type="success"
+                                effect="dark"
+                                size="small"
                             >
                                 {{ getBadgeName(badgeId) }}
+                            </el-tag>
+                        </div>
+                    </div>
+
+                    <!-- Badge Proof Files -->
+                    <div v-if="profileForm.badges.length" class="badge-proofs">
+                        <div class="preview-label">Upload Proof Files for Selected Badges:</div>
+                        <div v-for="badgeId in profileForm.badges" :key="'proof-' + badgeId" class="badge-proof-entry">
+                            <div class="badge-proof-header">
+                                <span class="badge-proof-label">{{ getBadgeName(badgeId) }} Certificate/Proof</span>
+                                <span class="required-indicator">*</span>
                             </div>
+                            <el-upload
+                                :on-change="(file, files) => badgeProofFileChange(file, files, badgeId)"
+                                :file-list="getBadgeProofFileList(badgeId)"
+                                :auto-upload="false"
+                                accept=".pdf,.jpg,.png"
+                                :limit="1"
+                                drag
+                                class="upload-box"
+                            >
+                                <el-icon><Document /></el-icon>
+                                <div>Click or drag {{ getBadgeName(badgeId) }} certificate to upload</div>
+                                <template #tip>
+                                    <div class="helper-text">Upload certificate or proof document (PDF, JPG, PNG)</div>
+                                </template>
+                            </el-upload>
                         </div>
                     </div>
                 </div>
@@ -224,7 +272,7 @@
                             <el-icon><Document /></el-icon>
                             <div>Click or drag work samples to upload</div>
                             <template #tip>
-                                <div class="helper-text">Examples: photos, sample reports, Xactimate exports. (Max 5 files)</div>
+                                <div class="helper-text">Examples: photos, sample reports, Xactimate exports</div>
                             </template>
                         </el-upload>
                     </el-form-item>
@@ -234,7 +282,7 @@
                 <!-- Verification Documents -->
                 <div class="form-section">
                     <el-row :gutter="20">
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <el-form-item label="Resume / CV" prop="resume">
                                 <el-upload
                                     class="upload-box"
@@ -256,7 +304,7 @@
                                 </el-upload>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <el-form-item label="W-9" prop="w9">
                                 <el-upload
                                     class="upload-box"
@@ -278,39 +326,7 @@
                                 </el-upload>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="Background Check / Drug Screen Date" prop="bg_check_date">
-                                <el-date-picker 
-                                    v-model="profileForm.bg_check_date" 
-                                    type="date" 
-                                    placeholder="Select date"
-                                    style="width: 100%"
-                                />
-                            </el-form-item>
-                            <el-form-item label="Upload Background Check (within 12 months)" prop="background_check">
-                                <el-upload
-                                    class="upload-box"
-                                    :on-change="backgroundCheckFileChange"
-                                    :file-list="BackgroundCheckFileList"
-                                    :auto-upload="false"
-                                    accept=".pdf,.jpg,.png"
-                                    :limit="1"
-                                    drag
-                                >
-                                    <el-icon><Document /></el-icon>
-                                    <div>Click or drag background check to upload</div>
-                                    <template #tip>
-                                        <span v-if="BackgroundCheckFileList.length">
-                                            <el-icon><Document /></el-icon>
-                                            {{ BackgroundCheckFileList[0].name }} ({{ (BackgroundCheckFileList[0].size/1024/1024).toFixed(2) }} MB)
-                                        </span>
-                                    </template>
-                                </el-upload>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
+                        <el-col :span="8">
                             <el-form-item label="Proof of Insurance (E&O) or COI" prop="insurance_proof">
                                 <el-upload
                                     class="upload-box"
@@ -367,7 +383,7 @@
                 
                 <!-- Terms & Submit -->
                 <div class="form-section">
-                    <el-form-item prop="declaration_agreed" :required="true" :rules="rules.declaration_agreed">
+                    <el-form-item prop="declaration_agreed" :required="true">
                         <el-checkbox v-model="profileForm.declaration_agreed">
                             I confirm all information is accurate and I consent to a background check.
                         </el-checkbox>
@@ -408,44 +424,32 @@ export default {
     const loading = props.loading;
 
     const profileForm = ref({
-      // Personal & Contact
       phone: '',
       city: '',
       state: '',
       availability: [],
-      
-      // Experience & Eligibility
       years_experience: null,
       cat_deployments: null,
       bio: '',
-      
-      // Licensing
       licenses: [
+        { state: '', number: '', expiration: '', file: null, fileList: [] },
         { state: '', number: '', expiration: '', file: null, fileList: [] }
       ],
-      
-      // Certifications & Badges
-      badges: ['xactimate'], // Default to Xactimate Level 2+
-      
-      // Carrier & IA Experience
+      badges: [], 
+      badge_proofs: {}, // Object to store badge proof files: { badgeId: file }
       carrier_experience: [],
       employers: '',
       work_samples: [],
-      
-      // Verification Documents
       resume: '',
       w9: '',
       bg_check_date: '',
       background_check: '',
       insurance_proof: '',
-      
-      // References
       references: [
         { name: '', phone: '', relationship: '' },
         { name: '', phone: '', relationship: '' },
       ],
-      
-      declaration_agreed: true,
+      declaration_agreed: false,
     });
 
     const availableBadges = [
@@ -479,6 +483,26 @@ export default {
       bg_check_date: [{ required: true, message: 'Please select background check date', trigger: 'change' }],
       background_check: [{ required: true, message: 'Please upload background check', trigger: 'change' }],
       insurance_proof: [{ required: true, message: 'Please upload proof of insurance', trigger: 'change' }],
+      licenses: [
+        {
+          validator: (rule, value, callback) => {
+            if (!Array.isArray(value) || value.length < 2) {
+              return callback(new Error('Please provide at least 2 licenses'));
+            }
+            for (let i = 0; i < Math.min(2, value.length); i++) {
+              const license = value[i];
+              if (!license.state || !license.number || !license.expiration) {
+                return callback(new Error(`License #${i + 1} is incomplete. All fields are required for the first 2 licenses.`));
+              }
+              if (!license.file) {
+                return callback(new Error(`License #${i + 1} requires a file upload.`));
+              }
+            }
+            return callback();
+          },
+          trigger: 'blur',
+        },
+      ],
       references: [
         {
           validator: (rule, value, callback) => {
@@ -496,18 +520,7 @@ export default {
           trigger: 'blur',
         },
       ],
-      declaration_agreed: [
-        { 
-          required: true, 
-          validator: (rule, value, callback) => {
-            if (value !== true) {
-              return callback(new Error('You must confirm the provided information is correct'));
-            }
-            return callback();
-          }, 
-          trigger: 'change' 
-        }
-      ],
+      declaration_agreed: [{ required: true, message: 'You must confirm the provided information is correct', trigger: 'change' }],
     };
 
     const profileFormRef = ref(null);
@@ -516,14 +529,20 @@ export default {
     const BackgroundCheckFileList = ref([]);
     const InsuranceProofFileList = ref([]);
     const WorkSamplesFileList = ref([]);
+    const BadgeProofFileLists = ref({}); // Object to store file lists for each badge
 
     // Badge methods
     const toggleBadge = (badgeId) => {
       const index = profileForm.value.badges.indexOf(badgeId);
       if (index > -1) {
+        // Remove badge and its proof file
         profileForm.value.badges.splice(index, 1);
+        delete profileForm.value.badge_proofs[badgeId];
+        delete BadgeProofFileLists.value[badgeId];
       } else {
+        // Add badge and initialize proof file list
         profileForm.value.badges.push(badgeId);
+        BadgeProofFileLists.value[badgeId] = [];
       }
     };
 
@@ -538,7 +557,7 @@ export default {
     };
 
     const removeLicense = (idx) => {
-      if (profileForm.value.licenses.length > 1) {
+      if (profileForm.value.licenses.length > 2) {
         profileForm.value.licenses.splice(idx, 1);
       }
     };
@@ -646,6 +665,28 @@ export default {
       profileForm.value.work_samples = uploadedFiles.map(f => f.raw);
     };
 
+    const badgeProofFileChange = (file, uploadedFiles, badgeId) => {
+      const allowedTypes = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg'];
+      const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg'];
+      if (!allowedTypes.includes(file.raw.type) && !allowedExtensions.some(ext => file.raw.name.toLowerCase().endsWith(ext))) {
+        BadgeProofFileLists.value[badgeId] = [];
+        error('Invalid file type. Please upload a PDF or image file (PNG, JPG, JPEG).');
+        return false;
+      }
+      const maxSize = 2 * 1024 * 1024;
+      if (file.raw.size > maxSize) {
+        BadgeProofFileLists.value[badgeId] = [];
+        error('File size must be less than 2MB');
+        return false;
+      }
+      BadgeProofFileLists.value[badgeId] = uploadedFiles.slice(-1);
+      profileForm.value.badge_proofs[badgeId] = file.raw;
+    };
+
+    const getBadgeProofFileList = (badgeId) => {
+      return BadgeProofFileLists.value[badgeId] || [];
+    };
+
     const licenseFileChange = (file, uploadedFiles, licenseIndex) => {
       const allowedTypes = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg'];
       const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg'];
@@ -665,16 +706,12 @@ export default {
     };
 
     // Submit handler
-    const handleSubmit = () => {
-      // First check if declaration is agreed
-      if (!profileForm.value.declaration_agreed) {
-        error('You must confirm that all provided information is correct before submitting.');
-        return;
-      }
-      
+    const handleSubmit = () => {      
       profileFormRef.value.validate(async (valid) => {
         if (!valid) return;
         if (!validateReferences()) return;
+        if (!validateLicenses()) return;
+        if (!validateBadgeProofs()) return;
         
         const formData = new FormData();
         
@@ -703,6 +740,14 @@ export default {
         
         // Badges & Experience
         formData.append('badges', JSON.stringify(profileForm.value.badges));
+        
+        // Badge proof files
+        profileForm.value.badges.forEach((badgeId) => {
+          if (profileForm.value.badge_proofs[badgeId]) {
+            formData.append(`badge_proof_${badgeId}`, profileForm.value.badge_proofs[badgeId]);
+          }
+        });
+        
         formData.append('carrier_experience', JSON.stringify(profileForm.value.carrier_experience));
         formData.append('employers', profileForm.value.employers);
         
@@ -755,6 +800,40 @@ export default {
       return true;
     };
 
+    // Custom license validation
+    const validateLicenses = () => {
+      const licenses = profileForm.value.licenses;
+      if (!Array.isArray(licenses) || licenses.length < 2) {
+        error('Please provide at least 2 licenses');
+        return false;
+      }
+      for (let i = 0; i < Math.min(2, licenses.length); i++) {
+        const license = licenses[i];
+        if (!license.state || !license.number || !license.expiration) {
+          error(`License #${i + 1} is incomplete. All fields are required for the first 2 licenses.`);
+          return false;
+        }
+        if (!license.file) {
+          error(`License #${i + 1} requires a file upload.`);
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // Custom badge proof validation
+    const validateBadgeProofs = () => {
+      const badges = profileForm.value.badges;
+      for (const badgeId of badges) {
+        if (!profileForm.value.badge_proofs[badgeId]) {
+          const badgeName = getBadgeName(badgeId);
+          error(`Please upload proof file for ${badgeName} certification.`);
+          return false;
+        }
+      }
+      return true;
+    };
+
     return {
       profileForm,
       profileFormRef,
@@ -777,6 +856,8 @@ export default {
       insuranceProofFileChange,
       workSamplesFileChange,
       licenseFileChange,
+      badgeProofFileChange,
+      getBadgeProofFileList,
       refError,
       Delete,
       Document,
@@ -1018,33 +1099,6 @@ export default {
   margin-bottom: 12px;
 }
 
-.badge-selector {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.04);
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 160ms;
-  user-select: none;
-}
-
-.badge-selector:hover {
-  transform: translateY(-2px);
-  border-color: rgba(212,175,55,0.1);
-}
-
-.badge-selector.active {
-  background: linear-gradient(180deg, rgba(212,175,55,0.12), rgba(212,175,55,0.04));
-  color: var(--white);
-  border-color: rgba(212,175,55,0.2);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(11,22,33,0.6);
-}
-
 .badge-preview {
   margin-top: 12px;
 }
@@ -1061,13 +1115,35 @@ export default {
   gap: 8px;
 }
 
-.badge-pill {
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  padding: 6px 10px;
-  border-radius: 999px;
-  color: #061018;
-  font-weight: 700;
-  font-size: 13px;
+/* Badge Proof Files */
+.badge-proofs {
+  margin-top: 16px;
+}
+
+.badge-proof-entry {
+  background: rgba(255,255,255,0.01);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.badge-proof-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.badge-proof-label {
+  font-weight: 600;
+  color: var(--white);
+  font-size: 14px;
+}
+
+.required-indicator {
+  color: #f56c6c;
+  margin-left: 4px;
+  font-weight: bold;
 }
 
 /* Reference Entry */
@@ -1094,16 +1170,21 @@ export default {
 
 /* Upload Styling */
 .upload-box {
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
   border: 1px dashed rgba(255,255,255,0.1) !important;
   border-radius: 8px !important;
   background: rgba(255,255,255,0.02) !important;
 }
 
 .license-upload {
-  border: 1px dashed rgba(255,255,255,0.1) !important;
-  border-radius: 8px !important;
-  background: rgba(255,255,255,0.02) !important;
   width: 100%;
+  border: 1px dashed #d9d9d9;
+  border-radius: 8px;
+  text-align: center;
+  padding: 10px 0;
+  background: #f8fafc;
 }
 
 /* Helper Text */
