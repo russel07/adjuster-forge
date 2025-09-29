@@ -180,25 +180,27 @@ class AdjusterProfileService implements CompleteProfileService
         }, $availability);
         $licenses = (new License())->findByUserId($user_id);
         $licenses = array_map(function($item) {
-            return $item->license_class;
-        }, $licenses);
-        $endorsements = (new Endorsement())->findByUserId($user_id);
-        $endorsements = array_map(function($item) {
-            return $item->endorsement;
-        }, $endorsements);
-        $experience = (new Experience())->findByUserId($user_id);
-        $experience = array_map(function($item) {
             return [
-                'type' => $item->equipment_type,
-                'years' => $item->years
+                'state' => $item->state,
+                'number' => $item->license_number,
+                'expiration' => $item->expiration_date,
+                'has_file' => !empty($item->license_file),
+                'file_url' => $item->license_file
             ];
-        }, $experience);
+        }, $licenses);
+        $badges = (new Badge())->findByUserId($user_id);
+        $badges = array_map(function($item) {
+            return [
+                'badge' => $item->badge,
+                'has_proof_file' => !empty($item->proof_file),
+                'proof_file_url' => $item->proof_file
+            ];
+        }, $badges);
         return [
             'user_data' => $user_data,
             'availability' => $availability,
             'licenses' => $licenses,
-            'endorsements' => $endorsements,
-            'experience' => $experience
+            'badges' => $badges
         ];
     }
 }

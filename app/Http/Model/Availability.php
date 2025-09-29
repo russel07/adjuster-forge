@@ -12,4 +12,10 @@ class Availability extends Model
         'adjuster_id',
         'availability'
     ];
+
+    public function findByUserId($user_id)
+    {
+        $model = static::getInstance();
+        return $model->_wpdb->get_results("SELECT * FROM $model->tableName WHERE adjuster_id = $user_id");
+    }
 }

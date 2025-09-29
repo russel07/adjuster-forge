@@ -230,13 +230,14 @@ class UserController extends BaseController
                 } else {
                     $insurance_proof = '';
                 }
+                // Update bio separately
+                update_user_meta( $user_id, 'af_bio', $bio );
 
                 $new_data = [
                     'phone'             => $phone,
                     'availability'      => $availability,
                     'years_experience'  => $years_experience,
                     'cat_deployments'   => $cat_deployments,
-                    'bio'               => $bio,
                     'license_data'      => $licenses_with_files,
                     'badges'            => $badges_with_proofs,
                     'carrier_experience'=> $carrier_experience,
