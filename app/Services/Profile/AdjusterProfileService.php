@@ -56,7 +56,7 @@ class AdjusterProfileService implements CompleteProfileService
         foreach ($badges as $badge) {
             if ( ! empty( $badge ) ) {
                 (new Badge())->store([
-                    'adjuster_id' => $user_id, 'badge' => $badge, 'proof_file' => $badge['proof_file_url']
+                    'adjuster_id' => $user_id, 'badge' => $badge['badge'], 'proof_file' => $badge['proof_file_url']
                 ]);
             }
         }

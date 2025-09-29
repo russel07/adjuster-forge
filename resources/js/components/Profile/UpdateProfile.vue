@@ -53,103 +53,124 @@
               </el-row>
               <template v-if="user_type === 'adjuster'">
                 <el-divider content-position="left">Adjuster Specific Details</el-divider>
+                
+                <!-- Experience & Eligibility -->
                 <el-row :gutter="20">
                   <el-col :span="12">
-                    <el-form-item label="Availability" prop="availability">
-                        <el-select v-model="form.availability" multiple placeholder="Select availability">
-                        <el-option label="Full Time" value="Full Time" />
-                        <el-option label="Part Time" value="Part Time" />
-                        <el-option label="Weekends" value="Weekends" />
-                        <el-option label="Nights" value="Nights" />
-                        <el-option label="Seasonal" value="Seasonal" />
-                        </el-select>
+                    <el-form-item label="Current Availability" prop="availability">
+                      <el-select v-model="form.availability" multiple placeholder="Select availability">
+                        <el-option label="Available" value="available" />
+                        <el-option label="Contractual" value="contractual" />
+                        <el-option label="Permanent" value="permanent" />
+                        <el-option label="Not Available" value="not-available" />
+                      </el-select>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="License Class(es)" prop="license_classes">
-                      <el-select v-model="form.license_classes" multiple placeholder="Select license class(es)">
-                          <el-option label="Class A" value="CDL-Class-A" />
-                          <el-option label="Class B" value="CDL-Class-B" />
-                          <el-option label="Class C" value="CDL-Class-C" />
-                          <el-option label="Non-CDL" value="Non-CDL" />
+                    <el-form-item label="Years of Licensed Experience" prop="years_experience">
+                      <el-input-number v-model="form.years_experience" :min="3" :max="60" placeholder="e.g., 5" style="width: 100%"></el-input-number>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                
+                <el-row :gutter="20">
+                  <el-col :span="12">
+                    <el-form-item label="CAT Deployments" prop="cat_deployments">
+                      <el-input-number v-model="form.cat_deployments" :min="0" placeholder="Number of CAT deployments" style="width: 100%"></el-input-number>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="Experience Types" prop="experience_types">
+                      <el-select v-model="form.experience_types" multiple placeholder="Select your experience types" style="width: 100%">
+                        <el-option label="Contents" value="Contents" />
+                        <el-option label="Auto" value="Auto" />
+                        <el-option label="Property" value="Property" />
+                        <el-option label="Large Loss" value="Large Loss" />
+                        <el-option label="Commercial" value="Commercial" />
+                        <el-option label="Worker Comp" value="Worker Comp" />
+                        <el-option label="CAT" value="CAT" />
+                        <el-option label="Desk Adjuster" value="Desk Adjuster" />
+                        <el-option label="Field Adjuster" value="Field Adjuster" />
                       </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
-                <el-row :gutter="20">
-                  <el-col :xs="24" :sm="12">
-                    <el-form-item label="Endorsements" prop="endorsements">
-                      <el-select v-model="form.endorsements" multiple placeholder="Select endorsements">
-                          <el-option label="Hazmat (H)" value="Hazmat" />
-                          <el-option label="Tank Vehicles (N)" value="Tank-Vehicles" />
-                          <el-option label="Passenger (P)" value="Passenger" />
-                          <el-option label="Double/Triple Trailers (T)" value="Double-Triple-Trailers" />
-                          <el-option label="Combination Hazmat/Tank (X)" value="Combination-Hazmat-Tank" />
-                          <el-option label="School Bus (S)" value="School-Bus" />
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-form-item label="Vehicle/Equipment Experience">
-                  <template v-for="(eq, idx) in form.equipment_experience" :key="idx">
-                    <div class="equipment-row">
-                      <el-row :gutter="10" align="middle">
-                        <el-col :xs="24" :sm="10">
-                          <el-form-item :label="idx === 0 ? 'Equipment Type' : ''" :prop="`equipment_experience.${idx}.type`" style="margin-bottom: 0;">
-                            <el-select v-model="eq.type" placeholder="Select equipment type" style="width: 100%">
-                              <el-option label="18-Wheeler / Tractor-Trailer" value="18-Wheeler-Tractor-Trailer" />
-                              <el-option label="Doubles / Triples" value="Doubles-Triples" />
-                              <el-option label="Straight Truck / Box Truck" value="Straight-Truck-Box-Truck" />
-                              <el-option label="Flatbed" value="Flatbed" />
-                              <el-option label="Tanker" value="Tanker" />
-                              <el-option label="Refrigerated (Reefer)" value="Refrigerated-Reefer" />
-                              <el-option label="Dry Van" value="Dry-Van" />
-                              <el-option label="Dump Truck" value="Dump-Truck" />
-                              <el-option label="Heavy Haul / Oversize Loads" value="Heavy-Haul-Oversize-Loads" />
-                            </el-select>
-                          </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="8">
-                          <el-form-item :label="idx === 0 ? 'Years of Experience' : ''" :prop="`equipment_experience.${idx}.years`" style="margin-bottom: 0;">
-                            <el-input-number v-model="eq.years" :min="1" placeholder="Years" style="width: 100%" />
-                          </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="6" class="equipment-actions" style="display: flex; align-items: center;">
-                          <el-tooltip content="Remove Equipment" placement="top">
-                            <el-icon v-if="form.equipment_experience.length > 1" @click="removeEquipment(idx)" class="remove-equipment-button"><Delete /></el-icon>
-                          </el-tooltip>
-                        </el-col>
-                      </el-row>
+
+                <!-- Certifications & Badges -->
+                <el-form-item label="Certifications & Badges">
+                  <div class="badges-grid">
+                    <el-tag
+                      v-for="badge in availableBadges" 
+                      :key="badge.id"
+                      :type="form.badges.includes(badge.id) ? 'primary' : undefined"
+                      :effect="form.badges.includes(badge.id) ? 'dark' : 'plain'"
+                      size="large"
+                      style="cursor: pointer; margin: 4px;"
+                      @click="toggleBadge(badge.id)"
+                    >
+                      {{ badge.name }}
+                    </el-tag>
+                  </div>
+                  <div class="badge-preview" v-if="form.badges.length">
+                    <div class="preview-label">Selected Badges:</div>
+                    <div class="badge-pills">
+                      <el-tag
+                        v-for="badgeId in form.badges" 
+                        :key="badgeId" 
+                        type="success"
+                        effect="dark"
+                        size="small"
+                      >
+                        {{ getBadgeName(badgeId) }}
+                      </el-tag>
                     </div>
-                  </template>
-                  <el-button type="primary" @click="addEquipment" style="margin-top: 10px;">
-                    + Add More
-                  </el-button>
+                  </div>
                 </el-form-item>
+
+                <!-- Carrier & IA Experience -->
+                <el-row :gutter="20">
+                  <el-col :span="12">
+                    <el-form-item label="Carrier Experience" prop="carrier_experience">
+                      <el-select v-model="form.carrier_experience" multiple placeholder="Select carriers">
+                        <el-option label="State Farm" value="State Farm" />
+                        <el-option label="Allstate" value="Allstate" />
+                        <el-option label="Citizens" value="Citizens" />
+                        <el-option label="Renfroe" value="Renfroe" />
+                        <el-option label="Pilot" value="Pilot" />
+                        <el-option label="Other" value="Other" />
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="Employers / IA Firms" prop="employers_ia_firms">
+                      <el-input 
+                        v-model="form.employers_ia_firms" 
+                        type="textarea" 
+                        :rows="3"
+                        placeholder="List prior firms, roles, and years"
+                      ></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
 
                 <el-form-item label="Professional References">
                   <template v-for="(ref, idx) in form.references" :key="idx">
                     <div class="reference-entry">
-                      <el-row :gutter="10" align="middle">
+                      <div class="reference-header">
+                        <span class="reference-label">Reference {{ idx + 1 }}</span>
+                        <el-tooltip v-if="form.references.length > 2" content="Remove Reference" placement="top">
+                          <el-icon @click="removeReference(idx)" class="remove-button"><Delete /></el-icon>
+                        </el-tooltip>
+                      </div>
+                      <el-row :gutter="10">
                         <el-col :xs="24" :sm="8">
-                          <el-form-item :label="idx === 0 ? 'Reference Name' : ''" :prop="`references.${idx}.name`" style="margin-bottom: 0;">
-                            <el-input v-model="ref.name" placeholder="Full name" style="width: 100%" />
-                          </el-form-item>
+                          <el-input v-model="ref.name" placeholder="Full name" />
                         </el-col>
                         <el-col :xs="24" :sm="8">
-                          <el-form-item :label="idx === 0 ? 'Phone' : ''" :prop="`references.${idx}.phone`" style="margin-bottom: 0;">
-                            <el-input v-model="ref.phone" placeholder="Phone number" style="width: 100%" />
-                          </el-form-item>
+                          <el-input v-model="ref.phone" placeholder="Phone or email" />
                         </el-col>
-                        <el-col :xs="24" :sm="6">
-                          <el-form-item :label="idx === 0 ? 'Years Known' : ''" :prop="`references.${idx}.years_known`" style="margin-bottom: 0;">
-                            <el-input v-model="ref.years_known" placeholder="Years known" style="width: 100%" />
-                          </el-form-item>
-                        </el-col>
-                        <el-col :xs="24" :sm="2" class="reference-actions" style="display: flex; align-items: center; justify-content: center;">
-                          <el-tooltip content="Remove Reference" placement="top">
-                            <el-icon v-if="form.references.length > 1" @click="removeReference(idx)" class="remove-reference-button"><Delete /></el-icon>
-                          </el-tooltip>
+                        <el-col :xs="24" :sm="8">
+                          <el-input v-model="ref.relationship" placeholder="E.g., Manager at Company X" />
                         </el-col>
                       </el-row>
                     </div>
@@ -216,6 +237,17 @@ export default {
     const user_type = app_vars.user_data?.user_type || '';
     const loading = ref(false);
     const formRef = ref(null);
+    
+    // Available badges for adjusters
+    const availableBadges = [
+      { id: 'xactimate', name: 'Xactimate Level 2+' },
+      { id: 'haag', name: 'HAAG' },
+      { id: 'nfip', name: 'NFIP' },
+      { id: 'rope', name: 'Rope & Harness' },
+      { id: 'drone', name: 'Drone Part 107' },
+      { id: 'multistate', name: 'Multi-State Licensed' },
+      { id: 'flood', name: 'Flood Certified' },
+    ];
     const form = ref({
       first_name: '',
       last_name: '',
@@ -225,15 +257,17 @@ export default {
       phone: '',
       ...(user_type === 'adjuster'
     ? {
-        bio: '',
+        about: '',
         availability: [],
-        license_classes: [],
-        endorsements: [],
-        equipment_experience: [
-          { type: '', years: null }
-        ],
+        years_experience: null,
+        cat_deployments: null,
+        experience_types: [],
+        badges: [],
+        carrier_experience: [],
+        employers_ia_firms: '',
         references: [
-          { name: '', phone: '', years_known: '' }
+          { name: '', phone: '', relationship: '' },
+          { name: '', phone: '', relationship: '' }
         ],
       }
     : {
@@ -256,32 +290,20 @@ export default {
       ],
       ...(user_type === 'adjuster'
       ? {
-          availability: [{ required: false, message: 'Please select at least one availability option', trigger: 'change' }],
-          license_classes: [{ required: true, message: 'Please select at least one license class', trigger: 'change' }],
-          endorsements: [{ required: false, message: 'Please select at least one endorsement', trigger: 'change' }],
-          equipment_experience: [{
+          availability: [{ type: 'array', required: false, message: 'Please select at least one availability option', trigger: 'change' }],
+          years_experience: [
+            { required: true, message: 'Please enter years of experience', trigger: 'blur' },
+            { type: 'number', min: 0, message: 'Years of experience must be a positive number', trigger: 'blur' }
+          ],
+          experience_types: [{ type: 'array', required: false, message: 'Please select at least one experience type', trigger: 'change' }],
+          references: [{
             validator: (rule, value, callback) => {
-                if (!Array.isArray(value) || value.length < 1) {
-                    return callback(new Error('Please add at least one equipment experience row'));
-                }
-                for (let i = 0; i < value.length; i++) {
-                    const eq = value[i];
-                    if (!eq.type || eq.years === null || eq.years === undefined) {
-                        return callback(new Error(`Equipment row #${i + 1} is incomplete`));
-                    }
-                }
-                return callback();
-            },
-            trigger: 'blur',
-        }],
-        references: [{
-            validator: (rule, value, callback) => {
-                if (!Array.isArray(value) || value.length < 1) {
-                    return callback(new Error('Please add at least one professional reference'));
+                if (!Array.isArray(value) || value.length < 2) {
+                    return callback(new Error('Please provide at least 2 references'));
                 }
                 for (let i = 0; i < value.length; i++) {
                     const ref = value[i];
-                    if (!ref.name || !ref.years_known || !ref.phone) {
+                    if (!ref.name || !ref.phone) {
                         return callback(new Error(`Reference #${i + 1} is incomplete`));
                     }
                 }
@@ -321,31 +343,31 @@ export default {
           if (user_type === 'adjuster') {
             form.value.about = response.bio || '';
             const adjuster_data = response.adjuster_data || {};
+            
             // Set adjuster-specific form data
             form.value.availability = Array.isArray(adjuster_data.availability) 
               ? adjuster_data.availability.map(item => item.name || item) 
               : [];
             
-            form.value.license_classes = Array.isArray(adjuster_data.licenses) 
-              ? adjuster_data.licenses.map(item => item.name || item) 
+            form.value.years_experience = adjuster_data.years_experience || null;
+            form.value.cat_deployments = adjuster_data.cat_deployments || null;
+            
+            form.value.experience_types = Array.isArray(adjuster_data.experience_types) 
+              ? adjuster_data.experience_types.map(item => item.name || item) 
               : [];
             
-            form.value.endorsements = Array.isArray(adjuster_data.endorsements) 
-              ? adjuster_data.endorsements.map(item => item.name || item) 
+            form.value.badges = Array.isArray(adjuster_data.badges) 
+              ? adjuster_data.badges.map(item => item.badge || item.name || item) 
               : [];
             
-            // Set equipment experience
-            if (Array.isArray(adjuster_data.experience) && adjuster_data.experience.length > 0) {
-              form.value.equipment_experience = adjuster_data.experience.map(item => ({
-                type: item.name || item.type || '',
-                years: item.years || null
-              }));
-            } else {
-              form.value.equipment_experience = [{ type: '', years: null }];
-            }
+            form.value.carrier_experience = Array.isArray(adjuster_data.carrier_experience) 
+              ? adjuster_data.carrier_experience.map(item => item.name || item) 
+              : [];
+            
+            form.value.employers_ia_firms = adjuster_data.employers_ia_firms || '';
 
             // Set references
-            let references = adjuster_data.user_data?.references || [];
+            let references = adjuster_data.user_data?.references || adjuster_data.references || [];
             if (typeof references === 'string') {
               references = references.replace(/\\"/g, '"');
               try {
@@ -358,11 +380,14 @@ export default {
             if (Array.isArray(references) && references.length > 0) {
               form.value.references = references.map(ref => ({
                 name: ref.name || '',
-                years_known: ref.years_known || '',
-                phone: ref.phone || ''
+                phone: ref.phone || '',
+                relationship: ref.relationship || ''
               }));
             } else {
-              form.value.references = [{ name: '', years_known: '', phone: '' }];
+              form.value.references = [
+                { name: '', phone: '', relationship: '' },
+                { name: '', phone: '', relationship: '' }
+              ];
             }
 
           } else if (user_type === 'company') {
@@ -392,11 +417,26 @@ export default {
       }
     };
 
+    // Badge management functions
+    const toggleBadge = (badgeId) => {
+      const index = form.value.badges.indexOf(badgeId);
+      if (index > -1) {
+        form.value.badges.splice(index, 1);
+      } else {
+        form.value.badges.push(badgeId);
+      }
+    };
+
+    const getBadgeName = (badgeId) => {
+      const badge = availableBadges.find(b => b.id === badgeId);
+      return badge ? badge.name : badgeId;
+    };
+
     const addReference = () => {
-      form.value.references.push({ name: '', name: '', phone: '' });
+      form.value.references.push({ name: '', phone: '', relationship: '' });
     };
     const removeReference = (idx) => {
-      if (form.value.references.length > 1) {
+      if (form.value.references.length > 2) {
         form.value.references.splice(idx, 1);
       }
     };
@@ -433,6 +473,9 @@ export default {
       handleSubmit,
       loading,
       user_type,
+      availableBadges,
+      toggleBadge,
+      getBadgeName,
       addEquipment,
       removeEquipment,
       addReference,
@@ -478,6 +521,53 @@ export default {
   border-radius: 6px;
   background-color: #fafafa;
   width: 100%;
+}
+
+.reference-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.reference-label {
+  font-weight: 600;
+  color: #303133;
+  font-size: 14px;
+}
+
+.remove-button {
+  color: #f56c6c;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.remove-button:hover {
+  color: #ff4d4f;
+}
+
+/* Badge System */
+.badges-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.badge-preview {
+  margin-top: 12px;
+}
+
+.preview-label {
+  font-size: 13px;
+  color: #606266;
+  margin-bottom: 8px;
+}
+
+.badge-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .field-error {
   color: #f56c6c;
