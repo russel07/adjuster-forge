@@ -129,13 +129,82 @@ class UserController extends BaseController
                 // Get form data from the request
                 $phone              = sanitize_text_field( $this->request->get( 'phone' ) );
                 $availability       =  $this->request->get( 'availability' );
-                $license_classes    = sanitize_text_field( $this->request->get( 'license_classes' ) );
-                $endorsements       = sanitize_text_field( $this->request->get( 'endorsements' ) );
-                $experience_json    = $this->request->get( 'equipment_experience' );
+                $years_experience   = intval( $this->request->get( 'years_experience' ) );
+                $cat_deployments    = intval( $this->request->get( 'cat_deployments' ) );
+                $bio                = sanitize_textarea_field( $this->request->get( 'bio' ) );
+                $licenses           = sanitize_text_field( $this->request->get( 'licenses' ) );
+                $badges             = sanitize_text_field( $this->request->get( 'badges' ) );
+                $carrier_experience = $this->request->get( 'carrier_experience' );
+                $employers_ia_firms = sanitize_text_field( $this->request->get( 'employers_ia_firms' ) );
                 $references_json    = $this->request->get( 'references' );
-                //$references    = json_decode($references_json, true); // Convert JSON string to array
                 $d_agreed           = $this->request->get( 'declaration_agreed', false ) ? true : false;
-                //$references         = $sanitized_references;
+                $licenses           = stripslashes( $licenses );
+                $badges             = stripslashes( $badges );
+                $references         = stripslashes( $references_json );
+                $license_data       = json_decode( $licenses, true );
+                $badge_data         = json_decode( $badges, true );
+                $references_data    = json_decode( $references, true );
+                // Process license files
+                $licenses_with_files = [];
+                if (is_array($license_data)) {
+                    foreach ($license_data as $index => $license) {
+                        $license_entry = [
+                            'state' => $license['state'],
+                            'number' => $license['number'],
+                            'expiration' => $license['expiration'],
+                            'has_file' => $license['has_file'],
+                            'file_url' => ''
+                        ];
+                        
+                        // Check if there's a corresponding file
+                        $file_key = 'license_file_' . $index;
+                        if (isset($_FILES[$file_key]) && !empty($_FILES[$file_key]['name'])) {
+                            $license_file = self::handle_file_upload($file_key);
+                            if (is_wp_error($license_file)) {
+                                return $this->response($license_file->get_error_message(), 400);
+                            }
+                            $license_entry['file_url'] = $license_file;
+                        }
+                        
+                        $licenses_with_files[] = $license_entry;
+                    }
+                }
+                // Process badges with proofs
+                $badges_with_proofs = [];
+                if (is_array($badge_data)) {
+                    foreach ($badge_data as $index => $badge) {
+                        $badge_entry = [
+                            'badge' => $badge,
+                            'proof_file_url' => ''
+                        ];
+                        
+                        // Check if there's a corresponding proof file
+                        $proof_key = 'badge_proof_' . $index;
+                        if (isset($_FILES[$proof_key]) && !empty($_FILES[$proof_key]['name'])) {
+                            $proof_file = self::handle_file_upload($proof_key);
+                            if (is_wp_error($proof_file)) {
+                                return $this->response($proof_file->get_error_message(), 400);
+                            }
+                            $badge_entry['proof_file_url'] = $proof_file;
+                        }
+                        
+                        $badges_with_proofs[] = $badge_entry;
+                    }
+                }
+
+                $work_samples = [];
+                // Process carrier experience file
+                //check if file exist with key work_sample_ 
+                foreach ($_FILES as $key => $file) {
+                    if (strpos($key, 'work_sample_') === 0 && !empty($file['name'])) {
+                        $uploaded_file = self::handle_file_upload($key);
+                        if (is_wp_error($uploaded_file)) {
+                            return $this->response($uploaded_file->get_error_message(), 400);
+                        } else {
+                            $work_samples[] = $uploaded_file;
+                        }
+                    }
+                }
 
                 // Handle event file upload
                 $resume = self::handle_file_upload('resume');
@@ -144,32 +213,40 @@ class UserController extends BaseController
                     return $this->response($resume->get_error_message(), 400);
                 }
 
-                $medical_card = self::handle_file_upload('medical_card');
-
-                if ( is_wp_error( $medical_card ) ) {
-                    return $this->response($medical_card->get_error_message(), 400);
-                }
-
-                if ( isset($_FILES['mvr']) && !empty($_FILES['mvr']['name']) ) {
-                    $mvr = self::handle_file_upload('mvr');
-                    if ( is_wp_error( $mvr ) ) {
-                        return $this->response($mvr->get_error_message(), 400);
+                if ( isset($_FILES['w9']) && !empty($_FILES['w9']['name']) ) {
+                    $w9 = self::handle_file_upload('w9');
+                    if ( is_wp_error( $w9 ) ) {
+                        return $this->response($w9->get_error_message(), 400);
                     }
+                } else {
+                    $w9 = '';
                 }
-                else {
-                    $mvr = '';
+
+                if ( isset($_FILES['insurance_proof']) && !empty($_FILES['insurance_proof']['name']) ) {
+                    $insurance_proof = self::handle_file_upload('insurance_proof');
+                    if ( is_wp_error( $insurance_proof ) ) {
+                        return $this->response($insurance_proof->get_error_message(), 400);
+                    }
+                } else {
+                    $insurance_proof = '';
                 }
+
                 $new_data = [
-                    'phone'         => $phone,
-                    'availability'  => $availability,
-                    'license_classes'=> $license_classes,
-                    'endorsements'  => $endorsements,
-                    'experience'    => $experience_json,
-                    'references'    => $references_json,
-                    'resume'        => $resume,
-                    'medical_card'  => $medical_card,
-                    'mvr'           => $mvr,
-                    'declaration_agreed' => $d_agreed,
+                    'phone'             => $phone,
+                    'availability'      => $availability,
+                    'years_experience'  => $years_experience,
+                    'cat_deployments'   => $cat_deployments,
+                    'bio'               => $bio,
+                    'license_data'      => $licenses_with_files,
+                    'badges'            => $badges_with_proofs,
+                    'carrier_experience'=> $carrier_experience,
+                    'employers_ia_firms'=> $employers_ia_firms,
+                    'work_samples'      => !empty($work_samples) ? implode( ',', $work_samples ) : null,
+                    'resume'            => $resume,
+                    'w9'                => $w9,
+                    'insurance_proof'   => $insurance_proof,
+                    'references'        => $references_data,
+                    'declaration_agreed'=> $d_agreed,
                 ];
             } else if( $user_type == 'company' ) {
                 $phone          = sanitize_text_field( $this->request->get( 'phone' ) );

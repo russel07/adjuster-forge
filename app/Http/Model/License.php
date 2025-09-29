@@ -6,10 +6,13 @@ defined('ABSPATH') || exit; // Prevent direct access
 
 class License extends Model
 {
-    protected $tableName = 'af_adjuster_license_classes';
+    protected $tableName = 'af_adjuster_licenses';
 
     protected $fillable = [
-        'user_id',
-        'license_class'
+        'adjuster_id',
+        'state',
+        'license_number',
+        'expiration_date',
+        'license_file'
     ];
 }

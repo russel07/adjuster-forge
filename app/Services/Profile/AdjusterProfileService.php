@@ -8,7 +8,8 @@ use SmartySoft\AdjusterForge\Services\Profile\CompleteProfileService;
 use SmartySoft\AdjusterForge\Foundation\AppHelper;
 use SmartySoft\AdjusterForge\Http\Model\Availability;
 use SmartySoft\AdjusterForge\Http\Model\License;
-use SmartySoft\AdjusterForge\Http\Model\Endorsement;
+use SmartySoft\AdjusterForge\Http\Model\Badge;
+use SmartySoft\AdjusterForge\Http\Model\CarrierExperience;
 use SmartySoft\AdjusterForge\Http\Model\Experience;
 
 class AdjusterProfileService implements CompleteProfileService
@@ -17,15 +18,18 @@ class AdjusterProfileService implements CompleteProfileService
     public function save(array $data, $user_id): bool
     {
         $user_data = [
-            'first_name'    => $data['first_name'],
-            'last_name'     => $data['last_name'],
-            'email'         => $data['email'],
-            'user_type'     => $data['user_type'],
-            'profile_link'  => $data['profile_link'],
-            'phone'         => $data['phone'],
-            'resume'       => $data['resume'],
-            'medical_card' => $data['medical_card'],
-            'mvr'          => $data['mvr']
+            'first_name'        => $data['first_name'],
+            'last_name'         => $data['last_name'],
+            'email'             => $data['email'],
+            'user_type'         => $data['user_type'],
+            'profile_link'      => $data['profile_link'],
+            'phone'             => $data['phone'],
+            'years_experience'  => $data['years_experience'],
+            'cat_deployments'   => $data['cat_deployments'],
+            'bio'               => $data['bio'],
+            'resume'            => $data['resume'],
+            'w9'                => $data['w9'],
+            'insurance_proof'   => $data['insurance_proof'],
         ];
         //Store availability
         $availability = $data['availability'];
@@ -33,45 +37,44 @@ class AdjusterProfileService implements CompleteProfileService
         foreach ($data_arr as $value) {
             if ( ! empty( $value ) ) {
                 (new Availability())->store([
-                    'user_id' => $user_id, 'availability' => $value
+                    'adjuster_id' => $user_id, 'availability' => $value
                 ]);
             }
         }
         //Store license classes
-        $license_classes = $data['license_classes'];
-        $licenses = json_decode( wp_unslash( $license_classes ), true );
-        foreach ($licenses as $value) {
-            if ( ! empty( $value ) ) {
+        $licenses = $data['license_data'];
+        foreach ($licenses as $license) {
+            if ( ! empty( $license ) ) {
                 (new License())->store([
-                    'user_id' => $user_id, 'license_class' => $value
+                    'adjuster_id' => $user_id, 'state' => $license['state'], 'license_number' => $license['number'],
+                    'expiration_date' => $license['expiration'], 'license_file' => $license['file_url']
                 ]);
             }
         }
-        //Store endorsements
-        $endorsements = $data['endorsements'];
-        $endorsements_arr = json_decode( wp_unslash( $endorsements ), true );
-        foreach ($endorsements_arr as $value) {
-            if ( ! empty( $value ) ) {
-                (new Endorsement())->store([
-                    'user_id' => $user_id, 'endorsement' => $value
+        //Store badges
+        $badges = $data['badges'];
+        foreach ($badges as $badge) {
+            if ( ! empty( $badge ) ) {
+                (new Badge())->store([
+                    'adjuster_id' => $user_id, 'badge' => $badge, 'proof_file' => $badge['proof_file_url']
                 ]);
             }
         }
-        //Store experience
-        $experience_json = $data['experience'];
-        $experience_arr = json_decode( wp_unslash( $experience_json ), true );
-        foreach ($experience_arr as $experience) {
-            if ( ! empty( $experience ) ) {
-                (new Experience())->store([
-                    'user_id' => $user_id, 
-                    'equipment_type' => $experience['type'] ?? '',
-                    'years' => $experience['years'] ?? 0
-                ]);
-            }
-        }
+        
+        //Store carrier experience
+        $carrier_experience = $data['carrier_experience'];
+        $employers_ia_firms = $data['employers_ia_firms'];
+        $work_samples = $data['work_samples'];
+        
+        (new CarrierExperience())->store([
+            'adjuster_id' => $user_id,
+            'carrier_name' => $carrier_experience,
+            'description' => $employers_ia_firms,
+            'proof_file' => $work_samples
+        ]);
+
         //Store references
-        $references_json = $data['references'];
-        $references_arr = json_decode( wp_unslash( $references_json ), true );
+        $references_arr = $data['references'];
         $user_data['references'] = $references_arr;
         $settings = self::getOption('adjuster_forge_general_settings', []);
 

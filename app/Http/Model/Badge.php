@@ -4,12 +4,13 @@ namespace SmartySoft\AdjusterForge\Http\Model;
 
 defined('ABSPATH') || exit; // Prevent direct access
 
-class Endorsement extends Model
+class Badge extends Model
 {
-    protected $tableName = 'af_adjuster_endorsements';
+    protected $tableName = 'af_adjuster_badges';
 
     protected $fillable = [
-        'user_id',
-        'endorsement'
+        'adjuster_id',
+        'badge',
+        'proof_file'
     ];
 }

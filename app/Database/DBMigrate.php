@@ -4,6 +4,7 @@ namespace SmartySoft\AdjusterForge\Database;
 
 defined('ABSPATH') || exit; // Prevent direct access
 use SmartySoft\AdjusterForge\Database\Migrations\AdjusterAvailabilityMigrator;
+use SmartySoft\AdjusterForge\Database\Migrations\AdjusterBadgeMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\AdjusterCareerExperienceMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\AdjusterCertificationsMigrator;
 use SmartySoft\AdjusterForge\Database\Migrations\AdjusterEquipmentExperienceMigrator;
@@ -26,7 +27,8 @@ class DBMigrate
         AdjusterCareerExperienceMigrator::class,
         AdjusterCertificationsMigrator::class,
         AdjusterLicencesMigrator::class,
-        AdjusterEquipmentExperienceMigrator::class
+        AdjusterEquipmentExperienceMigrator::class,
+        AdjusterBadgeMigrator::class,
     ];
 
     public static function run(){

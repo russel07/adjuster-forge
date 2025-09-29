@@ -179,7 +179,7 @@
                         <el-tag
                             v-for="badge in availableBadges" 
                             :key="badge.id"
-                            :type="profileForm.badges.includes(badge.id) ? 'primary' : ''"
+                            :type="profileForm.badges.includes(badge.id) ? 'primary' : undefined"
                             :effect="profileForm.badges.includes(badge.id) ? 'dark' : 'plain'"
                             size="large"
                             style="cursor: pointer; margin: 4px;"
@@ -248,9 +248,9 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="Employers / IA Firms" prop="employers">
+                            <el-form-item label="Employers / IA Firms" prop="employers_ia_firms">
                                 <el-input 
-                                    v-model="profileForm.employers" 
+                                    v-model="profileForm.employers_ia_firms" 
                                     type="textarea" 
                                     :rows="3"
                                     placeholder="List prior firms, roles, and years"
@@ -425,20 +425,19 @@ export default {
 
     const profileForm = ref({
       phone: '',
-      city: '',
-      state: '',
       availability: [],
       years_experience: null,
       cat_deployments: null,
+      experience_types: [],
       bio: '',
       licenses: [
         { state: '', number: '', expiration: '', file: null, fileList: [] },
         { state: '', number: '', expiration: '', file: null, fileList: [] }
       ],
       badges: [], 
-      badge_proofs: {}, // Object to store badge proof files: { badgeId: file }
-      carrier_experience: [],
-      employers: '',
+      badge_proofs: {},
+      carrier_experience: '',
+      employers_ia_firms: '',
       work_samples: [],
       resume: '',
       w9: '',
@@ -467,22 +466,21 @@ export default {
         { required: true, message: 'Please enter your phone number', trigger: 'blur' },
         { pattern: /^[0-9+\-\s()]{7,20}$/, message: 'Please enter a valid phone number', trigger: 'blur' },
       ],
-      state: [
-        { required: true, message: 'Please select your state', trigger: 'change' }
+      availability: [
+        { type: 'array', required: true, message: 'Please select your availability', trigger: 'change' }
       ],
       years_experience: [
         { required: true, message: 'Please enter years of experience', trigger: 'blur' },
         { type: 'number', min: 0, message: 'Years of experience must be a positive number', trigger: 'blur' }
+      ],
+      experience_types: [
+        { type: 'array', required: true, message: 'Please select at least one experience type', trigger: 'change' }
       ],
       bio: [
         { required: true, message: 'Please enter a brief bio', trigger: 'blur' },
         { min: 60, message: 'Bio must be at least 60 characters', trigger: 'blur' }
       ],
       resume: [{ required: true, message: 'Please upload your resume', trigger: 'change' }],
-      w9: [{ required: true, message: 'Please upload your W-9', trigger: 'change' }],
-      bg_check_date: [{ required: true, message: 'Please select background check date', trigger: 'change' }],
-      background_check: [{ required: true, message: 'Please upload background check', trigger: 'change' }],
-      insurance_proof: [{ required: true, message: 'Please upload proof of insurance', trigger: 'change' }],
       licenses: [
         {
           validator: (rule, value, callback) => {
@@ -717,52 +715,50 @@ export default {
         
         // Personal & Contact
         formData.append('phone', profileForm.value.phone);
-        formData.append('city', profileForm.value.city);
-        formData.append('state', profileForm.value.state);
         formData.append('availability', JSON.stringify(profileForm.value.availability));
         
         // Experience
         formData.append('years_experience', profileForm.value.years_experience);
         formData.append('cat_deployments', profileForm.value.cat_deployments);
+        formData.append('experience_types', JSON.stringify(profileForm.value.experience_types));
         formData.append('bio', profileForm.value.bio);
         
-        // Licensing
-        formData.append('licenses', JSON.stringify(profileForm.value.licenses.map(l => ({
+        // Licensing - Send license data and files separately
+        const licenseData = profileForm.value.licenses.map((l, index) => ({
           state: l.state,
           number: l.number,
-          expiration: l.expiration
-        }))));
-        profileForm.value.licenses.forEach((license, idx) => {
+          expiration: l.expiration,
+          has_file: l.file ? true : false
+        }));
+        formData.append('licenses', JSON.stringify(licenseData));
+        
+        // Send license files separately
+        profileForm.value.licenses.forEach((license, index) => {
           if (license.file) {
-            formData.append(`license_file_${idx}`, license.file);
+            formData.append(`license_file_${index}`, license.file);
           }
         });
-        
-        // Badges & Experience
+
+        // Badges
         formData.append('badges', JSON.stringify(profileForm.value.badges));
-        
-        // Badge proof files
-        profileForm.value.badges.forEach((badgeId) => {
+        // Send badge proof files separately
+        profileForm.value.badges.forEach((badgeId, index) => {
           if (profileForm.value.badge_proofs[badgeId]) {
-            formData.append(`badge_proof_${badgeId}`, profileForm.value.badge_proofs[badgeId]);
+            formData.append(`badge_proof_${index}`, profileForm.value.badge_proofs[badgeId]);
           }
         });
-        
-        formData.append('carrier_experience', JSON.stringify(profileForm.value.carrier_experience));
-        formData.append('employers', profileForm.value.employers);
-        
-        // Documents
-        formData.append('resume', profileForm.value.resume);
-        formData.append('w9', profileForm.value.w9);
-        formData.append('bg_check_date', profileForm.value.bg_check_date);
-        formData.append('background_check', profileForm.value.background_check);
-        formData.append('insurance_proof', profileForm.value.insurance_proof);
-        
+        // Carrier & IA Experience
+        formData.append('carrier_experience', profileForm.value.carrier_experience);
+        formData.append('employers_ia_firms', profileForm.value.employers_ia_firms);
         // Work samples
         profileForm.value.work_samples.forEach((file, idx) => {
           formData.append(`work_sample_${idx}`, file);
         });
         
+        // Documents
+        formData.append('resume', profileForm.value.resume);
+        formData.append('w9', profileForm.value.w9);
+        formData.append('insurance_proof', profileForm.value.insurance_proof);
         // References
         formData.append('references', JSON.stringify(profileForm.value.references));
         formData.append('declaration_agreed', profileForm.value.declaration_agreed ? '1' : '0');
@@ -774,6 +770,9 @@ export default {
     // Reference field error helper
     const refError = (index) => {
       const ref = profileForm.value.references[index];
+      // Don't show error if both fields are empty (initial state)
+      if (ref.name === '' && ref.phone === '') return '';
+      // Show error only if one field is filled but the other is empty, or if format is invalid
       if (!ref.name || !ref.phone) return 'Name and contact required';
       if (!/^[0-9+\-\s()@.]{7,30}$/.test(ref.phone)) return 'Invalid contact format';
       return '';

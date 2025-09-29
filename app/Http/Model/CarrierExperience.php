@@ -4,12 +4,14 @@ namespace SmartySoft\AdjusterForge\Http\Model;
 
 defined('ABSPATH') || exit; // Prevent direct access
 
-class Availability extends Model
+class CarrierExperience extends Model
 {
-    protected $tableName = 'af_adjuster_availability';
+    protected $tableName = 'af_adjuster_carrier_experience';
 
     protected $fillable = [
         'adjuster_id',
-        'availability'
+        'carrier_name',
+        'description',
+        'proof_file'
     ];
 }
