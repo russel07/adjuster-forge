@@ -26,6 +26,7 @@ export function useAppHelper() {
             case 'pending': return 'Pending';
             case 'completed': return 'Completed';
             case 'submitted': return user_type === 'adjuster' ? 'Under Review' : 'Submitted for Review';
+            case 'under_review': return user_type === 'adjuster' ? 'Under Review' : 'Submitted for Review';
             case 'rejected': return 'Rejected';
             case 'revoked': return 'Revoked';
             case 'active': return 'Active';

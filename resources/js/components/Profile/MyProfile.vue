@@ -102,14 +102,18 @@ export default {
     // Adjuster details
     const adjusterDetails = ref({
       phone: '',
-      resume: '',
-      medical_card: '',
-      mvr: '',
-      references: [],
+      bio: '',
+      years_experience: 0,
+      cat_deployments: 0,
       availability: [],
       licenses: [],
-      endorsements: [],
-      experience: [],
+      badges: [],
+      carrier_experience: [],
+      employers_ia_firms: '',
+      resume: '',
+      w9: '',
+      insurance_proof: '',
+      references: [],
     });
 
     // Company details
@@ -179,26 +183,32 @@ export default {
 
           if (user_type === 'adjuster') {
             const adjuster_data = response.adjuster_data || {};
-            let references = adjuster_data.user_data.references || [];
+            
+            // Handle references - could be from user_data or direct
+            let references = adjuster_data.references || adjuster_data.user_data?.references || [];
             if (typeof references === 'string') {
               references = references.replace(/\\"/g, '"');
               try {
-                adjuster_data.references = JSON.parse(references);
+                references = JSON.parse(references);
               } catch (e) {
-                adjuster_data.references = [];
+                references = [];
               }
             }
             
             Object.assign(adjusterDetails.value, {
-              phone: adjuster_data.user_data.phone || '',
-              resume: adjuster_data.user_data.resume || '',
-              medical_card: adjuster_data.user_data.medical_card || '',
-              mvr: adjuster_data.user_data.mvr || '',
-              references: Array.isArray(adjuster_data.references) ? adjuster_data.references : [],
+              phone: adjuster_data.phone || adjuster_data.user_data?.phone || '',
+              bio: adjuster_data.bio || adjuster_data.user_data?.bio || '',
+              years_experience: adjuster_data.user_data?.years_experience || 0,
+              cat_deployments: adjuster_data.cat_deployments || adjuster_data.user_data?.cat_deployments || 0,
               availability: Array.isArray(adjuster_data.availability) ? adjuster_data.availability : [],
               licenses: Array.isArray(adjuster_data.licenses) ? adjuster_data.licenses : [],
-              endorsements: Array.isArray(adjuster_data.endorsements) ? adjuster_data.endorsements : [],
-              experience: Array.isArray(adjuster_data.experience) ? adjuster_data.experience : [],
+              badges: Array.isArray(adjuster_data.badges) ? adjuster_data.badges : [],
+              carrier_experience: Array.isArray(adjuster_data.carrier_experience) ? adjuster_data.carrier_experience : [],
+              employers_ia_firms: adjuster_data.employers_ia_firms || '',
+              resume: adjuster_data.resume || adjuster_data.user_data?.resume || '',
+              w9: adjuster_data.w9 || adjuster_data.user_data?.w9 || '',
+              insurance_proof: adjuster_data.insurance_proof || adjuster_data.user_data?.insurance_proof || '',
+              references: Array.isArray(references) ? references : [],
             });
           } else if (user_type === 'company') {
             const company_data = response.company_data || {};

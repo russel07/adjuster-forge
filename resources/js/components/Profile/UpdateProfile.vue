@@ -341,16 +341,22 @@ export default {
           form.value.phone = response.phone || '';
 
           if (user_type === 'adjuster') {
-            form.value.about = response.bio || '';
             const adjuster_data = response.adjuster_data || {};
-            
+            form.value.first_name = response.first_name || adjuster_data.user_data?.first_name || '';
+            form.value.last_name = response.last_name || adjuster_data.user_data?.last_name || '';
+            form.value.city = response.city || adjuster_data.user_data?.city || '';
+            form.value.state = response.state || adjuster_data.user_data?.state || '';
+            form.value.country = response.country || adjuster_data.user_data?.country || '';
+            form.value.phone = response.phone || adjuster_data.user_data?.phone || '';
+            form.value.about = response?.bio || adjuster_data.user_data?.bio || '';
+            form.value.phone = response.phone || adjuster_data.user_data?.phone || '';
             // Set adjuster-specific form data
             form.value.availability = Array.isArray(adjuster_data.availability) 
               ? adjuster_data.availability.map(item => item.name || item) 
               : [];
             
-            form.value.years_experience = adjuster_data.years_experience || null;
-            form.value.cat_deployments = adjuster_data.cat_deployments || null;
+            form.value.years_experience = adjuster_data.user_data?.years_experience || null;
+            form.value.cat_deployments = adjuster_data.user_data?.cat_deployments || null;
             
             form.value.experience_types = Array.isArray(adjuster_data.experience_types) 
               ? adjuster_data.experience_types.map(item => item.name || item) 

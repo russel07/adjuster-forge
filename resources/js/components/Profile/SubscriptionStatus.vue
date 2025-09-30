@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Subscription status alerts -->
-    <template v-if="statusValue != 'active'">
+    <template v-if="statusValue != 'active' && statusValue != 'under_review'">
       <el-alert
         type="warning"
         show-icon

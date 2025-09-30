@@ -441,8 +441,6 @@ export default {
       work_samples: [],
       resume: '',
       w9: '',
-      bg_check_date: '',
-      background_check: '',
       insurance_proof: '',
       references: [
         { name: '', phone: '', relationship: '' },
