@@ -171,11 +171,13 @@
                     </div>
                 </div>
 
-                  <!-- Carrier & IA Experience -->
+                <el-divider content-position="left">Carrier & IA Experience</el-divider>
+                <!-- Carrier & IA Experience -->
+                <div class="form-section">
                   <el-row :gutter="20">
                     <el-col :span="12">
                       <el-form-item label="Carrier Experience" prop="carrier_experience">
-                        <el-select v-model="form.carrier_experience" multiple placeholder="Select carriers">
+                        <el-select v-model="form.carrier_experience" multiple placeholder="Select carriers" style="width: 100%">
                           <el-option label="State Farm" value="State Farm" />
                           <el-option label="Allstate" value="Allstate" />
                           <el-option label="Citizens" value="Citizens" />
@@ -192,68 +194,82 @@
                           type="textarea" 
                           :rows="3"
                           placeholder="List prior firms, roles, and years"
-                        ></el-input>
+                        />
                       </el-form-item>
                     </el-col>
                   </el-row>
+                </div>
 
-                <el-form-item label="Professional References">
-                  <template v-for="(ref, idx) in form.references" :key="idx">
-                    <div class="reference-entry">
-                      <div class="reference-header">
-                        <span class="reference-label">Reference {{ idx + 1 }}</span>
-                        <el-tooltip v-if="form.references.length > 2" content="Remove Reference" placement="top">
-                          <el-icon @click="removeReference(idx)" class="remove-button"><Delete /></el-icon>
-                        </el-tooltip>
+                <el-divider content-position="left">Professional References</el-divider>
+                <!-- Professional References -->
+                <div class="form-section">
+                  <el-form-item label="Professional References">
+                    <template v-for="(ref, idx) in form.references" :key="idx">
+                      <div class="reference-entry">
+                        <div class="reference-header">
+                          <span class="reference-label">Reference {{ idx + 1 }}</span>
+                          <el-tooltip v-if="form.references.length > 2" content="Remove Reference" placement="top">
+                            <el-icon @click="removeReference(idx)" class="remove-button"><Delete /></el-icon>
+                          </el-tooltip>
+                        </div>
+                        <el-row :gutter="10">
+                          <el-col :xs="24" :sm="8">
+                            <el-input v-model="ref.name" placeholder="Full name" />
+                          </el-col>
+                          <el-col :xs="24" :sm="8">
+                            <el-input v-model="ref.phone" placeholder="Phone or email" />
+                          </el-col>
+                          <el-col :xs="24" :sm="8">
+                            <el-input v-model="ref.relationship" placeholder="E.g., Manager at Company X" />
+                          </el-col>
+                        </el-row>
                       </div>
-                      <el-row :gutter="10">
-                        <el-col :xs="24" :sm="8">
-                          <el-input v-model="ref.name" placeholder="Full name" />
-                        </el-col>
-                        <el-col :xs="24" :sm="8">
-                          <el-input v-model="ref.phone" placeholder="Phone or email" />
-                        </el-col>
-                        <el-col :xs="24" :sm="8">
-                          <el-input v-model="ref.relationship" placeholder="E.g., Manager at Company X" />
-                        </el-col>
-                      </el-row>
-                    </div>
-                  </template>
-                  <el-button type="primary" @click="addReference" style="margin-top: 10px;">
-                    + Add Reference
-                  </el-button>
-                </el-form-item>
+                    </template>
+                    <el-button type="primary" @click="addReference" style="margin-top: 10px;">
+                      + Add Reference
+                    </el-button>
+                  </el-form-item>
+                </div>
               </template>
               <template v-else> 
                 <el-divider content-position="left">Company Specific Details</el-divider>
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <el-form-item label="Company Name" prop="company_name">
-                        <el-input v-model="form.company_name" placeholder="Enter your company name"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="Website" prop="website">
-                      <el-input v-model="form.website" placeholder="Enter company website"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="DOT / MC Number" prop="dot_mc">
-                      <el-input v-model="form.dot_mc" placeholder="Enter DOT Or MC Number"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="Address" prop="address">
-                      <el-input v-model="form.address" type="textarea" :rows="4" placeholder="Enter company address"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </template>
-              <el-form-item>
-                <div class="button-container">
-                  <el-button type="primary" @click="handleSubmit" :loading="loading">Update Profile</el-button>
+                <div class="form-section">
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="Company Name" prop="company_name">
+                          <el-input v-model="form.company_name" placeholder="Enter your company name" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Website" prop="website">
+                        <el-input v-model="form.website" placeholder="Enter company website" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="DOT / MC Number" prop="dot_mc">
+                        <el-input v-model="form.dot_mc" placeholder="Enter DOT Or MC Number" />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Address" prop="address">
+                        <el-input v-model="form.address" type="textarea" :rows="4" placeholder="Enter company address" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
                 </div>
-              </el-form-item>
+              </template>
+              
+              <div class="form-section">
+                <el-form-item>
+                  <div class="button-container">
+                    <el-button type="primary" size="large" @click="handleSubmit" :loading="loading">
+                      Update Profile
+                    </el-button>
+                  </div>
+                </el-form-item>
+              </div>
             </el-form>
           </el-col>
         </el-row>
@@ -647,12 +663,82 @@ export default {
   background-color: #fff;
   box-shadow: 0 4px 24px rgba(102,126,234,0.08);
 }
-.form-section-header {
-  text-align: center;
-  margin-bottom: 20px;
+.form-section {
+  margin-bottom: 24px;
+  padding: 20px;
+  background-color: #fafbfc;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
 }
+
+.form-section:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
 .el-divider {
-  margin: 32px 0 16px 0;
+  margin: 32px 0 20px 0;
+  font-weight: 600;
+  color: #303133;
+}
+
+.el-form-item {
+  margin-bottom: 18px;
+}
+
+.el-input, .el-select {
+  width: 100%;
+}
+
+.el-input-number {
+  width: 100%;
+}
+
+.el-input-number .el-input__wrapper {
+  height: 40px;
+}
+.el-input-number__increase,
+.el-input-number__decrease {
+  height: 48px!important;
+  line-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-input-number .el-input-number__increase {
+  border-bottom: 1px solid #dcdfe6;
+}
+
+.el-input__wrapper {
+  border-radius: 6px;
+  border: 1px solid #dcdfe6;
+  transition: border-color 0.3s ease;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.el-input__wrapper:hover {
+  border-color: #c0c4cc;
+}
+
+.el-input__wrapper.is-focus {
+  border-color: #409eff;
+}
+
+.el-textarea__inner {
+  border-radius: 6px;
+  border: 1px solid #dcdfe6;
+  transition: border-color 0.3s ease;
+}
+
+.el-textarea__inner:hover {
+  border-color: #c0c4cc;
+}
+
+.el-textarea__inner:focus {
+  border-color: #409eff;
 }
 .equipment-row {
   margin-bottom: 10px;
@@ -767,33 +853,186 @@ export default {
 }
 .upload-box {
   width: 100%;
-  border: 1px dashed #d9d9d9;
+  border: 2px dashed #dcdfe6;
   border-radius: 8px;
   text-align: center;
-  padding: 10px 0;
-  background: #f8fafc;
+  padding: 20px 10px;
+  background: #fafbfc;
+  transition: all 0.3s ease;
 }
-.terms-link {
-  font-size: 0.95em;
+
+.upload-box:hover {
+  border-color: #409eff;
+  background: #f0f9ff;
 }
-.terms-conditions {
-  color: #409eff;
-  text-decoration: underline;
+
+.upload-box .el-icon {
+  font-size: 28px;
+  color: #8c939d;
+  margin-bottom: 8px;
 }
+
+.helper-text {
+  font-size: 12px;
+  color: #8c939d;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* Badge System Improvements */
+.badges-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.badge-preview {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f0f9ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+}
+
+.preview-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.badge-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Badge Proof Files */
+.badge-proofs {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  background-color: #fafbfc;
+}
+
+.badge-proof-entry {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+}
+
+.badge-proof-entry:last-child {
+  margin-bottom: 0;
+}
+
+.badge-proof-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.badge-proof-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+}
+
+.required-indicator {
+  color: #ef4444;
+  margin-left: 4px;
+  font-weight: bold;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 20px 0;
 }
-.submit-button {
+
+.button-container .el-button {
   min-width: 200px;
-  padding: 12px 24px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
 }
+
 h3 {
   font-weight: 600;
   color: #303133;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
+  font-size: 24px;
 }
+
+.field-error {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Equipment and Reference Entries */
+.equipment-row, .reference-entry {
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  background-color: white;
+  transition: box-shadow 0.3s ease;
+}
+
+.equipment-row:hover, .reference-entry:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.reference-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reference-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+}
+
+.remove-button {
+  color: #ef4444;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-size: 18px;
+}
+
+.remove-button:hover {
+  color: #dc2626;
+}
+
+.remove-reference-button,
+.remove-equipment-button {
+  background-color: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.remove-reference-button:hover,
+.remove-equipment-button:hover {
+  background-color: #fef2f2;
+}
+
+/* Responsive Styles */
 @media (max-width: 900px) {
   .el-row.user-profile {
     flex-direction: column;
@@ -804,33 +1043,65 @@ h3 {
   }
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .profile-update-form {
     padding: 15px;
     margin: 10px;
   }
-  .reference-entry {
-    padding: 8px;
+  
+  .form-section {
+    padding: 15px;
   }
-  .remove-equipment-button,
-  .remove-reference-button {
-    margin-top: 10px;
+  
+  .reference-entry, .equipment-row {
+    padding: 12px;
+  }
+  
+  .badges-grid {
+    gap: 8px;
+    padding: 12px;
+  }
+  
+  .badge-proof-entry {
+    padding: 12px;
+  }
+  
+  h3 {
+    font-size: 20px;
   }
 }
+
 @media (max-width: 480px) {
   .profile-update-form {
     padding: 10px;
     margin: 5px;
   }
-  .form-section-header h1 {
-    font-size: 1.5em;
+  
+  .form-section {
+    padding: 12px;
   }
+  
   .reference-entry .el-row {
-    gap: 5px;
+    gap: 8px;
   }
+  
   .reference-entry .el-col {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .badges-grid {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .button-container .el-button {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  h3 {
+    font-size: 18px;
+    text-align: center;
   }
 }
 </style>
