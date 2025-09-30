@@ -4,12 +4,16 @@ const eGiftCardRestRequest = (method, route, data = {}) => {
     const url = `${window.adjuster_forge_app_vars.rest_info.rest_url}/${route}`;
 
     const headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
         'X-WP-Nonce': window.adjuster_forge_app_vars.rest_info.nonce
     };
 
-    // Set query timestamp if data is not empty
-    if (Object.keys(data).length !== 0) {
+    // Don't set Content-Type for FormData - let browser set it with boundary
+    if (!(data instanceof FormData)) {
+        headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    }
+
+    // Set query timestamp if data is not empty and not FormData
+    if (!(data instanceof FormData) && Object.keys(data).length !== 0) {
         data.query_timestamp = Date.now();
     }
 

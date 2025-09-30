@@ -7,151 +7,195 @@
           <el-col :span="24">
             <h3>Update Profile</h3>
             <el-form :model="form" ref="formRef" :rules="rules" label-position="top" class="profile-update-form">
-              <el-row :gutter="20">
-                <el-col :xs="24" :sm="12">
-                  <el-form-item label="First Name" prop="first_name">
-                    <el-input v-model="form.first_name" placeholder="Enter your first name" />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12">
-                  <el-form-item label="Last Name" prop="last_name">
-                    <el-input v-model="form.last_name" placeholder="Enter your last name" />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :xs="24" :sm="12">
-                  <el-form-item label="City" prop="city">
-                    <el-input v-model="form.city" placeholder="Enter your city" />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12">
-                  <el-form-item label="State" prop="state">
-                    <el-input v-model="form.state" placeholder="Enter your state" />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :xs="24" :sm="12">
-                  <el-form-item label="Country" prop="country">
-                    <el-input v-model="form.country" placeholder="Enter your country" />
-                  </el-form-item>
-                </el-col>
-                <el-col :xs="24" :sm="12">
-                  <el-form-item label="Mobile Number" prop="phone">
-                    <el-input v-model="form.phone" placeholder="Enter your mobile number" />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              
-              <el-row :gutter="20">
-                <el-col :span="24">
-                  <el-form-item label="About" prop="about">
-                    <el-input v-model="form.about" type="textarea" :rows="4" placeholder="Enter company about"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
+              <div class="form-section">
+                <el-divider content-position="left">Personal Information</el-divider>
+                <el-row :gutter="20">
+                  <el-col :xs="24" :sm="12">
+                    <el-form-item label="First Name" prop="first_name">
+                      <el-input v-model="form.first_name" placeholder="Enter your first name" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="12">
+                    <el-form-item label="Last Name" prop="last_name">
+                      <el-input v-model="form.last_name" placeholder="Enter your last name" />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :xs="24" :sm="12">
+                    <el-form-item label="City" prop="city">
+                      <el-input v-model="form.city" placeholder="Enter your city" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="12">
+                    <el-form-item label="State" prop="state">
+                      <el-input v-model="form.state" placeholder="Enter your state" />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                  <el-col :xs="24" :sm="12">
+                    <el-form-item label="Country" prop="country">
+                      <el-input v-model="form.country" placeholder="Enter your country" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :xs="24" :sm="12">
+                    <el-form-item label="Mobile Number" prop="phone">
+                      <el-input v-model="form.phone" placeholder="Enter your mobile number" />
+                    </el-form-item>
+                  </el-col>
+                </el-row>                
+                <el-row :gutter="20">
+                  <el-col :span="24">
+                    <el-form-item label="About" prop="about">
+                      <el-input v-model="form.about" type="textarea" :rows="4" placeholder="Enter company about"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
               <template v-if="user_type === 'adjuster'">
-                <el-divider content-position="left">Adjuster Specific Details</el-divider>
-                
-                <!-- Experience & Eligibility -->
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <el-form-item label="Current Availability" prop="availability">
-                      <el-select v-model="form.availability" multiple placeholder="Select availability">
-                        <el-option label="Available" value="available" />
-                        <el-option label="Contractual" value="contractual" />
-                        <el-option label="Permanent" value="permanent" />
-                        <el-option label="Not Available" value="not-available" />
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="Years of Licensed Experience" prop="years_experience">
-                      <el-input-number v-model="form.years_experience" :min="3" :max="60" placeholder="e.g., 5" style="width: 100%"></el-input-number>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <el-form-item label="CAT Deployments" prop="cat_deployments">
-                      <el-input-number v-model="form.cat_deployments" :min="0" placeholder="Number of CAT deployments" style="width: 100%"></el-input-number>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="Experience Types" prop="experience_types">
-                      <el-select v-model="form.experience_types" multiple placeholder="Select your experience types" style="width: 100%">
-                        <el-option label="Contents" value="Contents" />
-                        <el-option label="Auto" value="Auto" />
-                        <el-option label="Property" value="Property" />
-                        <el-option label="Large Loss" value="Large Loss" />
-                        <el-option label="Commercial" value="Commercial" />
-                        <el-option label="Worker Comp" value="Worker Comp" />
-                        <el-option label="CAT" value="CAT" />
-                        <el-option label="Desk Adjuster" value="Desk Adjuster" />
-                        <el-option label="Field Adjuster" value="Field Adjuster" />
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
+                <div class="form-section">
+                  <el-divider content-position="left">Adjuster Specific Details</el-divider>
+                  
+                  <!-- Experience & Eligibility -->
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="Years of Licensed Experience" prop="years_experience">
+                        <el-input-number v-model="form.years_experience" :min="3" :max="60" placeholder="e.g., 5" style="width: 100%"></el-input-number>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Current Availability" prop="availability">
+                        <el-select v-model="form.availability" multiple placeholder="Select availability">
+                          <el-option label="Available" value="available" />
+                          <el-option label="Contractual" value="contractual" />
+                          <el-option label="Permanent" value="permanent" />
+                          <el-option label="Not Available" value="not-available" />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="CAT Deployments" prop="cat_deployments">
+                        <el-input-number v-model="form.cat_deployments" :min="0" placeholder="Number of CAT deployments" style="width: 100%"></el-input-number>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Experience Types" prop="experience_types">
+                        <el-select v-model="form.experience_types" multiple placeholder="Select your experience types" style="width: 100%">
+                          <el-option label="Contents" value="Contents" />
+                          <el-option label="Auto" value="Auto" />
+                          <el-option label="Property" value="Property" />
+                          <el-option label="Large Loss" value="Large Loss" />
+                          <el-option label="Commercial" value="Commercial" />
+                          <el-option label="Worker Comp" value="Worker Comp" />
+                          <el-option label="CAT" value="CAT" />
+                          <el-option label="Desk Adjuster" value="Desk Adjuster" />
+                          <el-option label="Field Adjuster" value="Field Adjuster" />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </div>
 
+                <el-divider content-position="left">Certifications & Badges</el-divider>
                 <!-- Certifications & Badges -->
-                <el-form-item label="Certifications & Badges">
+                <div class="form-section">
                   <div class="badges-grid">
-                    <el-tag
-                      v-for="badge in availableBadges" 
-                      :key="badge.id"
-                      :type="form.badges.includes(badge.id) ? 'primary' : undefined"
-                      :effect="form.badges.includes(badge.id) ? 'dark' : 'plain'"
-                      size="large"
-                      style="cursor: pointer; margin: 4px;"
-                      @click="toggleBadge(badge.id)"
-                    >
-                      {{ badge.name }}
-                    </el-tag>
-                  </div>
-                  <div class="badge-preview" v-if="form.badges.length">
-                    <div class="preview-label">Selected Badges:</div>
-                    <div class="badge-pills">
-                      <el-tag
-                        v-for="badgeId in form.badges" 
-                        :key="badgeId" 
-                        type="success"
-                        effect="dark"
-                        size="small"
-                      >
-                        {{ getBadgeName(badgeId) }}
-                      </el-tag>
+                        <el-tag
+                            v-for="badge in availableBadges" 
+                            :key="badge.id"
+                            :type="form.badges.includes(badge.id) ? 'primary' : undefined"
+                            :effect="form.badges.includes(badge.id) ? 'dark' : 'plain'"
+                            size="large"
+                            style="cursor: pointer; margin: 4px;"
+                            @click="toggleBadge(badge.id)"
+                        >
+                            {{ badge.name }}
+                        </el-tag>
                     </div>
-                  </div>
-                </el-form-item>
+                    <div class="badge-preview" v-if="form.badges.length">
+                        <div class="preview-label">Selected Badges:</div>
+                        <div class="badge-pills">
+                            <el-tag
+                                v-for="badgeId in form.badges" 
+                                :key="badgeId" 
+                                type="success"
+                                effect="dark"
+                                size="small"
+                            >
+                                {{ getBadgeName(badgeId) }}
+                            </el-tag>
+                        </div>
+                    </div>
 
-                <!-- Carrier & IA Experience -->
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <el-form-item label="Carrier Experience" prop="carrier_experience">
-                      <el-select v-model="form.carrier_experience" multiple placeholder="Select carriers">
-                        <el-option label="State Farm" value="State Farm" />
-                        <el-option label="Allstate" value="Allstate" />
-                        <el-option label="Citizens" value="Citizens" />
-                        <el-option label="Renfroe" value="Renfroe" />
-                        <el-option label="Pilot" value="Pilot" />
-                        <el-option label="Other" value="Other" />
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="Employers / IA Firms" prop="employers_ia_firms">
-                      <el-input 
-                        v-model="form.employers_ia_firms" 
-                        type="textarea" 
-                        :rows="3"
-                        placeholder="List prior firms, roles, and years"
-                      ></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
+                    <!-- Badge Proof Files -->
+                    <div v-if="form.badges.length" class="badge-proofs">
+                        <div class="preview-label">Upload Proof Files for Selected Badges:</div>
+                        <div v-for="badgeId in form.badges" :key="'proof-' + badgeId" class="badge-proof-entry">
+                            <div class="badge-proof-header">
+                                <span class="badge-proof-label">{{ getBadgeName(badgeId) }} Certificate/Proof</span>
+                                <span class="required-indicator">*</span>
+                            </div>
+                            <el-upload
+                                :on-change="(file, files) => badgeProofFileChange(file, files, badgeId)"
+                                :on-remove="(file, files) => badgeProofFileRemove(file, files, badgeId)"
+                                :file-list="getBadgeProofFileList(badgeId)"
+                                :auto-upload="false"
+                                accept=".pdf,.jpg,.png"
+                                :limit="1"
+                                drag
+                                class="upload-box"
+                            >
+                                <el-icon><Document /></el-icon>
+                                <div v-if="getBadgeProofFileList(badgeId).length === 0">
+                                    Click or drag {{ getBadgeName(badgeId) }} certificate to upload
+                                </div>
+                                <div v-else>
+                                    Replace {{ getBadgeName(badgeId) }} certificate
+                                </div>
+                                <template #tip>
+                                    <div class="helper-text">
+                                        <span v-if="getBadgeProofFileList(badgeId).length === 0">
+                                            Upload certificate or proof document (PDF, JPG, PNG)
+                                        </span>
+                                        <span v-else>
+                                            Current file will be replaced with new upload
+                                        </span>
+                                    </div>
+                                </template>
+                            </el-upload>
+                        </div>
+                    </div>
+                </div>
+
+                  <!-- Carrier & IA Experience -->
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <el-form-item label="Carrier Experience" prop="carrier_experience">
+                        <el-select v-model="form.carrier_experience" multiple placeholder="Select carriers">
+                          <el-option label="State Farm" value="State Farm" />
+                          <el-option label="Allstate" value="Allstate" />
+                          <el-option label="Citizens" value="Citizens" />
+                          <el-option label="Renfroe" value="Renfroe" />
+                          <el-option label="Pilot" value="Pilot" />
+                          <el-option label="Other" value="Other" />
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="Employers / IA Firms" prop="employers_ia_firms">
+                        <el-input 
+                          v-model="form.employers_ia_firms" 
+                          type="textarea" 
+                          :rows="3"
+                          placeholder="List prior firms, roles, and years"
+                        ></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
                 <el-form-item label="Professional References">
                   <template v-for="(ref, idx) in form.references" :key="idx">
@@ -263,6 +307,7 @@ export default {
         cat_deployments: null,
         experience_types: [],
         badges: [],
+        badge_proofs: {},
         carrier_experience: [],
         employers_ia_firms: '',
         references: [
@@ -325,6 +370,8 @@ export default {
           ],
         })
     };
+    
+    const BadgeProofFileLists = ref({});
 
     // Fetch profile info
     const fetchProfileInfo = async () => {
@@ -365,6 +412,23 @@ export default {
             form.value.badges = Array.isArray(adjuster_data.badges) 
               ? adjuster_data.badges.map(item => item.badge || item.name || item) 
               : [];
+            
+            // Populate existing badge proof files
+            if (Array.isArray(adjuster_data.badges)) {
+              adjuster_data.badges.forEach(badge => {
+                if (badge.proof_file_url && (badge.badge || badge.name)) {
+                  const badgeId = badge.badge || badge.name;
+                  // Create file object for display in upload component
+                  const existingFile = {
+                    name: badge.proof_file_url.split('/').pop() || 'Badge Proof',
+                    url: `${window.location.origin}/download/${badge.proof_file_url}`,
+                    status: 'success',
+                    uid: Date.now() + Math.random()
+                  };
+                  BadgeProofFileLists.value[badgeId] = [existingFile];
+                }
+              });
+            }
             
             form.value.carrier_experience = Array.isArray(adjuster_data.carrier_experience) 
               ? adjuster_data.carrier_experience.map(item => item.name || item) 
@@ -428,8 +492,11 @@ export default {
       const index = form.value.badges.indexOf(badgeId);
       if (index > -1) {
         form.value.badges.splice(index, 1);
+        delete form.value.badge_proofs[badgeId];
+        delete BadgeProofFileLists.value[badgeId];
       } else {
         form.value.badges.push(badgeId);
+        BadgeProofFileLists.value[badgeId] = [];
       }
     };
 
@@ -447,13 +514,85 @@ export default {
       }
     };
 
+    const badgeProofFileChange = (file, uploadedFiles, badgeId) => {
+      const allowedTypes = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg'];
+      const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg'];
+      if (!allowedTypes.includes(file.raw.type) && !allowedExtensions.some(ext => file.raw.name.toLowerCase().endsWith(ext))) {
+        // Remove only new files, keep existing ones
+        BadgeProofFileLists.value[badgeId] = BadgeProofFileLists.value[badgeId]?.filter(f => f.status === 'success' && f.url) || [];
+        error('Invalid file type. Please upload a PDF or image file (PNG, JPG, JPEG).');
+        return false;
+      }
+      const maxSize = 2 * 1024 * 1024;
+      if (file.raw.size > maxSize) {
+        // Remove only new files, keep existing ones
+        BadgeProofFileLists.value[badgeId] = BadgeProofFileLists.value[badgeId]?.filter(f => f.status === 'success' && f.url) || [];
+        error('File size must be less than 2MB');
+        return false;
+      }
+      // Keep existing files and add new one (replace any new uploads)
+      const existingFiles = BadgeProofFileLists.value[badgeId]?.filter(f => f.status === 'success' && f.url) || [];
+      BadgeProofFileLists.value[badgeId] = [...existingFiles, ...uploadedFiles.slice(-1)];
+      form.value.badge_proofs[badgeId] = file.raw;
+    };
+    
+    // Handle badge proof file removal
+    const badgeProofFileRemove = (file, fileList, badgeId) => {
+      BadgeProofFileLists.value[badgeId] = fileList;
+      // If it's a new file being removed, clear it from badge_proofs
+      if (!file.url) {
+        delete form.value.badge_proofs[badgeId];
+      }
+    };
+    
+    // Badge proof file management
+    const getBadgeProofFileList = (badgeId) => {
+      return BadgeProofFileLists.value[badgeId] || [];
+    };
+
     const handleSubmit = () => {
       formRef.value.validate(async (valid) => {
         if (!valid) return;
         loading.value = true;
         startLoading();
         try {
-          const response = await post('update-profile', form.value);
+          let submitData;
+          
+          if (user_type === 'adjuster') {
+            // Create FormData for file uploads
+            const formData = new FormData();
+            
+            // Append basic fields
+            Object.keys(form.value).forEach(key => {
+              if (key === 'badge_proofs') {
+                // Handle badge proof files separately
+                return;
+              }
+              
+              const value = form.value[key];
+              if (Array.isArray(value)) {
+                formData.append(key, JSON.stringify(value));
+              } else if (value !== null && value !== undefined) {
+                formData.append(key, value);
+              }
+            });
+            
+            // Append badge proof files
+            if (form.value.badges && form.value.badges.length > 0) {
+              form.value.badges.forEach((badgeId, index) => {
+                if (form.value.badge_proofs[badgeId]) {
+                  formData.append(`badge_proof_${badgeId}`, form.value.badge_proofs[badgeId]);
+                }
+              });
+            }
+            
+            submitData = formData;
+          } else {
+            // For company users, use regular JSON
+            submitData = form.value;
+          }
+          
+          const response = await post('update-profile', submitData);
           if ( response ) {
             success('Profile updated successfully');
           } else {
@@ -485,7 +624,10 @@ export default {
       addEquipment,
       removeEquipment,
       addReference,
-      removeReference
+      removeReference,
+      getBadgeProofFileList,
+      badgeProofFileChange,
+      badgeProofFileRemove,
     };
   }
 };
@@ -575,6 +717,41 @@ export default {
   flex-wrap: wrap;
   gap: 8px;
 }
+
+/* Badge Proof Files */
+.badge-proofs {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  background-color: #fafbfc;
+}
+
+.badge-proof-entry {
+  margin-bottom: 16px;
+}
+
+.badge-proof-entry:last-child {
+  margin-bottom: 0;
+}
+
+.badge-proof-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.badge-proof-label {
+  font-weight: 600;
+  color: #303133;
+  font-size: 14px;
+}
+
+.required-indicator {
+  color: #f56c6c;
+  margin-left: 4px;
+}
+
 .field-error {
   color: #f56c6c;
   font-size: 0.85em;

@@ -328,25 +328,48 @@ class UserController extends BaseController
 
         if ( $user_type === 'adjuster' ) {
             update_user_meta( $user_id, 'af_bio', $about );
+            
             // Handle adjuster-specific data
             $availability = $this->request->get( 'availability', [] );
-            $license_classes = $this->request->get( 'license_classes', [] );
-            $endorsements = $this->request->get( 'endorsements', [] );
-            $equipment_experience = $this->request->get( 'equipment_experience', [] );
+            $years_experience = intval( $this->request->get( 'years_experience' ) );
+            $cat_deployments = intval( $this->request->get( 'cat_deployments' ) );
+            $experience_types = $this->request->get( 'experience_types', [] );
+            $badges = $this->request->get( 'badges', [] );
+            $carrier_experience = $this->request->get( 'carrier_experience', [] );
+            $employers_ia_firms = sanitize_textarea_field( $this->request->get( 'employers_ia_firms' ) );
             $references = $this->request->get( 'references', [] );
+
+            // Handle badge proof files
+            $badge_proofs = [];
+            if ( is_array($badges) && !empty($badges) ) {
+                foreach ( $badges as $badge_id ) {
+                    $file_key = 'badge_proof_' . $badge_id;
+                    if ( isset($_FILES[$file_key]) && !empty($_FILES[$file_key]['name']) ) {
+                        $uploaded_file = self::handle_file_upload($file_key);
+                        if ( !is_wp_error($uploaded_file) ) {
+                            $badge_proofs[$badge_id] = $uploaded_file;
+                        }
+                    }
+                }
+            }
 
             // Prepare data for ProfileService
             $adjuster_data = [
-                'first_name'   => $first_name,
-                'last_name'    => $last_name,
-                'email'        => wp_get_current_user()->user_email,
-                'user_type'    => $user_type,
-                'phone'        => $phone,
-                'availability' => $availability,
-                'license_classes' => $license_classes,
-                'endorsements' => $endorsements,
-                'experience'   => $equipment_experience,
-                'references'   => $references,
+                'first_name'         => $first_name,
+                'last_name'          => $last_name,
+                'email'              => wp_get_current_user()->user_email,
+                'user_type'          => $user_type,
+                'phone'              => $phone,
+                'bio'                => $about,
+                'availability'       => $availability,
+                'years_experience'   => $years_experience,
+                'cat_deployments'    => $cat_deployments,
+                'experience_types'   => $experience_types,
+                'badges'             => $badges,
+                'badge_proofs'       => $badge_proofs,
+                'carrier_experience' => $carrier_experience,
+                'employers_ia_firms' => $employers_ia_firms,
+                'references'         => $references,
             ];
 
             // Update references in subscription data

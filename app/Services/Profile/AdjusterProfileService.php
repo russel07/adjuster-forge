@@ -11,6 +11,7 @@ use SmartySoft\AdjusterForge\Http\Model\License;
 use SmartySoft\AdjusterForge\Http\Model\Badge;
 use SmartySoft\AdjusterForge\Http\Model\CarrierExperience;
 use SmartySoft\AdjusterForge\Http\Model\Experience;
+use SmartySoft\AdjusterForge\Http\Model\Endorsement;
 
 class AdjusterProfileService implements CompleteProfileService
 {
@@ -112,49 +113,83 @@ class AdjusterProfileService implements CompleteProfileService
             foreach ($data['availability'] as $value) {
                 if (!empty($value)) {
                     (new Availability())->store([
-                        'user_id' => $user_id, 
+                        'adjuster_id' => $user_id, 
                         'availability' => $value
                     ]);
                 }
             }
         }
 
-        // Store license classes
-        if (isset($data['license_classes']) && is_array($data['license_classes'])) {
-            foreach ($data['license_classes'] as $value) {
+        // Store experience types (using License model for now - may need separate model)
+        if (isset($data['experience_types']) && is_array($data['experience_types'])) {
+            foreach ($data['experience_types'] as $value) {
                 if (!empty($value)) {
                     (new License())->store([
-                        'user_id' => $user_id, 
+                        'adjuster_id' => $user_id, 
                         'license_class' => $value
                     ]);
                 }
             }
         }
 
-        // Store endorsements
-        if (isset($data['endorsements']) && is_array($data['endorsements'])) {
-            foreach ($data['endorsements'] as $value) {
-                if (!empty($value)) {
-                    (new Endorsement())->store([
-                        'user_id' => $user_id, 
-                        'endorsement' => $value
+        // Store badges with proof files
+        if (isset($data['badges']) && is_array($data['badges'])) {
+            foreach ($data['badges'] as $badge_id) {
+                if (!empty($badge_id)) {
+                    $proof_file = '';
+                    
+                    // Check if there's a proof file for this badge
+                    if (isset($data['badge_proofs'][$badge_id])) {
+                        $proof_file = $data['badge_proofs'][$badge_id];
+                    }
+                    
+                    (new Badge())->store([
+                        'adjuster_id' => $user_id,
+                        'badge' => $badge_id,
+                        'proof_file' => $proof_file
                     ]);
                 }
             }
         }
 
-        // Store experience
-        if (isset($data['experience']) && is_array($data['experience'])) {
-            foreach ($data['experience'] as $experience) {
-                if (!empty($experience) && isset($experience['type']) && isset($experience['years'])) {
-                    (new Experience())->store([
-                        'user_id' => $user_id, 
-                        'equipment_type' => $experience['type'],
-                        'years' => intval($experience['years'])
-                    ]);
-                }
-            }
+        // Store carrier experience
+        if (isset($data['carrier_experience']) || isset($data['employers_ia_firms'])) {
+            $carrier_experience = isset($data['carrier_experience']) && is_array($data['carrier_experience']) 
+                ? implode(',', $data['carrier_experience']) 
+                : (isset($data['carrier_experience']) ? $data['carrier_experience'] : '');
+                
+            $employers_ia_firms = isset($data['employers_ia_firms']) ? $data['employers_ia_firms'] : '';
+            
+            (new CarrierExperience())->store([
+                'adjuster_id' => $user_id,
+                'carrier_name' => $carrier_experience,
+                'description' => $employers_ia_firms,
+                'proof_file' => '' // No work samples in update
+            ]);
         }
+
+        // Update user meta with basic profile data and references
+        $user_data = [
+            'first_name'        => $data['first_name'] ?? '',
+            'last_name'         => $data['last_name'] ?? '',
+            'email'             => $data['email'] ?? '',
+            'user_type'         => $data['user_type'] ?? '',
+            'phone'             => $data['phone'] ?? '',
+            'bio'               => $data['bio'] ?? '',
+            'years_experience'  => $data['years_experience'] ?? 0,
+            'cat_deployments'   => $data['cat_deployments'] ?? 0,
+            'references'        => $data['references'] ?? [],
+        ];
+
+        // Get existing subscription data and merge with updates
+        $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
+        if (!is_array($existing_data)) {
+            $existing_data = [];
+        }
+
+        // Merge user data with existing subscription data
+        $updated_data = array_merge($existing_data, $user_data);
+        update_user_meta($user_id, 'adjuster_forge_subscription_data', $updated_data);
 
         return true;
     }
@@ -167,7 +202,8 @@ class AdjusterProfileService implements CompleteProfileService
         // Delete existing records
         (new Availability())->deleteByUserId($user_id);
         (new License())->deleteByUserId($user_id);
-        (new Endorsement())->deleteByUserId($user_id);
+        (new Badge())->deleteByUserId($user_id);
+        (new CarrierExperience())->deleteByUserId($user_id);
         (new Experience())->deleteByUserId($user_id);
     }
 

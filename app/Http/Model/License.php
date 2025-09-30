@@ -21,4 +21,10 @@ class License extends Model
         $model = static::getInstance();
         return $model->_wpdb->get_results("SELECT * FROM $model->tableName WHERE adjuster_id = $user_id");
     }
+
+    public function deleteByUserId($user_id)
+    {
+        $model = static::getInstance();
+        return $model->_wpdb->delete($model->tableName, array('adjuster_id' => $user_id));
+    }
 }
