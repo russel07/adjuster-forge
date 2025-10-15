@@ -15,6 +15,7 @@ import JobApplicants from "../components/Jobs/JobApplicants.vue"
 import AdjustersList from "../components/Profile/AdjustersList.vue";
 import AdjusterDetails from "../components/Profile/AdjusterDetails.vue";
 import PaymentHistory from "../components/Profile/PaymentHistory.vue"
+import VerificationFee from "../components/Profile/VerificationFee.vue";
 
 const routes = [
     {
@@ -84,6 +85,11 @@ const routes = [
         component: ChangePassword
     },
     {
+        path: '/verification-fee',
+        name: 'verification-fee',
+        component: VerificationFee
+    },
+    {
         path: '/job-details/:id',
         name: 'job-details',
         component: JobDetails,
@@ -129,10 +135,20 @@ router.beforeEach((to, from, next) => {
                 next()
             }
         } else {
-            if ( to.path === '/complete-profile' ) {
-                next({ path: '/my-profile' })
-            }else {
-                next()
+            // did not paid verification fees, force to pay
+            if( ! subscription_data.paid_verification_fee ) {
+                if ( to.path !== '/verification-fee' ) {
+                    next({ path: '/verification-fee' })
+                } else {
+                    next()
+                }
+            } else {
+                //Verification fees paid, force to redirect profile page
+                if ( to.path === '/verification-fee' ) {
+                    next({ path: '/my-profile' })
+                } else {
+                    next()
+                }
             }
         }
     }

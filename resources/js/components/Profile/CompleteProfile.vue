@@ -8,12 +8,14 @@
             v-if="user_type === 'adjuster'"
             :t_c_page_url="t_c_page_url"
             :loading="loading"
+            :error="error"
             @submit-profile="submitProfile"
           />
           <CompanyProfileSection
             v-else-if="user_type === 'company'"
             :t_c_page_url="t_c_page_url"
             :loading="loading"
+            :error="error"
             @submit-profile="submitProfile"
           />
         </div>
@@ -59,12 +61,9 @@ export default {
         });
         if (response.status === 'success') {
           success('Profile updated successfully');
-          if (user_type === 'company') {
-            //router.push({ name: 'subscription' });
-            setTimeout(() => {
-              window.location.href = profilePageURL;
-            }, 1200);
-          }
+          setTimeout(() => {
+            window.location.href = profilePageURL;
+          }, 1200);
         } else {
           error(response.message || 'Something went wrong');
         }

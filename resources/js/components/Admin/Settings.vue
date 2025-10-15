@@ -21,6 +21,10 @@
                     <el-option v-for="item in wp_pages" :key="item.id" :label="item.title" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
+
+                 <el-form-item label="Adjuster Verification Fee" prop="verification_fee">
+                  <el-input v-model="form.verification_fee" type="number" :min="0" step="0.01" placeholder="Enter verification fee"></el-input>
+                </el-form-item>
                 
                 <el-form-item label="Adjuster Subscription Amount" prop="adjuster_subscription_amount">
                   <el-input v-model="form.adjuster_subscription_amount" type="number" :min="0" step="0.01" placeholder="Enter adjuster subscription amount"></el-input>
@@ -117,6 +121,7 @@ export default {
     const form = ref({
       auth_page_id: '',
       profile_page_id: '',
+      verification_fee: '',
       adjuster_subscription_amount: '',
       adjuster_subscription_id: '',
       adjuster_yearly_subscription_amount: '',
@@ -140,6 +145,9 @@ export default {
       ],
       profile_page_id: [
         { required: true, message: "Profile Page is required", trigger: "change" },
+      ],
+      verification_fee: [
+        { required: true, message: "Verification Fee is required", trigger: "blur" },
       ],
       adjuster_subscription_amount: [
         { required: true, message: "Adjuster Subscription Amount is required", trigger: "blur" },
@@ -198,6 +206,7 @@ export default {
           currencies.value = settings.currencies;
           form.value.auth_page_id = String(settings.auth_page_id);
           form.value.profile_page_id = String(settings.profile_page_id);
+          form.value.verification_fee = settings.verification_fee;
           form.value.adjuster_subscription_amount = settings.adjuster_subscription_amount;
           form.value.adjuster_subscription_id = settings.adjuster_subscription_id;
           form.value.adjuster_yearly_subscription_amount = settings.adjuster_yearly_subscription_amount;
