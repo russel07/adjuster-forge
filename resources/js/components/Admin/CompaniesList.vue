@@ -40,7 +40,14 @@
                                     class="input-with-select">
                                 </el-input>
                             </template>
-                            <template #default="scope">
+                            <template #default="scope">                                
+                                <el-button
+                                    type="primary"
+                                    size="small"
+                                    @click="viewDetails(scope.row)"
+                                >
+                                    View Details
+                                </el-button>
                                 <template v-if="scope.row.profile_completed">
                                     <div v-if="scope.row.status == 'active'">
                                         <el-popconfirm title="Are you sure you want to Revoke Access?"
@@ -78,6 +85,7 @@
 
 <script>
 import { onMounted, ref, watch } from "vue";
+import { useRouter } from 'vue-router';
 import AlertMessage from "../../Composable/AlertMessage";
 import { useAppHelper } from "../../Composable/appHelper";
 import { loader } from '../../Composable/Loader';
@@ -89,6 +97,7 @@ export default {
         Header,
     },
     setup() {
+        const router = useRouter();
         const { get, post, imageUrl, getStatusLabel } = useAppHelper();
         const { error, success } = AlertMessage();
         const { startLoading, stopLoading } = loader();
@@ -100,6 +109,13 @@ export default {
         const totalItems = ref(10);
         const companiesData = ref([]);
         const search = ref('');
+
+        const viewDetails = (row) => {
+            router.push({
+                name: 'company-details',
+                params: { user_id: row.user_id },
+            });
+        };
 
         const fetchCompaniesData = async () => {
             startLoading();
@@ -200,6 +216,7 @@ export default {
             image_url,
             imageUrl,
             getStatusLabel,
+            viewDetails
         };
     },
 };

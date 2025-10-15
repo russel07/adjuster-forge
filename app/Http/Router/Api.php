@@ -55,6 +55,8 @@ Router::get('payment-history', 'UserController@get_payment_history');
 //Admin Features
 Router::get('admin-settings', 'AdminController@general_settings');
 Router::post('update-settings', 'AdminController@update_settings');
+Router::post('update-free-access-settings', 'AdminController@update_free_access_settings');
+Router::post('update-manual-payment', 'AdminController@update_manual_payment');
 Router::get('get-payment-settings', 'PaymentController@get_payment_settings');
 Router::post('save-payment-settings', 'PaymentController@save_payment_settings');
 Router::get('purchased-list', 'AdminController@purchased_list');

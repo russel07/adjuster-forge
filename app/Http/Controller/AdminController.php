@@ -121,6 +121,127 @@ class AdminController extends BaseController
     }
 
     /**
+     * Update free access settings for adjuster and companies.
+     */
+    public function update_free_access_settings( \WP_REST_Request $request )
+    {
+        $existingSettings = self::getOption('adjuster_forge_general_settings', []);
+        $allow_adjuster_free = $this->request->get('allow_free_adjuster') === 'true' ? 'yes' : 'no';
+        $allow_company_free = $this->request->get('allow_free_company') === 'true' ? 'yes' : 'no';
+
+        if($allow_adjuster_free === 'yes') {
+            $existingSettings['allow_free_adjuster'] = 'yes';
+            $existingSettings['adjuster_free_interval'] = sanitize_text_field($this->request->get('adjuster_free_interval'));
+            $existingSettings['adjuster_interval_amount'] = intval($this->request->get('adjuster_interval_amount'));
+        } else {
+            $existingSettings['allow_free_adjuster'] = 'no';
+            $existingSettings['adjuster_free_interval'] = 'month';
+            $existingSettings['adjuster_interval_amount'] = 0;
+        }
+
+        if( $allow_company_free === 'yes' ) {
+            $existingSettings['allow_free_company'] = 'yes';
+            $existingSettings['company_free_interval'] = sanitize_text_field($this->request->get('company_free_interval'));
+            $existingSettings['company_interval_amount'] = intval($this->request->get('company_interval_amount'));
+        } else {
+            $existingSettings['allow_free_company'] = 'no';
+            $existingSettings['company_free_interval'] = 'month';
+            $existingSettings['company_interval_amount'] = 0;
+        }
+
+        // Update or insert the settings in the wp_options table.
+        self::updateOption('adjuster_forge_general_settings', $existingSettings);
+        return $this->response([
+            'message' => 'Free access settings updated successfully.',
+            'status' => 'success',
+        ], 200);
+    }
+
+    public function update_manual_payment( \WP_REST_Request $request )
+    {
+        $user_id = intval($this->request->get('user_id'));
+        $user_type = sanitize_text_field( $this->request->get('user_type') );
+        $customer_id = sanitize_text_field($this->request->get('customer_id'));
+        $transaction_id = sanitize_text_field($this->request->get('transaction_id'));
+        $plan_type = sanitize_text_field($this->request->get('plan_type'));
+        $payment_interval = sanitize_text_field($this->request->get('payment_interval'));
+        $amount = floatval($this->request->get('amount'));
+        $paid_date = sanitize_text_field($this->request->get('paid_date'));
+
+        // Store subscription details in database
+        (new SubscriptionHistory())->store([
+            'user_id' => $user_id,
+            'user_type' => $user_type,
+            'plan_name' => $plan_type,
+            'amount' => $amount,
+            'currency' => 'USD',
+            'payment_status' => 'paid',
+            'customer_id' => $customer_id,
+            'transaction_id' => $transaction_id,
+            'created_at' => current_time('mysql'),
+        ]);
+
+        $subscription_model = new Subscription();
+
+        $subscriber = $subscription_model->getSubscriptionByUserId( $user_id );
+        $interval = $payment_interval === 'monthly' ? 'month' : 'year';
+        if ( ! $subscriber ) {
+            // Create a new subscription record
+            $subscription_model->store([
+                'user_id' => $user_id,
+                'customer_id' => $customer_id,
+                'subscription_interval' => $payment_interval,
+                'status' => 'active',
+                'paid_date' => current_time('mysql'),
+                'expire_at' => date('Y-m-d H:i:s', strtotime("+1 $interval")),
+                'created_at' => current_time('mysql'),
+            ]);
+        } else {
+            $interval = $subscriber->subscription_interval;
+            // Update the existing subscription record
+            $subscription_model->update([
+                'status' => 'active',
+                'paid_date' => current_time('mysql'),
+                'expire_at' => date('Y-m-d H:i:s', strtotime("+1 $interval")),
+            ], $subscriber->id);
+        }
+
+        $existing_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
+
+        if ( ! empty( $existing_data ) ) {
+            $existing_data['paid_subscription_fee']     = true;
+            $existing_data['paid_subscription_fee_at']  = current_time('mysql');
+            $existing_data['transaction_id']            = $transaction_id;
+            $existing_data['subscription_type']         = $plan_type;
+            $existing_data['subscription_expire_at']    = date('Y-m-d H:i:s', strtotime("+1 $interval"));
+            $existing_data['customer_id']               = $customer_id;
+            $existing_data['plan_type']                 = $plan_type;
+            $existing_data['subscription_status']       = 'active';
+            $existing_data['account_status']            = 'active';
+        } else {
+            $existing_data = [
+                'profile_completed' => true,
+                'profile_completed_at' => current_time('mysql'),
+                'user_type' => $user_type,
+                'customer_id'               => $customer_id,
+                'paid_subscription_fee'     => true,
+                'paid_subscription_fee_at'  => current_time('mysql'),
+                'transaction_id'            => $transaction_id,
+                'subscription_type'         => $plan_type,
+                'subscription_expire_at'    => date('Y-m-d H:i:s', strtotime("+1 $interval")),
+                'account_status'            => 'active',
+                'plan_type'                 => $plan_type,
+            ];
+        }
+        update_user_meta($user_id, 'adjuster_forge_subscription_data', $existing_data );
+
+        return $this->response([
+            'message' => 'Manual payment settings updated successfully.',
+            'status' => 'success',
+        ], 200);
+    }
+
+    /**
      * Get the list of adjusters.
      *
      * @param \WP_REST_Request $request

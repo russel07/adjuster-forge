@@ -2,10 +2,11 @@ import { createWebHashHistory, createRouter } from "vue-router";
 import Settings from '../components/Admin/Settings.vue';
 import PaymentSettings from '../components/Admin/PaymentSettings.vue';
 import CompaniesList from '../components/Admin/CompaniesList.vue';
+import CompanyDetails from "../components/Admin/CompanyDetails.vue";
 import AdjustersList from '../components/Admin/AdjustersList.vue';
-import PurchaseHistory from '../components/Admin/PurchaseHistory.vue';
 import AdjusterDetails from "../components/Admin/AdjusterDetails.vue";
-
+import ManualPayment from "../components/Admin/ManualPayment.vue";
+import FreeAccessSettings from "../components/Admin/FreeAccessSettings.vue";
 const routes = [
     {
         path: '/',
@@ -22,14 +23,25 @@ const routes = [
         component: PaymentSettings
     },
     {
-        path: '/purchased',
-        name: 'PurchaseHistory',
-        component: PurchaseHistory
+        path: '/free-access',
+        name: 'FreeAccessSettings',
+        component: FreeAccessSettings
     },
     {
         path: '/companies',
         name: 'CompaniesList',
         component: CompaniesList
+    },
+    {
+        path: '/company-details/:user_id',
+        name: 'company-details',
+        component: CompanyDetails,
+        props: true
+    },
+    {
+        path: '/manual-payment/:user_id',
+        name: 'ManualPayment',
+        component: ManualPayment
     },
     {
         path: '/adjusters',

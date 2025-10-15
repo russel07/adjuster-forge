@@ -72,10 +72,10 @@ class Application
     public function load_admin_assets()
     {
         // Enqueue styles admin area
-        wp_enqueue_style( ADJUSTER_FORGE_PLUGIN_ASSET_ID.'-style', ADJUSTER_FORGE_PLUGIN_URL . 'assets/css/ADJUSTER_forge_admin.css' );
+        wp_enqueue_style( ADJUSTER_FORGE_PLUGIN_ASSET_ID.'-style', ADJUSTER_FORGE_PLUGIN_URL . 'assets/css/adjuster_forge_admin.css' );
 
         // Enqueue JavaScript for admin
-        wp_enqueue_script( ADJUSTER_FORGE_PLUGIN_ASSET_ID, ADJUSTER_FORGE_PLUGIN_URL . 'assets/js/ADJUSTER_forge_admin.js', array('jquery', 'moment'), ADJUSTER_FORGE_VERSION, true);
-        wp_localize_script( ADJUSTER_FORGE_PLUGIN_ASSET_ID, ADJUSTER_FORGE_PLUGIN_ASSET_VARS. '_app_vars', $this->ADJUSTER_forge_app_vars());
+        wp_enqueue_script( ADJUSTER_FORGE_PLUGIN_ASSET_ID, ADJUSTER_FORGE_PLUGIN_URL . 'assets/js/adjuster_forge_admin.js', array('jquery', 'moment'), ADJUSTER_FORGE_VERSION, true);
+        wp_localize_script( ADJUSTER_FORGE_PLUGIN_ASSET_ID, ADJUSTER_FORGE_PLUGIN_ASSET_VARS. '_app_vars', $this->adjuster_forge_app_vars());
     }
 }
