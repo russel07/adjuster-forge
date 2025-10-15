@@ -115,6 +115,92 @@ class PaymentController extends BaseController
     }
 
     /**
+     * Handles verification fee payment.
+     */
+    public function verification_fee()
+    {
+        // Retrieve and sanitize inputs
+        $plan_name          = sanitize_text_field($this->request->get('plan_name'));
+        $customer_id        = sanitize_text_field( $this->request->get( 'customer_id' ) );
+        $transaction_id     = sanitize_text_field( $this->request->get( 'transaction_id' ) );
+        $current_user       = wp_get_current_user();
+        $user_id            = $current_user->ID;
+        $user_type          = get_user_meta($user_id, 'df_user_type', true);
+        $subscription_model = new Subscription();
+        $subscriber = $subscription_model->getSubscriptionByUserId( $user_id );
+
+        if ( ! $subscriber ) {
+            // Create a new subscription record
+            $subscription_model->store([
+                'user_id' => $user_id,
+                'customer_id' => $customer_id,
+                'subscription_interval' => NULL,
+                'status' => 'paid_verification_fee',
+                'paid_date' => current_time('mysql'),
+                'expire_at' => date('Y-m-d H:i:s'),
+                'created_at' => current_time('mysql'),
+            ]);
+        } else {
+            // Update the existing subscription record
+            $subscription_model->update( [
+                'status' => 'paid_verification_fee',
+                'paid_date' => current_time('mysql'),
+                'expire_at' => date('Y-m-d H:i:s'),
+            ], $subscriber->id );
+        }
+
+        //Store record in subscription history table
+        (new SubscriptionHistory())->store([
+            'user_id'           => $user_id,
+            'user_type'         => $user_type,
+            'plan_name'         => $plan_name,
+            'amount'            => floatval( $this->request->get( 'amount' ) ),
+            'currency'          => sanitize_text_field( $this->request->get( 'currency' ) ),
+            'payment_status'    => sanitize_text_field( $this->request->get( 'payment_status' ) ),
+            'transaction_id'    => $transaction_id,
+            'customer_id'       => $customer_id,
+            'created_at'        => current_time('mysql'),
+        ]); 
+
+        $subscription_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
+        if ( ! empty( $subscription_data ) ) {
+            $subscription_data['paid_verification_fee'] = true;
+            $subscription_data['paid_verification_fee_at'] = current_time('mysql');
+            $subscription_data['customer_id'] = $customer_id;
+            $subscription_data['account_status'] = 'paid_verification_fee';
+        } else {
+            $subscription_data = [
+                'profile_completed' => true,
+                'profile_completed_at' => current_time('mysql'),
+                'user_type' => $user_type,
+                'paid_verification_fee'     => true,
+                'paid_verification_fee_at'  => current_time('mysql'),
+                'customer_id'               => $customer_id,
+                'paid_subscription_fee'     => false,
+                'paid_subscription_fee_at'  => '',
+                'subscription_type'         => '',
+                'subscription_expire_at'    => '',
+                'account_status'            => 'paid_verification_fee',
+            ];
+        }
+
+        do_action('diver_forge_after_verification_fee_paid', (object) [
+            'user_name'      => $current_user->display_name,
+            'user_email'     => $current_user->user_email,
+            'payment_id'     => $transaction_id,
+            'order_date'     => current_time('mysql'),
+            'profile_link'   => self::getProfilePageUrl($user_id)
+        ]);
+
+        update_user_meta($user_id, 'adjuster_forge_subscription_data', $subscription_data);
+
+        return $this->response([
+            'message' => 'Verification fees paid successfully.',
+            'status' => 'success',
+        ], 200);
+    }
+
+    /**
      * Create a subscription with Stripe
      */
     public function create_subscription()

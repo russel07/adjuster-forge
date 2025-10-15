@@ -16,6 +16,7 @@ Router::get('get-membership-settings', 'SettingsController@get_membership_data')
 Router::post('create-payment-intent', 'PaymentController@make_payment_intents');
 Router::post('create-payment-refund', 'PaymentController@make_payment_intents_refund');
 Router::post('save-membership', 'PaymentController@save_membership');
+Router::post('verification-fee', 'PaymentController@verification_fee');
 
 // Subscription management
 Router::get('subscription-plans', 'PaymentController@get_subscription_plans');
