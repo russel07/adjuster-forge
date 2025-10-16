@@ -157,7 +157,7 @@ class UserDataTransformer
 
         $user_id = $user->ID;
         $subscription_data = get_user_meta($user_id, 'adjuster_forge_subscription_data', true);
-        
+        $about = get_user_meta($user_id, 'af_bio', true);
         if (!is_array($subscription_data)) {
             $subscription_data = [];
         }
@@ -172,6 +172,7 @@ class UserDataTransformer
             'endorsements' => $subscription_data['endorsements'] ?? [],
             'equipment_experience' => $subscription_data['equipment_experience'] ?? [],
             'availability' => $subscription_data['availability'] ?? [],
+            'about' => $about,
         ];
 
         return (object) array_merge((array) $base_data, $adjuster_data);

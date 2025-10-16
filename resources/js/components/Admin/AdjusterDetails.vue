@@ -52,6 +52,12 @@
                         </div>
                     </el-card>
 
+                    <!-- Adjuster About Section (if available) -->
+                    <el-card v-if="adjuster.about" class="about-card" header="About Adjuster">
+                        <div class="about-content">
+                            <p>{{ adjuster.about }}</p>
+                        </div>
+                    </el-card>
                     <!-- Main Content Grid -->
                     <el-row :gutter="24" class="content-grid">
                         <!-- Left Column -->
@@ -219,13 +225,6 @@
                             </el-card>
                         </el-col>
                     </el-row>
-
-                    <!-- Adjuster Bio Section (if available) -->
-                    <el-card v-if="adjuster.bio" class="about-card" header="About Adjuster">
-                        <div class="about-content">
-                            <p>{{ adjuster.bio }}</p>
-                        </div>
-                    </el-card>
 
                     <!-- Licenses Section -->
                     <el-card v-if="adjuster.licenses && adjuster.licenses.length" class="licenses-card" header="Licenses">
