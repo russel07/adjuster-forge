@@ -345,7 +345,7 @@ class AdminController extends BaseController
         $result = $this->statusService->updateUserStatus($user_id, $status, $additional_data);
 
         if ( $result ) {
-            do_action('diver_forge_after_adjuster_profile_'. $action, (object)[
+            do_action('adjuster_forge_after_adjuster_profile_'. $action, (object)[
                 'user_id' => $user_id,
                 'user_name' => $first_name,
                 'user_email' => $user_email,

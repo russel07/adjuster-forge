@@ -127,7 +127,7 @@ class AuthController extends BaseController
         ] );
 
         // Send user registration confirmation email
-        do_action( 'diver_forge_after_registration', (Object)[
+        do_action( 'adjuster_forge_after_registration', (Object)[
             'user_name'     => $first_name,
             'user_email'    => $email,
             'user_type'     => $user_type,

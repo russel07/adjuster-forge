@@ -193,7 +193,7 @@ trait AppHelper
 
     public static function getAllowedCurrency()
     {
-        return apply_filters('diver_forge_allowed_currency', array(
+        return apply_filters('adjuster_forge_allowed_currency', array(
             'USD' => 'USD',
             'EUR' => 'EUR',
             'GBP' => 'GBP',
@@ -202,7 +202,7 @@ trait AppHelper
 
     public static function getAllowedCurrencySymble()
     {
-        return apply_filters('diver_forge_allowed_currency_symble', array(
+        return apply_filters('adjuster_forge_allowed_currency_symble', array(
             'USD' => '$',
             'EUR' => '€',
             'GBP' => '£',
@@ -225,7 +225,7 @@ trait AppHelper
             $baseUrl = '';
         }
 
-        return apply_filters('diver_forge_profile_page_url', $baseUrl);
+        return apply_filters('adjuster_forge_profile_page_url', $baseUrl);
     }
 
     /**
@@ -404,7 +404,7 @@ trait AppHelper
     }
 
     public static function adjusters_stripe_plan( $settings = [] ) {
-        return apply_filters('diver_forge_adjusters_stripe_plan', [
+        return apply_filters('adjuster_forge_adjusters_stripe_plan', [
             'id' => '1',
             'name' => 'Free Trial',
             'price' => 0.00,
@@ -540,7 +540,7 @@ trait AppHelper
         } else {
             $plans = array_merge([$free_trial], $paid_plans);
         }
-        return apply_filters('diver_forge_companies_stripe_plan', $plans);
+        return apply_filters('adjuster_forge_companies_stripe_plan', $plans);
     }
 
     /**

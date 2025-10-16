@@ -184,7 +184,7 @@ class PaymentController extends BaseController
             ];
         }
 
-        do_action('diver_forge_after_verification_fee_paid', (object) [
+        do_action('adjuster_forge_after_verification_fee_paid', (object) [
             'user_name'      => $current_user->display_name,
             'user_email'     => $current_user->user_email,
             'payment_id'     => $transaction_id,

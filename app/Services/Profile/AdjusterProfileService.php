@@ -99,7 +99,7 @@ class AdjusterProfileService implements CompleteProfileService
             update_user_meta( $user_id, 'adjuster_forge_subscription_data', $user_data );
         }
         // Trigger custom action for profile completion (for hooks/emails/logging)
-        do_action('diver_forge_after_complete_profile', (object) $user_data);
+        do_action('adjuster_forge_after_complete_profile', (object) $user_data);
         return true;
     }
 

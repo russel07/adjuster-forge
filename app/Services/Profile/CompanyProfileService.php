@@ -33,7 +33,7 @@ class CompanyProfileService implements CompleteProfileService
             update_user_meta( $user_id, 'adjuster_forge_subscription_data', $profile_data );
         }
         // Trigger custom action for profile completion (for hooks/emails/logging)
-        do_action('diver_forge_after_complete_profile', (object) $data);
+        do_action('adjuster_forge_after_complete_profile', (object) $data);
         return true;
     }
 

@@ -25,6 +25,7 @@ export function useAppHelper() {
         switch (value) {
             case 'pending': return 'Pending';
             case 'completed': return 'Completed';
+            case 'paid_verification_fee': return user_type === 'adjuster' ? 'Under Review' : 'Submitted for Review';
             case 'submitted': return user_type === 'adjuster' ? 'Under Review' : 'Submitted for Review';
             case 'under_review': return user_type === 'adjuster' ? 'Under Review' : 'Submitted for Review';
             case 'rejected': return 'Rejected';
@@ -44,6 +45,7 @@ export function useAppHelper() {
         switch (value) {
             case 'pending': return 'pending';
             case 'completed': return 'completed';
+            case 'paid_verification_fee': return user_type === 'adjuster' ? 'under_review' : 'submitted_for_review';
             case 'submitted': return user_type === 'adjuster' ? 'under_review' : 'submitted_for_review';
             case 'rejected': return 'rejected';
             case 'revoked': return 'revoked';

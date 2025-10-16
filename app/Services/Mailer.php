@@ -62,6 +62,65 @@ class Mailer {
         wp_mail( $user_email, $subject, $message, $headers );
     }
 
+    public static function send_verification_fee_confirmation_email( $data ) {
+        // Sanitize incoming data
+        $user_name   = sanitize_text_field( $data['user_name'] );
+        $user_email  = sanitize_email( $data['user_email'] );
+        $profile_link = esc_url( $data['profile_link'] );
+
+        // Start output buffering and include the email template
+        ob_start();
+        include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/verification-payment-confirmation.php' );
+        $message = ob_get_clean();
+
+        // Set email subject
+        $subject = 'Your Verification is Underway';
+
+        // Get headers for the email
+        $headers = self::get_email_headers();
+
+        // Attempt to send the email
+        wp_mail( $user_email, $subject, $message, $headers );
+    }
+
+    /**
+     * Sends an invoice notification email to the admin after a successful purchase.
+     *
+     * This function takes an array of invoice data, sanitizes the input, and sends an email to the admin
+     * with the details of the purchase, including the user's name, email, payment ID, item purchased,
+     * payment method, and order date.
+     *
+     * @param array $invoice_data Associative array containing invoice data. Expected keys:
+     * - 'user_name' (string): Name of the user making the purchase.
+     * - 'user_email' (string): Email address of the user.
+     * - 'payment_id' (string): Payment ID for the transaction.
+     * - 'order_date' (string): Date the order was placed.
+     *
+     * @return void
+     */
+    public static function send_user_verification_fee_paid_notification_to_admin( $invoice_data ) {
+        // Sanitize incoming data to ensure safe use
+        $user_name      = sanitize_text_field( $invoice_data['user_name'] );
+        $user_email     = sanitize_email( $invoice_data['user_email'] );
+        $payment_id     = sanitize_text_field( $invoice_data['payment_id'] );
+        $order_date     = sanitize_text_field( $invoice_data['order_date'] );
+
+        // Start output buffering and include the email template
+        ob_start();
+        include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/admin-notification.php' );
+        $message = ob_get_clean();
+
+        // Set email subject and recipient
+        $subject    = 'New Driver Verification Fee Payment Received';
+        $admin_mail = get_option('admin_email');
+
+        // Get the headers for the email (e.g., from, content-type)
+        $headers = self::get_email_headers();
+
+        // Attempt to send the email to the admin
+        wp_mail( $admin_mail, $subject, $message, $headers );
+    }
+
     public static function send_user_profile_approved_email($data) {
         // Sanitize incoming data
         $user_name   = sanitize_text_field( $data['user_name'] );
