@@ -11,43 +11,51 @@
                     </el-button>
                 </div>
                 
-                <div v-if="company" class="company-layout">
+                <div v-if="company" class="content-wrapper">
                     <!-- Company Profile Header -->
-                    <el-card class="profile-header-card">
-                        <div class="company-profile-header">
-                            <div class="profile-image-section">
-                                <el-image
-                                    :src="imageUrl( image_url, company.profile_picture ) || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(company.company_name || company.first_name + ' ' + company.last_name)"
-                                    fit="cover"
-                                    class="company-image"
-                                    :alt="company.company_name || company.first_name + ' ' + company.last_name"
-                                />
-                                <div class="profile-badges">
-                                    <el-tag :type="company.status === 'active' ? 'success' : company.status === 'pending' ? 'warning' : 'danger'" size="large">
-                                        {{ getStatusLabel(company.status) }}
-                                    </el-tag>
-                                    <el-tag v-if="company.plan_type" :type="company.plan_type === 'premium' ? 'warning' : 'info'" size="large">
-                                        {{ company.plan_type.toUpperCase() }}
-                                    </el-tag>
+                    <el-card class="profile-header">
+                        <div class="profile-header-flex">
+                            <div class="profile-content">
+                                <div class="profile-avatar">
+                                    <el-image
+                                        :src="imageUrl( image_url, company.profile_picture ) || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(company.company_name || company.first_name + ' ' + company.last_name)"
+                                        fit="cover"
+                                        class="avatar-image"
+                                        :alt="company.company_name || company.first_name + ' ' + company.last_name"
+                                    />
+                                </div>
+                                <div class="profile-info">
+                                    <h1 class="profile-name">{{ company.company_name }}</h1>                                    
+                                    <div class="profile-badges">
+                                        <el-tag :type="company.status === 'active' ? 'success' : company.status === 'pending' ? 'warning' : 'danger'" size="large">
+                                            {{ getStatusLabel(company.status) }}
+                                        </el-tag>
+                                        <el-tag v-if="company.plan_type" :type="company.plan_type === 'premium' ? 'warning' : 'info'" size="large">
+                                            {{ company.plan_type.toUpperCase() }}
+                                        </el-tag>
+                                    </div>
+                                </div>
+                                <div class="profile-contact">
+                                    <h3 class="contact-person">{{ company.first_name }} {{ company.last_name }}</h3>
+                                    <div class="contact-details">
+                                        <div class="contact-item">
+                                            <el-icon><Message /></el-icon>
+                                            <span>{{ company.user_email }}</span>
+                                        </div>
+                                        <div class="contact-item">
+                                            <el-icon><Phone /></el-icon>
+                                            <span>{{ company.phone }}</span>
+                                        </div>
+                                        <div v-if="company.website" class="contact-item">
+                                            <el-icon><Link /></el-icon>
+                                            <el-link :href="company.website" target="_blank" type="primary">{{ company.website }}</el-link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="company-info-header">
-                                <h2 class="company-name">{{ company.company_name || 'N/A' }}</h2>
-                                <h3 class="contact-person">{{ company.first_name }} {{ company.last_name }}</h3>
-                                <div class="contact-details">
-                                    <div class="contact-item">
-                                        <el-icon><Message /></el-icon>
-                                        <span>{{ company.user_email }}</span>
-                                    </div>
-                                    <div class="contact-item">
-                                        <el-icon><Phone /></el-icon>
-                                        <span>{{ company.phone }}</span>
-                                    </div>
-                                    <div v-if="company.website" class="contact-item">
-                                        <el-icon><Link /></el-icon>
-                                        <el-link :href="company.website" target="_blank" type="primary">{{ company.website }}</el-link>
-                                    </div>
-                                </div>
+                            <div class="about-content" v-if="company.about">
+                                <h2 class="about-title">About Company</h2>
+                                <p>{{ company.about }}</p>
                             </div>
                         </div>
                     </el-card>
@@ -160,13 +168,6 @@
                             </el-card>
                         </el-col>
                     </el-row>
-
-                    <!-- Company Description -->
-                    <el-card v-if="company.about" class="about-card" header="About Company">
-                        <div class="about-content">
-                            <p>{{ company.about }}</p>
-                        </div>
-                    </el-card>
 
                     <!-- Action Buttons -->
                     <el-card class="action-card">
@@ -391,64 +392,84 @@ export default {
     font-weight: 500;
 }
 
-.company-layout {
+.content-wrapper {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
-/* Profile Header Card */
-.profile-header-card {
+/* Profile Header Styles */
+.profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e4e7ed;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+    overflow: hidden;
 }
 
-.company-profile-header {
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
+.profile-header :deep(.el-card__body) {
+    padding: 32px;
 }
 
-.profile-image-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+.profile-header-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 48px;
+  color: white;
 }
 
-.company-image {
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 32px;
+  color: white;
+  flex: 1;
+}
+
+.profile-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-image {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 16px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-badges {
     display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.profile-contact {
+    display: flex;
     flex-direction: column;
-    gap: 8px;
-    align-items: center;
+    gap: 12px;
+    min-width: 280px;
 }
 
-.company-info-header {
-    flex: 1;
-}
-
-.company-name {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
+.contact-person{
+    font-size: 1.5rem;
+    font-weight: 600;
     margin: 0 0 8px 0;
-}
-
-.contact-person {
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: #34495e;
-    margin: 0 0 16px 0;
+    color: white;
 }
 
 .contact-details {
@@ -461,13 +482,14 @@ export default {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
-    color: #5a6c7d;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .contact-item .el-icon {
-    color: #409eff;
-    font-size: 16px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* Content Grid */
@@ -530,26 +552,35 @@ export default {
     font-weight: 500;
 }
 
-/* About Card */
-.about-card {
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e4e7ed;
+/* About Content */
+.about-content {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 32px 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 320px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 
-.about-card .el-card__header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    font-size: 16px;
-    border-radius: 12px 12px 0 0;
+.about-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
 
 .about-content p {
-    line-height: 1.6;
-    color: #5a6c7d;
-    margin: 0;
-    text-align: justify;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #f8f9ff;
+  margin: 0;
+  word-break: break-word;
 }
 
 /* References Card */
@@ -605,11 +636,10 @@ export default {
         gap: 16px;
     }
     
-    .company-profile-header {
+    .profile-content {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 20px;
     }
     
     .contact-details {
@@ -624,8 +654,8 @@ export default {
         font-size: 1.6rem;
     }
     
-    .company-name {
-        font-size: 1.6rem;
+    .profile-name {
+        font-size: 1.8rem;
     }
     
     .contact-person {
@@ -638,7 +668,7 @@ export default {
         padding: 12px;
     }
     
-    .company-image {
+    .avatar-image {
         width: 100px;
         height: 100px;
     }
@@ -647,8 +677,8 @@ export default {
         font-size: 1.4rem;
     }
     
-    .company-name {
-        font-size: 1.4rem;
+    .profile-name {
+        font-size: 1.5rem;
     }
 }
 

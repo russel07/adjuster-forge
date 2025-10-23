@@ -67,6 +67,7 @@ Router::get('adjuster/{user_id}', 'AdminController@adjuster_details');
 Router::post('toggle-adjuster', 'AdminController@toggle_adjuster');
 Router::get('search-adjusters', 'AdminController@search_adjusters_list');
 Router::get('companies', 'AdminController@companies_list');
+Router::get('company/{user_id}', 'AdminController@company_details');
 Router::get('search-companies', 'AdminController@search_companies_list');
 Router::post('permit-access', 'AdminController@permit_user_access');
 Router::post('revoke-access', 'AdminController@revoke_user_access');

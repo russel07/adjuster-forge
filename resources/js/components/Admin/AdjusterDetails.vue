@@ -13,49 +13,47 @@
                 
                 <div v-if="adjuster" class="adjuster-layout">
                     <!-- Adjuster Profile Header -->
-                    <el-card class="profile-header-card">
-                        <div class="adjuster-profile-header">
-                            <div class="profile-image-section">
-                                <el-image
-                                    :src="imageUrl( image_url, adjuster.profile_picture ) || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(adjuster.first_name + ' ' + adjuster.last_name)"
-                                    fit="cover"
-                                    class="adjuster-image"
-                                    :alt="adjuster.first_name + ' ' + adjuster.last_name"
-                                />
-                                <div class="profile-badges">
-                                    <el-tag :type="adjuster.status === 'active' ? 'success' : adjuster.status === 'pending' ? 'warning' : adjuster.status === 'approved' ? 'success' : adjuster.status === 'rejected' ? 'danger' : 'info'" size="large">
-                                        {{ getStatusLabel(adjuster.status) }}
-                                    </el-tag>
-                                    <el-tag v-if="adjuster.plan_type" :type="adjuster.plan_type === 'premium' ? 'warning' : 'info'" size="large">
-                                        {{ adjuster.plan_type.toUpperCase() }}
-                                    </el-tag>
+                    <el-card class="profile-header">
+                        <div class="profile-header-flex">
+                            <div class="profile-content">
+                                <div class="profile-avatar">
+                                    <el-image
+                                        :src="imageUrl( image_url, adjuster.profile_picture ) || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(adjuster.first_name + ' ' + adjuster.last_name)"
+                                        fit="cover"
+                                        class="avatar-image"
+                                        :alt="adjuster.first_name + ' ' + adjuster.last_name"
+                                    />
                                 </div>
-                            </div>
-                            <div class="adjuster-info-header">
-                                <h2 class="adjuster-name">{{ adjuster.first_name }} {{ adjuster.last_name }}</h2>
-                                <h3 class="adjuster-username">@{{ adjuster.username }}</h3>
-                                <div class="contact-details">
+                                <div class="profile-info">
+                                    <h1 class="profile-name">{{ adjuster.first_name }} {{ adjuster.last_name }}</h1>
+                                    <div class="profile-badges">
+                                        <el-tag :type="adjuster.status === 'active' ? 'success' : adjuster.status === 'pending' ? 'warning' : adjuster.status === 'approved' ? 'success' : adjuster.status === 'rejected' ? 'danger' : 'info'" size="large">
+                                            {{ getStatusLabel(adjuster.status) }}
+                                        </el-tag>
+                                        <el-tag v-if="adjuster.plan_type" :type="adjuster.plan_type === 'premium' ? 'warning' : 'info'" size="large">
+                                            {{ adjuster.plan_type.toUpperCase() }}
+                                        </el-tag>
+                                    </div>
+                                </div>
+                                <div class="profile-contact">
                                     <div class="contact-item">
                                         <el-icon><Message /></el-icon>
                                         <span>{{ adjuster.user_email }}</span>
                                     </div>
-                                    <div class="contact-item">
+                                    <div class="contact-item" v-if="adjuster.phone">
                                         <el-icon><Phone /></el-icon>
                                         <span>{{ adjuster.phone }}</span>
                                     </div>
-                                    <div class="contact-item">
+                                    <div class="contact-item" v-if="adjuster.city && adjuster.state">
                                         <el-icon><Location /></el-icon>
                                         <span>{{ adjuster.city }}, {{ adjuster.state }}</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </el-card>
-
-                    <!-- Adjuster About Section (if available) -->
-                    <el-card v-if="adjuster.about" class="about-card" header="About Adjuster">
-                        <div class="about-content">
-                            <p>{{ adjuster.about }}</p>
+                            <div class="about-content" v-if="adjuster.about">
+                                <h2 class="about-title">About Adjuster</h2>
+                                <p>{{ adjuster.about }}</p>
+                            </div>
                         </div>
                     </el-card>
                     <!-- Main Content Grid -->
@@ -520,77 +518,85 @@ export default {
     gap: 24px;
 }
 
-/* Profile Header Card */
-.profile-header-card {
+/* Profile Header Styles */
+.profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e4e7ed;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+    overflow: hidden;
 }
 
-.adjuster-profile-header {
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
+.profile-header :deep(.el-card__body) {
+    padding: 32px;
 }
 
-.profile-image-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
+.profile-header-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 48px;
+  color: white;
 }
 
-.adjuster-image {
+.profile-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 32px;
+  color: white;
+  flex: 1;
+}
+
+.profile-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-image {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 16px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-badges {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.adjuster-info-header {
-    flex: 1;
-}
-
-.adjuster-name {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0 0 8px 0;
-}
-
-.adjuster-username {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #7f8c8d;
-    margin: 0 0 16px 0;
-}
-
-.contact-details {
+.profile-contact {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    min-width: 280px;
 }
 
 .contact-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 14px;
-    color: #5a6c7d;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .contact-item .el-icon {
-    color: #409eff;
-    font-size: 16px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* Content Grid */
@@ -598,14 +604,28 @@ export default {
     margin-bottom: 24px;
 }
 
-.info-card, .licenses-card, .badges-card {
+.info-card {
     margin-bottom: 24px;
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
     border: 1px solid #e4e7ed;
 }
 
-.info-card .el-card__header,
+.info-card .el-card__header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 12px 12px 0 0;
+}
+
+.licenses-card, .badges-card {
+    margin-bottom: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e4e7ed;
+}
+
 .licenses-card .el-card__header,
 .badges-card .el-card__header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -668,26 +688,35 @@ export default {
     font-weight: 500;
 }
 
-/* About Card */
-.about-card {
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid #e4e7ed;
+/* About Content */
+.about-content {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 32px 24px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 320px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 
-.about-card .el-card__header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-weight: 600;
-    font-size: 16px;
-    border-radius: 12px 12px 0 0;
+.about-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
 
 .about-content p {
-    line-height: 1.6;
-    color: #5a6c7d;
-    margin: 0;
-    text-align: justify;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #f8f9ff;
+  margin: 0;
+  word-break: break-word;
 }
 
 /* References Card */
@@ -746,14 +775,13 @@ export default {
         gap: 16px;
     }
     
-    .adjuster-profile-header {
+    .profile-content {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 20px;
     }
     
-    .contact-details {
+    .profile-contact {
         align-items: center;
     }
     
@@ -765,12 +793,8 @@ export default {
         font-size: 1.6rem;
     }
     
-    .adjuster-name {
-        font-size: 1.6rem;
-    }
-    
-    .adjuster-username {
-        font-size: 1.1rem;
+    .profile-name {
+        font-size: 1.8rem;
     }
 }
 
@@ -779,7 +803,7 @@ export default {
         padding: 12px;
     }
     
-    .adjuster-image {
+    .avatar-image {
         width: 100px;
         height: 100px;
     }
@@ -788,8 +812,8 @@ export default {
         font-size: 1.4rem;
     }
     
-    .adjuster-name {
-        font-size: 1.4rem;
+    .profile-name {
+        font-size: 1.5rem;
     }
 }
 

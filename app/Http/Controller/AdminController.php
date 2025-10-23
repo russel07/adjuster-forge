@@ -6,7 +6,7 @@ defined('ABSPATH') || exit; // Prevent direct access
 
 use SmartySoft\AdjusterForge\Http\Request\ValidatorHandler;
 use SmartySoft\AdjusterForge\Http\Model\User;
-use SmartySoft\AdjusterForge\Http\Model\OrderHistory;
+use SmartySoft\AdjusterForge\Http\Model\SubscriptionHistory;
 use SmartySoft\AdjusterForge\Http\Model\Subscription;
 use SmartySoft\AdjusterForge\Services\CsvWriter;
 use SmartySoft\AdjusterForge\Services\UserStatusService;
@@ -396,6 +396,33 @@ class AdminController extends BaseController
         return $this->response([
             'data' =>  $data,
             'message' => 'companies list retrieved successfully.',
+            'status' => 'success',
+        ], 200);
+    }
+    
+    /**
+     * Retrieve details of a specific driver by user ID.
+     * @param \WP_REST_Request $request The request object containing the user ID.
+     * @return mixed The response containing driver details or an error message.
+     * */
+    public function company_details( \WP_REST_Request $request )
+    {
+        $user_id = intval($request->get_param('user_id'));
+        $company = User::find($user_id);
+
+        if ( ! $company ) {
+            return $this->response([
+                'message' => 'Company not found.',
+                'status' => 'error',
+            ], 404);
+        }
+
+        // Use the new transformer service
+        $data = $this->dataTransformer->transformCompanyDetails($company);
+
+        return $this->response([
+            'data' =>  $data,
+            'message' => 'Company details retrieved successfully.',
             'status' => 'success',
         ], 200);
     }
