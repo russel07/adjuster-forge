@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update on Your Verification Status</title>
+    <title>Adjuster Approved Email</title>
     <style>
         body {
             margin: 0;
@@ -42,9 +42,19 @@
             padding: 20px;
             font-size: 12px;
         }
-        .reason-list {
+        .checklist {
             margin: 20px 0;
-            padding-left: 18px;
+            padding-left: 0;
+            list-style: none;
+        }
+        .checklist li {
+            margin: 12px 0;
+            font-size: 16px;
+        }
+        .checkmark {
+            color: #2E6668;
+            font-weight: bold;
+            margin-right: 8px;
         }
         .signature {
             margin-top: 30px;
@@ -64,31 +74,24 @@
     <table>
         <tr>
             <td class="header">
-                Update on Your Verification Status
+                You’re Approved – Your Profile is Now Live
             </td>
         </tr>
         <tr>
             <td class="content">
-                <p>Hi <?php echo esc_html($user_name); ?>,</p>
-
-                <p>Thank you for submitting your documents for verification.</p>
-
-                <p>After careful review, we were unable to approve your application at this time.</p>
-
-                <p><strong>Reason(s) for non-approval may include:</strong></p>
-                <ul class="reason-list">
-                    <li>Incomplete or missing documentation</li>
-                    <li>Insufficient driving experience</li>
-                    <li>Issues identified in your motor vehicle record or references</li>
+                <p class="greeting">Hello <?php echo esc_html($adjuster_first_name); ?>,</p>
+                <p>Congratulations!</p>
+                <p>Your profile has been approved and verified by the Adjusters On Demand team. You’re now part of the most trusted network of deployment-ready adjusters in the industry.</p>
+                <p>You can now:</p>
+                <ul class="checklist">
+                    <li>Log in and update your professional profile</li>
+                    <li>Display your verification badge</li>
+                    <li>View and apply for open deployments from hiring companies</li>
                 </ul>
-
-                <p><strong>What happens next?</strong><br>
-                If you believe this was in error or you’d like to provide additional information, please reply to this email or contact us at <a href="mailto:support@iwilldrive4u.com">support@iwilldrive4u.com</a>.
-                </p>
-
-                <p>We appreciate your interest in I Will Drive 4 U and encourage you to reapply once you meet all eligibility requirements.</p>
-
-                <p class="signature">— The I Will Drive 4 U Verification Team</p>
+                <p style="margin: 28px 0 18px 0;"><a href="<?php echo esc_url($login_url); ?>" style="background: #2E6668; color: #fff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">Access Your Dashboard</a></p>
+                <p>We’re thrilled to have you on board — and proud to connect you with companies that value your skill, professionalism, and experience.</p>
+                <p>Welcome to Adjusters On Demand.</p>
+                <p class="signature">Let’s keep adjusters working and companies confident.</p>
             </td>
         </tr>
         <tr>
@@ -99,7 +102,7 @@
                         <path d="M39.1041 14.3609C39.1042 12.8798 38.9347 11.4035 38.5988 9.96094H31.5706C32.0988 11.3677 32.3687 12.8583 32.3673 14.3609C32.3673 21.2797 26.7386 26.9083 19.8199 26.9083C12.9012 26.9083 7.27256 21.2797 7.27256 14.3609C7.27143 12.8582 7.54158 11.3677 8.07003 9.96094H1.03847C0.703007 11.4036 0.533487 12.8798 0.533203 14.3609C0.534027 18.8915 2.1292 23.2773 5.0392 26.7497C7.94919 30.2221 11.9884 32.5597 16.449 33.3529V47.1777H23.1858V33.3529C27.6464 32.5597 31.6856 30.2221 34.5956 26.7497C37.5056 23.2773 39.1007 18.8915 39.1016 14.3609H39.1041Z" fill="#66AFB5"/>
                     </svg>
                 </p>
-                <p>I Will Drive 4 U<br><a href="mailto:support@iwilldrive4u.com" style="color: #ffffff;">support@iwilldrive4u.com</a></p>
+                <p class="signature">Warm regards,<br>The Adjusters On Demand Team<br><span style="font-size: 15px; color: #2E6668; font-weight: bold;">Verified. Vetted. On Demand.</span></p>
             </td>
         </tr>
     </table>

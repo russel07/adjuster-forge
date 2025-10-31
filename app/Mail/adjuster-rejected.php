@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adjuster Approved Email</title>
+    <title>Update on Your Verification Status</title>
     <style>
         body {
             margin: 0;
@@ -42,19 +42,9 @@
             padding: 20px;
             font-size: 12px;
         }
-        .checklist {
+        .reason-list {
             margin: 20px 0;
-            padding-left: 0;
-            list-style: none;
-        }
-        .checklist li {
-            margin: 12px 0;
-            font-size: 16px;
-        }
-        .checkmark {
-            color: #2E6668;
-            font-weight: bold;
-            margin-right: 8px;
+            padding-left: 18px;
         }
         .signature {
             margin-top: 30px;
@@ -74,27 +64,17 @@
     <table>
         <tr>
             <td class="header">
-                You’re Approved – Your Profile is Now Live
+                Update on Your Verification Status
             </td>
         </tr>
         <tr>
             <td class="content">
-                <p>Hi <?php echo esc_html($user_name); ?>,</p>
-
-                <p>Congratulations – your verification has been successfully completed.</p>
-
-                <p>Your profile is now live on <strong>I Will Drive 4 U</strong> and visible to companies looking for professional adjusters.</p>
-
-                <p><strong>What you can do now:</strong></p>
-                <ul class="checklist">
-                    <li><span class="checkmark">✅</span>Log in to update your profile</li>
-                    <li><span class="checkmark">✅</span>Browse job listings</li>
-                    <li><span class="checkmark">✅</span>Receive direct messages from verified companies</li>
-                </ul>
-
-                <p>Thank you for your professionalism.</p>
-
-                <p class="signature">— The I Will Drive 4 U Verification Team</p>
+                <p class="greeting">Hello <?php echo esc_html($adjuster_first_name); ?>,</p>
+                <p>Thank you for applying to join <strong>Adjusters On Demand</strong>.</p>
+                <p>After reviewing your application, we’re unable to approve it at this time. Our platform is designed exclusively for seasoned, verified adjusters who meet our current credentialing and experience requirements.</p>
+                <p>If your status or experience changes in the future, we encourage you to reapply. You can review our qualification guidelines here: <a href="<?php echo esc_url($requirements_url); ?>" style="color: #2E6668; font-weight: bold;">Requirements Link</a></p>
+                <p>We appreciate your interest in being part of our community and wish you continued success in your adjusting career.</p>
+                <p class="signature">Warm regards,<br>The Adjusters On Demand Team</p>
             </td>
         </tr>
         <tr>
@@ -105,7 +85,7 @@
                         <path d="M39.1041 14.3609C39.1042 12.8798 38.9347 11.4035 38.5988 9.96094H31.5706C32.0988 11.3677 32.3687 12.8583 32.3673 14.3609C32.3673 21.2797 26.7386 26.9083 19.8199 26.9083C12.9012 26.9083 7.27256 21.2797 7.27256 14.3609C7.27143 12.8582 7.54158 11.3677 8.07003 9.96094H1.03847C0.703007 11.4036 0.533487 12.8798 0.533203 14.3609C0.534027 18.8915 2.1292 23.2773 5.0392 26.7497C7.94919 30.2221 11.9884 32.5597 16.449 33.3529V47.1777H23.1858V33.3529C27.6464 32.5597 31.6856 30.2221 34.5956 26.7497C37.5056 23.2773 39.1007 18.8915 39.1016 14.3609H39.1041Z" fill="#66AFB5"/>
                     </svg>
                 </p>
-                <p>I Will Drive 4 U<br><a href="mailto:support@iwilldrive4u.com" style="color: #ffffff;">support@iwilldrive4u.com</a></p>
+                <p class="signature">Warm regards,<br>The Adjusters On Demand Team<br><span style="font-size: 15px; color: #2E6668; font-weight: bold;">Verified. Vetted. On Demand.</span></p>
             </td>
         </tr>
     </table>

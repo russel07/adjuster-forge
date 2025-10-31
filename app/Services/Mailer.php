@@ -43,11 +43,11 @@ class Mailer {
         ob_start();
         if( 'adjuster' === $user_type ) {
             // Set email subject
-            $subject = 'Welcome to I Will Drive 4 U – Next Steps';
+            $subject = 'Your Adjusters On Demand Profile Is Under Review';
             include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/adjuster-registration.php' );
         } elseif( 'company' === $user_type ) {
             // Set email subject
-            $subject = 'Welcome to I Will Drive 4 U – Your Account is Ready';
+            $subject = 'Welcome to Adjusters On Demand — Let’s Get You Connected';
             include_once( ADJUSTER_FORGE_PLUGIN_DIR . '/app/Mail/company-registration.php' );
         } 
         // Capture the output
@@ -132,7 +132,7 @@ class Mailer {
         $message = ob_get_clean();
 
         // Set email subject
-        $subject = 'You\’re Approved – Your Profile is Now Live';
+        $subject = ' Congratulations — You’re Officially a Verified Adjuster!';
 
         // Get headers for the email
         $headers = self::get_email_headers();
@@ -152,7 +152,7 @@ class Mailer {
         $message = ob_get_clean();
 
         // Set email subject
-        $subject = 'Update on Your Verification Status';
+        $subject = 'Update on Your Adjusters On Demand Application';
 
         // Get headers for the email
         $headers = self::get_email_headers();
