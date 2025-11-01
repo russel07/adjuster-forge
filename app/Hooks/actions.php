@@ -14,9 +14,9 @@
     //Send email to user after registration
     add_action('adjuster_forge_after_registration', [ ActionHooksHandler::class, 'send_user_registration_confirmation_email'] );
     //Send email to user after paid verification fee
-    add_action('adjuster_forge_after_verification_fee_paid', [ ActionHooksHandler::class, 'send_user_verification_fee_paid_email'] );
+    //add_action('adjuster_forge_after_verification_fee_paid', [ ActionHooksHandler::class, 'send_user_verification_fee_paid_email'] );
     //Send email to admin after user paid verification fee
-    add_action('adjuster_forge_after_verification_fee_paid', [ ActionHooksHandler::class, 'send_user_verification_fee_paid_notification_to_admin'] );
+    //add_action('adjuster_forge_after_verification_fee_paid', [ ActionHooksHandler::class, 'send_user_verification_fee_paid_notification_to_admin'] );
     //Send email to user after profile approved
     add_action('adjuster_forge_after_adjuster_profile_approved', [ ActionHooksHandler::class, 'send_user_profile_approved_email'] );
     //Send email to user after profile rejected
