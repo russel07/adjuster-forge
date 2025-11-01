@@ -3,31 +3,60 @@
     <el-main class="main-center">
       <Header />
       <div class="dashboard-container">
-        <h1>Stripe Settings</h1>
-
         <el-card>
-          <el-form :model="form" :rules="rules" ref="formRef" label-width="200px"
-            class="dashboard-setting-form-container">
-            <el-row>
-              <el-col :span="12">
-  
-                <div class="stripe-key-container">
-                  <el-form-item label="Stripe Public Key" prop="stripe_public_key">
-                    <el-input v-model="form.stripe_public_key"></el-input>
-                  </el-form-item>
+          <template #header>
+            <div class="card-header">
+              <h1>Stripe Settings</h1>
+            </div>
+          </template>
+          <template #default>
+            <el-card>
+              <el-form :model="form" :rules="rules" ref="formRef" label-width="200px"
+                class="dashboard-setting-form-container">
+                <el-row>
+                  <el-col :span="24">      
+                    <div class="stripe-key-container">
+                      <el-form-item label="Stripe Public Key" prop="stripe_public_key">
+                        <el-input v-model="form.stripe_public_key"></el-input>
+                      </el-form-item>
 
-                  <el-form-item label="Stripe Secret Key" prop="stripe_secret_key">
-                    <el-input v-model="form.stripe_secret_key"></el-input>
-                  </el-form-item>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-button type="primary" @click="onSubmit" class="setting-button">Save</el-button>
-              </el-col>
-            </el-row>
-          </el-form>
+                      <el-form-item label="Stripe Secret Key" prop="stripe_secret_key">
+                        <el-input v-model="form.stripe_secret_key"></el-input>
+                      </el-form-item>
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24">
+                    <el-button type="primary" @click="onSubmit" class="setting-button">Save</el-button>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </el-card>
+
+            <el-card class="mt-20">
+              <h2>Webhooks for Stripe</h2>
+              <p>Use the following URLs to set up webhooks in your Stripe dashboard:</p>
+              <ul class="webhook-list">
+                <li v-for="(url, event) in webhooks" :key="event" class="webhook-item">
+                  <div class="webhook-content">
+                    <strong>{{ event }}:</strong> 
+                    <code class="webhook-url">{{ url }}</code>
+                    <el-button 
+                      type="primary" 
+                      size="small" 
+                      :icon="CopyDocument"
+                      @click="copyToClipboard(url, event)"
+                      class="copy-button"
+                      title="Copy URL"
+                    >
+                      Copy
+                    </el-button>
+                  </div>
+                </li>
+              </ul>
+            </el-card>
+          </template>
         </el-card>
       </div>
     </el-main>
@@ -39,6 +68,7 @@
 
 <script>
 import { onMounted, ref } from 'vue';
+import { CopyDocument } from '@element-plus/icons-vue';
 import AlertMessage from '../../Composable/AlertMessage';
 import { useAppHelper } from '../../Composable/appHelper';
 import { loader } from '../../Composable/Loader';
@@ -55,7 +85,8 @@ export default {
     const { success, error } = AlertMessage();
     const { startLoading, stopLoading } = loader();
     const formRef = ref(null);
-
+    const app_vars = window.adjuster_forge_app_vars || {};
+    const rest_url = app_vars.rest_info?.rest_url || '';
     const form = ref({
       payment_gateway: '',
       stripe_public_key: '',
@@ -64,6 +95,12 @@ export default {
       paypal_secret_key: '',
     });
 
+    const webhooks = {
+      'Subscribed': `${rest_url}/webhook-subscribe-to-stripe`,
+      'Subscription Canceled': `${rest_url}/webhook-cancel-subscription-from-stripe`,
+      'Refund': `${rest_url}/webhook-refund-from-stripe`,
+    };
+
     const validateGatewayKey = (rule, value, callback) => {
       if (form.value.payment_gateway.includes('Stripe') || form.value.payment_gateway.includes('Both')) {
         if (!value) {
@@ -71,20 +108,6 @@ export default {
         }
       }
       callback();
-    };
-
-    /*watch(() => form.value.payment_gateway, (newValue) => {
-      if (newValue === 'Stripe') {
-        form.value.paypal_client_id = '';
-        form.value.paypal_secret_key = '';
-      } else if (newValue === 'PayPal') {
-        form.value.stripe_public_key = '';
-        form.value.stripe_secret_key = '';
-      }
-    });*/
-
-    const showThis = (gateway) => {
-      return form.value.payment_gateway.includes(gateway);
     };
 
     // Validation rules
@@ -156,6 +179,22 @@ export default {
       stopLoading();
     };
 
+    const copyToClipboard = async (url, eventName) => {
+      try {
+        await navigator.clipboard.writeText(url);
+        success(`${eventName} webhook URL copied to clipboard!`);
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        success(`${eventName} webhook URL copied to clipboard!`);
+      }
+    };
+
     onMounted(() => {
       fetchSettings();
     });
@@ -165,7 +204,9 @@ export default {
       rules,
       onSubmit,
       formRef,
-      showThis,
+      webhooks,
+      copyToClipboard,
+      CopyDocument,
     };
   },
 };
@@ -182,5 +223,62 @@ export default {
 
 .el-col {
   padding: 10px;
+}
+
+.webhook-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.webhook-item {
+  margin-bottom: 15px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.webhook-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.webhook-url {
+  background: #ffffff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #d0d7de;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #24292f;
+  flex: 1;
+  min-width: 300px;
+  word-break: break-all;
+  margin: 0 10px;
+}
+
+.copy-button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .webhook-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .webhook-url {
+    min-width: 100%;
+    margin: 5px 0;
+  }
+  
+  .copy-button {
+    margin-left: 0;
+    align-self: flex-end;
+  }
 }
 </style>
