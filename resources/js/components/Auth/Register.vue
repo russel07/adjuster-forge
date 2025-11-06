@@ -50,13 +50,13 @@
         </el-col>
       </el-row>
 
-      <el-form-item>
-        <el-button type="primary" class="register-button" @click="handleRegister">Register Your Account</el-button>
-      </el-form-item>
-
       <el-form-item prop="term_condition">
         <el-checkbox v-model="registerForm.term_condition">I confirm that I have read and accepted the <br />
           <a :href="t_c_page_url" target="_blank" class="terms-conditions">Terms and Conditions.</a></el-checkbox>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" class="register-button" @click="handleRegister">Register Your Account</el-button>
       </el-form-item>
 
       <el-form-item>

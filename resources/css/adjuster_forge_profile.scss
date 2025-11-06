@@ -4,31 +4,35 @@
 
 .primary-button {
     color: #fff;
-    background: #60BBAC;
-
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
-    padding: 20px 20px;
+    padding: 14px 28px;
     font-size: 16px;
-    transition: all 0.3s;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    cursor: pointer;
 
     &:hover {
-        background: #2E6668;
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
         color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
     }
-
 }
 
 
 
 .el-menu--horizontal {
     .is-active {
-        color: #60BBAC !important;
-        border-bottom-color: #60BBAC !important;
+        color: #667eea !important;
+        border-bottom-color: #667eea !important;
     }
 }
 
 .el-menu--horizontal>.el-menu-item.is-active {
-    color: #60BBAC !important;
+    color: #667eea !important;
     border-bottom-color: #60BBAC !important;
 }
 
@@ -46,17 +50,35 @@
 
             .el-input__wrapper {
                 padding: 0;
+                box-shadow: none;
+                border-radius: 12px;
 
                 .el-input__inner {
-                    height: 50px;
-                    border: 1px solid #BFC4C8;
-                    border-radius: 4px;
+                    height: 52px;
+                    border: 2px solid #e4e7ed;
+                    border-radius: 12px;
+                    padding: 0 16px;
+                    font-size: 15px;
+                    color: #2c3e50;
+                    background: #ffffff;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
                     &:focus {
-                        border-color: #60BBAC;
+                        border-color: #667eea;
+                        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+                        outline: none;
+                    }
+
+                    &:hover {
+                        border-color: #a0a8b8;
+                    }
+
+                    &::placeholder {
+                        color: #8492a6;
+                        font-size: 14px;
                     }
                 }
-
             }
         }
 
@@ -64,10 +86,20 @@
             border: none;
 
             .el-select__wrapper {
-                height: 50px;
+                height: 52px;
+                border: 2px solid #e4e7ed;
+                border-radius: 12px;
+                background: #ffffff;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
                 &:focus {
-                    border-color: #60BBAC;
+                    border-color: #667eea;
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+                }
+
+                &:hover {
+                    border-color: #a0a8b8;
                 }
             }
         }
@@ -482,12 +514,198 @@
                     padding-right: 10px;
 
                     .el-button--text {
-                        color: #60BBAC;
+                        color: #667eea;
                     }
-
                 }
-
             }
         }
+    }
+}
+
+/* Modern Form Element Styles */
+.el-form-item__label {
+    color: #2c3e50 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+}
+
+.el-button {
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.el-button--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    color: #fff !important;
+
+    &:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+    }
+}
+
+.el-textarea {
+    .el-textarea__inner {
+        border: 2px solid #e4e7ed !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        font-size: 15px !important;
+        color: #2c3e50 !important;
+        background: #ffffff !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+
+        &:focus {
+            border-color: #667eea !important;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15) !important;
+            outline: none !important;
+        }
+
+        &:hover {
+            border-color: #a0a8b8 !important;
+        }
+    }
+}
+
+.el-input-number {
+    .el-input__wrapper {
+        border: 2px solid #e4e7ed !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+
+        &:hover {
+            border-color: #a0a8b8 !important;
+        }
+    }
+
+    .el-input-number__increase,
+    .el-input-number__decrease {
+        border: none !important;
+        background: #f8fafc !important;
+        color: #667eea !important;
+
+        &:hover {
+            background: #e2e8f0 !important;
+            color: #5a6fd8 !important;
+        }
+    }
+}
+
+.el-upload {
+    .el-upload-dragger {
+        border: 2px dashed #e4e7ed !important;
+        border-radius: 12px !important;
+        background: #f8fafc !important;
+        transition: all 0.3s ease !important;
+
+        &:hover {
+            border-color: #667eea !important;
+            background: #f0f4ff !important;
+        }
+    }
+}
+
+/* Modern Checkbox and Radio Styles */
+.el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #667eea !important;
+    border-color: #667eea !important;
+}
+
+.el-checkbox__inner:hover {
+    border-color: #667eea !important;
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+    background-color: #667eea !important;
+    border-color: #667eea !important;
+}
+
+.el-radio__input.is-checked .el-radio__inner::after {
+    background-color: #fff !important;
+}
+
+.el-radio__inner:hover {
+    border-color: #667eea !important;
+}
+
+/* Modern Date Picker Styles */
+.el-date-editor.el-input {
+    border: none !important;
+
+    .el-input__wrapper {
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 12px !important;
+
+        .el-input__inner {
+            border: 2px solid #e4e7ed !important;
+            border-radius: 12px !important;
+            height: 52px !important;
+            padding: 0 16px !important;
+            font-size: 15px !important;
+            color: #2c3e50 !important;
+            background: #ffffff !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+
+            &:focus {
+                border-color: #667eea !important;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15) !important;
+                outline: none !important;
+            }
+
+            &:hover {
+                border-color: #a0a8b8 !important;
+            }
+        }
+    }
+}
+
+/* Modern Alert Styles */
+.el-alert {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.el-alert--warning {
+    background-color: #fef9e7 !important;
+    color: #b7791f !important;
+}
+
+.el-alert--success {
+    background-color: #f0f9ff !important;
+    color: #0369a1 !important;
+}
+
+.el-alert--error {
+    background-color: #fef2f2 !important;
+    color: #dc2626 !important;
+}
+
+/* Modern Card Styles */
+.el-card {
+    border-radius: 16px !important;
+    border: 2px solid #e4e7ed !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .el-card__header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border-radius: 14px 14px 0 0 !important;
+    }
+
+    .el-card__body {
+        padding: 24px !important;
     }
 }

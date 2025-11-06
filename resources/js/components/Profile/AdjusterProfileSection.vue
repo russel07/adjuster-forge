@@ -38,7 +38,12 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Phone Number" prop="phone">
-                            <el-input v-model="profileForm.phone" placeholder="+1 (555) 555-5555"></el-input>
+                            <el-input 
+                                v-model="profileForm.phone" 
+                                placeholder="(888) 321-9895"
+                                @input="formatPhoneNumber"
+                                maxlength="14"
+                            ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -462,7 +467,7 @@ export default {
     const rules = {
       phone: [
         { required: true, message: 'Please enter your phone number', trigger: 'blur' },
-        { pattern: /^[0-9+\-\s()]{7,20}$/, message: 'Please enter a valid phone number', trigger: 'blur' },
+        { pattern: /^\(\d{3}\) \d{3}-\d{4}$/, message: 'Please enter a valid US phone number format: (888) 321-9895', trigger: 'blur' },
       ],
       availability: [
         { type: 'array', required: true, message: 'Please select your availability', trigger: 'change' }
@@ -765,6 +770,21 @@ export default {
       });
     };
 
+    // Phone number formatting
+    const formatPhoneNumber = () => {
+      let value = profileForm.value.phone.replace(/\D/g, ''); // Remove all non-digits
+      
+      if (value.length >= 6) {
+        value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+      } else if (value.length >= 3) {
+        value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+      } else if (value.length > 0) {
+        value = `(${value}`;
+      }
+      
+      profileForm.value.phone = value;
+    };
+
     // Reference field error helper
     const refError = (index) => {
       const ref = profileForm.value.references[index];
@@ -772,7 +792,12 @@ export default {
       if (ref.name === '' && ref.phone === '') return '';
       // Show error only if one field is filled but the other is empty, or if format is invalid
       if (!ref.name || !ref.phone) return 'Name and contact required';
-      if (!/^[0-9+\-\s()@.]{7,30}$/.test(ref.phone)) return 'Invalid contact format';
+      // Check if it's an email or phone format
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
+      if (!emailPattern.test(ref.phone) && !phonePattern.test(ref.phone)) {
+        return 'Invalid contact format (use email or US phone format: (888) 321-9895)';
+      }
       return '';
     };
 
@@ -789,8 +814,11 @@ export default {
           error(`Reference #${i + 1} is incomplete. Please fill name and contact.`);
           return false;
         }
-        if (!/^[0-9+\-\s()@.]{7,30}$/.test(ref.phone)) {
-          error(`Reference #${i + 1} has an invalid contact format.`);
+        // Check if it's an email or phone format
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
+        if (!emailPattern.test(ref.phone) && !phonePattern.test(ref.phone)) {
+          error(`Reference #${i + 1} has an invalid contact format. Use email or US phone format: (888) 321-9895`);
           return false;
         }
       }
@@ -855,6 +883,7 @@ export default {
       licenseFileChange,
       badgeProofFileChange,
       getBadgeProofFileList,
+      formatPhoneNumber,
       refError,
       Delete,
       Document,
@@ -995,16 +1024,17 @@ export default {
 
 .el-input__wrapper {
   background: transparent !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
+  border: 1px solid #000000 !important;
   border-radius: 10px !important;
+  box-shadow: 0 0 0 1px #000 inset;
 }
 
 .el-input__wrapper:hover {
-  border-color: rgba(255,255,255,0.12) !important;
+  border-color: #333333 !important;
 }
 
 .el-input__wrapper.is-focus {
-  border-color: var(--accent) !important;
+  border-color: #000000 !important;
   box-shadow: var(--focus) !important;
 }
 
@@ -1016,23 +1046,23 @@ export default {
 .el-textarea__inner {
   color: var(--white) !important;
   background: transparent !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
+  border: 1px solid #000000 !important;
   border-radius: 10px !important;
 }
 
 .el-textarea__inner:focus {
-  border-color: var(--accent) !important;
+  border-color: #000000 !important;
   box-shadow: var(--focus) !important;
 }
 
 .el-select__wrapper {
   background: transparent !important;
-  border: 1px solid rgba(255,255,255,0.06) !important;
+  border: 1px solid #000000 !important;
   border-radius: 10px !important;
 }
 
 .el-select__wrapper.is-focused {
-  border-color: var(--accent) !important;
+  border-color: #000000 !important;
   box-shadow: var(--focus) !important;
 }
 
@@ -1275,15 +1305,15 @@ export default {
 /* Date Picker Styling */
 .el-date-editor.el-input {
   --el-input-bg-color: transparent !important;
-  --el-input-border-color: rgba(255,255,255,0.06) !important;
-  --el-input-focus-border-color: var(--accent) !important;
+  --el-input-border-color: #000000 !important;
+  --el-input-focus-border-color: #000000 !important;
 }
 
 /* Input Number Styling */
 .el-input-number {
   --el-input-bg-color: transparent !important;
-  --el-input-border-color: rgba(255,255,255,0.06) !important;
-  --el-input-focus-border-color: var(--accent) !important;
+  --el-input-border-color: #000000 !important;
+  --el-input-focus-border-color: #000000 !important;
 }
 
 /* Checkbox Styling */

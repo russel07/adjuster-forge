@@ -167,11 +167,14 @@
 
             .btn {
                 font-size: 16px;
-                font-weight: 400;
+                font-weight: 600;
                 text-decoration: none;
                 padding: 14px 32px;
                 display: inline-block;
                 white-space: nowrap;
+                border-radius: 12px;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
                 @media (max-width: 768px) {
                     font-size: 10px;
@@ -184,17 +187,19 @@
             }
 
             .btn-primary {
-
-                background-color: #2E6668;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: #fff;
                 border: none;
-                border-radius: 4px;
+                border-radius: 12px;
                 cursor: pointer;
-                transition: background-color 0.3s ease;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 
                 &:hover {
-                    background-color: #0a5f51;
-
+                    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+                    color: #fff;
                 }
 
                 &:disabled {
@@ -213,16 +218,20 @@
         margin-top: 20px;
 
         #load-more-jobs.btn-primary {
-            background-color: #2E6668;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            padding: 14px 28px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 
             &:hover {
-                background-color: #0a5f51;
-
+                background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
             }
 
             &:disabled {
