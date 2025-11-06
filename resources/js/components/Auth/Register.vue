@@ -37,6 +37,10 @@
         <el-input type="password" v-model="registerForm.password"></el-input>
       </el-form-item>
 
+      <el-form-item label="Confirm Password" prop="confirm_password">
+        <el-input type="password" v-model="registerForm.confirm_password"></el-input>
+      </el-form-item>
+
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="City" prop="city">
@@ -91,12 +95,23 @@ export default {
       last_name: '',
       email: '',
       password: '',
+      confirm_password: '',
       user_type: '',
       city: '',
       state: '',
       term_condition: '',
     });
     const registerFormRef = ref(null);
+    const validateConfirmPassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('Please confirm your password'));
+      } else if (value !== registerForm.value.password) {
+        callback(new Error('Passwords do not match'));
+      } else {
+        callback();
+      }
+    };
+
     const rules = {
       first_name: [{ required: true, message: 'Please enter your first name', trigger: 'blur' }],
       last_name: [{ required: true, message: 'Please enter your last name', trigger: 'blur' }],
@@ -104,7 +119,14 @@ export default {
         { required: true, message: 'Please enter your email address', trigger: 'blur' },
         { type: 'email', message: 'Please enter a valid email address', trigger: 'blur' },
       ],
-      password: [{ required: true, message: 'Please enter your password', trigger: 'blur' }],
+      password: [
+        { required: true, message: 'Please enter your password', trigger: 'blur' },
+        { min: 6, message: 'Password must be at least 6 characters long', trigger: 'blur' }
+      ],
+      confirm_password: [
+        { required: true, message: 'Please confirm your password', trigger: 'blur' },
+        { validator: validateConfirmPassword, trigger: 'blur' }
+      ],
       user_type: [{ required: true, message: 'Please select your user type', trigger: 'change' }],
       city: [{ required: true, message: 'Please enter your city', trigger: 'blur' }],
       state: [{ required: true, message: 'Please enter your state', trigger: 'blur' }],
