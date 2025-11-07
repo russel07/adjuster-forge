@@ -2,7 +2,7 @@
     margin-top: 20px;
 }
 
-.primary-button {
+.primary-button, .el-button--primary {
     color: #fff;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border: none;
@@ -47,39 +47,6 @@
         .el-input {
             border: none;
             margin-bottom: 16px;
-
-            .el-input__wrapper {
-                padding: 0;
-                box-shadow: none;
-                border-radius: 12px;
-
-                .el-input__inner {
-                    height: 52px;
-                    border: 0.5px solid #e4e7ed;
-                    border-radius: 12px;
-                    padding: 0 16px;
-                    font-size: 15px;
-                    color: #2c3e50;
-                    background: #ffffff;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
-                    &:focus {
-                        border-color: #667eea;
-                        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-                        outline: none;
-                    }
-
-                    &:hover {
-                        border-color: #a0a8b8;
-                    }
-
-                    &::placeholder {
-                        color: #8492a6;
-                        font-size: 14px;
-                    }
-                }
-            }
         }
 
         .el-select {
@@ -87,7 +54,7 @@
 
             .el-select__wrapper {
                 height: 52px;
-                border: 2px solid #e4e7ed;
+                border: 2px solid #656565;
                 border-radius: 12px;
                 background: #ffffff;
                 transition: all 0.3s ease;
@@ -477,7 +444,6 @@
 
 
 // Change Password
-
 .change-password {
     .el-form-item__error {
         color: #dc3545;
@@ -491,14 +457,9 @@
             margin-bottom: 14px;
 
             .el-input__wrapper {
-                padding: 0;
-
                 .el-input__inner {
-                    height: 50px;
-                    border: 0.5px solid #BFC4C8;
+                    height: 36px;
                     border-right-width: 0px;
-
-                    border-radius: 4px;
                     border-top-right-radius: 0px;
                     border-bottom-right-radius: 0px;
 
@@ -522,93 +483,6 @@
     }
 }
 
-/* Modern Form Element Styles */
-.el-form-item__label {
-    color: #2c3e50 !important;
-    font-size: 15px !important;
-    font-weight: 600 !important;
-    margin-bottom: 8px !important;
-}
-
-.el-button {
-    border-radius: 12px !important;
-    font-weight: 600 !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-}
-
-.el-button--primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    border: none !important;
-    color: #fff !important;
-
-    &:hover {
-        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
-    }
-}
-
-.el-textarea {
-    .el-textarea__inner {
-        border: 2px solid #e4e7ed !important;
-        border-radius: 12px !important;
-        padding: 16px !important;
-        font-size: 15px !important;
-        color: #2c3e50 !important;
-        background: #ffffff !important;
-        transition: all 0.3s ease !important;
-        box-shadow: none !important;
-
-        &:focus {
-            border-color: #667eea !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
-
-        &:hover {
-            border-color: #a0a8b8 !important;
-        }
-    }
-}
-
-.el-input-number {
-    .el-input__wrapper {
-        border: 0.5px solid #e4e7ed !important;
-        border-radius: 12px !important;
-        box-shadow: none !important;
-
-        &:hover {
-            border-color: #a0a8b8 !important;
-        }
-    }
-
-    .el-input-number__increase,
-    .el-input-number__decrease {
-        border: none !important;
-        background: #f8fafc !important;
-        color: #667eea !important;
-
-        &:hover {
-            background: #e2e8f0 !important;
-            color: #5a6fd8 !important;
-        }
-    }
-}
-
-.el-upload {
-    .el-upload-dragger {
-        border: 2px dashed #e4e7ed !important;
-        border-radius: 12px !important;
-        background: #f8fafc !important;
-        transition: all 0.3s ease !important;
-
-        &:hover {
-            border-color: #667eea !important;
-            background: #f0f4ff !important;
-        }
-    }
-}
 
 /* Modern Checkbox and Radio Styles */
 .el-checkbox__input.is-checked .el-checkbox__inner {
@@ -633,39 +507,6 @@
     border-color: #667eea !important;
 }
 
-/* Modern Date Picker Styles */
-.el-date-editor.el-input {
-    border: none !important;
-
-    .el-input__wrapper {
-        padding: 0 !important;
-        box-shadow: none !important;
-        border-radius: 12px !important;
-
-        .el-input__inner {
-            border: 0.5px solid #e4e7ed !important;
-            border-radius: 12px !important;
-            height: 52px !important;
-            padding: 0 16px !important;
-            font-size: 15px !important;
-            color: #2c3e50 !important;
-            background: #ffffff !important;
-            transition: all 0.3s ease !important;
-            box-shadow: none !important;
-
-            &:focus {
-                border-color: #667eea !important;
-                box-shadow: none !important;
-                outline: none !important;
-            }
-
-            &:hover {
-                border-color: #a0a8b8 !important;
-            }
-        }
-    }
-}
-
 /* Modern Alert Styles */
 .el-alert {
     border-radius: 12px !important;
@@ -686,6 +527,10 @@
 .el-alert--error {
     background-color: #fef2f2 !important;
     color: #dc2626 !important;
+}
+
+.el-tag .el-tag__close {
+    color: #ec0a0a !important;
 }
 
 /* Modern Card Styles */
@@ -710,13 +555,13 @@
     }
 }
 
-/* Adjuster Profile Form - Black Border Overrides & Component Styles */
+/* Adjuster Profile Form */
 .adjuster-application-container {
     /* CSS Variables for Dark Theme with Gold Accents */
     --bg: #031026;
     --card: #071329;
     --form: #ffffff;
-    --muted: #9fb0c8;
+    --muted: #252f3b;
     --accent: #d4af37;
     --accent-2: #b5892b;
     --white: #f7fbff;
@@ -735,96 +580,105 @@
     box-shadow: 0 4px 24px rgba(102,126,234,0.08);
     min-height: 100vh;
 
-    /* Input Field Black Border Overrides - High Specificity */
+    /* Override base input styles for dark theme */
     .el-input__wrapper {
-        background: transparent !important;
-        border: 0.5px solid #000000 !important;
-        border-radius: 10px !important;
+        height: 36px !important;
         box-shadow: none !important;
+        border: 0.5px solid #656565 !important;
+        background: #ffffff !important;
+        transition: all 0.3s ease !important;
 
         &:hover {
-            border-color: #333333 !important;
+            border-color: #a0a8b8 !important;
         }
 
         &.is-focus {
-            border-color: #000000 !important;
-            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+            height: 36px !important;
+            border-color: #667eea !important;
+            box-shadow: none !important;
+        }
+
+        &.is-focused {
+            height: 36px !important;
+            border-color: #656565 !important;
+            box-shadow: none !important;
         }
     }
 
     .el-input__inner {
-        color: var(--white) !important;
+        color: #656565 !important;
         background: transparent !important;
-    }
-
-    /* Textarea Black Border */
-    .el-textarea__inner {
-        color: var(--white) !important;
-        background: transparent !important;
-        border: 2px solid #000000 !important;
-        border-radius: 10px !important;
 
         &:focus {
-            border-color: #000000 !important;
-            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+            outline: none !important;
         }
-    }
-
-    /* Select Field Black Border */
-    .el-select__wrapper {
-        background: transparent !important;
-        border: 2px solid #000000 !important;
-        border-radius: 10px !important;
 
         &.is-focused {
-            border-color: #000000 !important;
-            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1) !important;
+            border-color: #656565 !important;
+            box-shadow: none !important;
+        }
+
+        &::placeholder {
+            color: #8492a6 !important;
+            font-size: 14px !important;
         }
     }
 
-    /* Input Number Black Border */
-    .el-input-number .el-input__wrapper {
+    /* Textarea Black Border Override */
+    .el-textarea__inner {
+        color: #565656 !important;
         background: transparent !important;
-        border: 0.5px solid #000000 !important;
-        border-radius: 10px !important;
+        box-shadow: none !important;
+        border: 0.5px solid #656565 !important;
 
-        &:hover {
-            border-color: #333333 !important;
+        &:focus {
+            border-color: #656565 !important;
         }
 
-        &.is-focus {
-            border-color: #000000 !important;
+        &.is-focused {
+            border-color: #656565 !important;
             box-shadow: none !important;
+        }
+
+        &::placeholder {
+            color: #8492a6 !important;
+            font-size: 14px !important;
         }
     }
 
-    /* Date Picker Black Border */
-    .el-date-editor .el-input__wrapper {
+    /* Select Field Override */
+    .el-select__wrapper {
+        height: 36px !important;
         background: transparent !important;
-        border: 0.5px solid #000000 !important;
-        border-radius: 10px !important;
+        border: 0.5px solid #656565 !important;
+        box-shadow: none !important;
 
-        &:hover {
-            border-color: #333333 !important;
+        &:focus {
+            border-color: #656565 !important;
         }
 
-        &.is-focus {
-            border-color: #000000 !important;
+        &.is-focused {
+            border-color: #656565 !important;
             box-shadow: none !important;
+        }
+
+        &::placeholder {
+            color: #8492a6 !important;
+            font-size: 14px !important;
         }
     }
 
     /* Element Plus Variable Overrides for Dark Theme */
     .el-date-editor.el-input {
         --el-input-bg-color: transparent !important;
-        --el-input-border-color: #000000 !important;
-        --el-input-focus-border-color: #000000 !important;
+        --el-input-border-color: #656565 !important;
+        --el-input-focus-border-color: #656565 !important;
     }
 
     .el-input-number {
         --el-input-bg-color: transparent !important;
-        --el-input-border-color: #000000 !important;
-        --el-input-focus-border-color: #000000 !important;
+        --el-input-border-color: #656565 !important;
+        --el-input-focus-border-color: #656565 !important;
     }
 
     .el-checkbox {
@@ -833,7 +687,14 @@
     }
 
     .el-checkbox__label {
-        color: var(--white) !important;
+        color: #1044d1 !important;
+    }
+
+    .el-select__selected-item {
+        .el-tag.el-tag--info {
+            background-color: #098af3 !important;
+            color: #ffffff !important;
+        }
     }
 
     /* Upload Styling with Black Borders */
@@ -847,7 +708,7 @@
         }
 
         .el-upload-dragger {
-            border: 2px dashed #000000 !important;
+            border: 2px dashed #656565 !important;
             border-radius: 8px !important;
             background: rgba(255,255,255,0.02) !important;
             width: 100% !important;
@@ -861,7 +722,7 @@
 
     .license-upload {
         width: 100%;
-        border: 2px dashed #000000 !important;
+        border: 2px dashed #656565 !important;
         border-radius: 8px;
         text-align: center;
         padding: 10px 0;
@@ -870,7 +731,7 @@
 
     /* Header Styling */
     .application-header {
-        background: linear-gradient(180deg, var(--card), rgba(7,19,41,0.9));
+        background: linear-gradient(180deg, #06436a, rgba(7,19,41,0.9));
         border-radius: var(--radius);
         padding: 22px;
         box-shadow: var(--shadow);
@@ -888,7 +749,7 @@
 
         p {
             margin: 6px 0 0;
-            color: var(--muted);
+            color: #ffffff;
             font-size: 13px;
         }
     }
@@ -936,9 +797,7 @@
 
     /* Form Content Grid */
     .profile-complete-form {
-        background: var(--form);
         border-radius: var(--radius);
-        box-shadow: var(--shadow);
         border: 1px solid rgba(255,255,255,0.03);
         max-width: 1100px;
         margin: 0 auto;
@@ -958,12 +817,6 @@
         }
     }
 
-    /* Element Plus Overrides */
-    .el-form-item__label {
-        color: var(--muted) !important;
-        font-size: 13px !important;
-    }
-
     /* Requirements Checklist */
     .requirements-checklist {
         margin-top: 12px;
@@ -973,7 +826,6 @@
         display: flex;
         gap: 10px;
         align-items: flex-start;
-        color: var(--muted);
         font-size: 14px;
         margin-bottom: 8px;
     }
@@ -1002,7 +854,6 @@
 
     .license-label {
         font-weight: 600;
-        color: var(--white);
         font-size: 14px;
     }
 
@@ -1030,7 +881,6 @@
 
     .preview-label {
         font-size: 13px;
-        color: var(--muted);
         margin-bottom: 8px;
     }
 
@@ -1061,7 +911,6 @@
 
     .badge-proof-label {
         font-weight: 600;
-        color: var(--white);
         font-size: 14px;
     }
 
@@ -1089,7 +938,6 @@
 
     .reference-label {
         font-weight: 600;
-        color: var(--white);
         font-size: 14px;
     }
 
@@ -1112,6 +960,7 @@
         gap: 16px;
         align-items: center;
         width: 100%;
+        margin-top: 20px;
     }
 
     /* Terms Link */

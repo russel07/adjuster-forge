@@ -84,16 +84,31 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="Experience Types" prop="experience_types">
-                                <el-select v-model="profileForm.experience_types" multiple placeholder="Select your experience types" style="width: 100%">
-                                    <el-option label="Contents" value="Contents" />
-                                    <el-option label="Auto" value="Auto" />
-                                    <el-option label="Property" value="Property" />
-                                    <el-option label="Large Loss" value="Large Loss" />
-                                    <el-option label="Commercial" value="Commercial" />
-                                    <el-option label="Worker Comp" value="Worker Comp" />
-                                    <el-option label="CAT" value="CAT" />
-                                    <el-option label="Desk Adjuster" value="Desk Adjuster" />
-                                    <el-option label="Field Adjuster" value="Field Adjuster" />
+                                <el-select 
+                                    v-model="profileForm.experience_types" 
+                                    multiple 
+                                    clearable
+                                    collapse-tags
+                                    placeholder="Select your experience types" 
+                                    popper-class="custom-header"
+                                    :max-collapse-tags="2"
+                                    style="width: 100%"
+                                >
+                                    <template #header>
+                                        <el-checkbox
+                                            v-model="experienceTypesCheckAll"
+                                            :indeterminate="experienceTypesIndeterminate"
+                                            @change="handleExperienceTypesCheckAll"
+                                        >
+                                            Select All
+                                        </el-checkbox>
+                                    </template>
+                                    <el-option 
+                                        v-for="type in experienceTypesOptions" 
+                                        :key="type.value"
+                                        :label="type.label" 
+                                        :value="type.value" 
+                                    />
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -379,7 +394,7 @@
                         </el-row>
                         <div v-if="refError(index)" class="field-error">{{ refError(index) }}</div>
                     </div>
-                    <el-button type="primary" @click="addReference" style="margin-top: 10px;">
+                    <el-button type="primary" @click="addReference" style="margin-top: 30px;">
                         + Add Reference
                     </el-button>
                 </el-form-item>
@@ -412,7 +427,7 @@
     </div>
 </template>
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Delete, Document, Picture, CircleCheck, CirclePlus } from '@element-plus/icons-vue';
 
 export default {
@@ -427,6 +442,24 @@ export default {
     const error = props.error;
     const t_c_page_url = props.t_c_page_url;
     const loading = props.loading;
+
+    // Experience Types Options
+    const experienceTypesOptions = ref([
+      { value: 'Contents', label: 'Contents' },
+      { value: 'File Reviewer', label: 'File Reviewer' },
+      { value: 'Auto', label: 'Auto' },
+      { value: 'Property', label: 'Property' },
+      { value: 'Large Loss', label: 'Large Loss' },
+      { value: 'Commercial', label: 'Commercial' },
+      { value: 'Worker Comp', label: 'Worker Comp' },
+      { value: 'CAT', label: 'CAT' },
+      { value: 'Desk Adjuster', label: 'Desk Adjuster' },
+      { value: 'Field Adjuster', label: 'Field Adjuster' },
+    ]);
+
+    // Select All functionality for Experience Types
+    const experienceTypesCheckAll = ref(false);
+    const experienceTypesIndeterminate = ref(false);
 
     const profileForm = ref({
       phone: '',
@@ -453,6 +486,30 @@ export default {
       ],
       declaration_agreed: false,
     });
+
+    // Watch for changes in experience_types to update select all state
+    watch(() => profileForm.value.experience_types, (val) => {
+      if (val.length === 0) {
+        experienceTypesCheckAll.value = false;
+        experienceTypesIndeterminate.value = false;
+      } else if (val.length === experienceTypesOptions.value.length) {
+        experienceTypesCheckAll.value = true;
+        experienceTypesIndeterminate.value = false;
+      } else {
+        experienceTypesIndeterminate.value = true;
+        experienceTypesCheckAll.value = false;
+      }
+    });
+
+    // Handle select all for experience types
+    const handleExperienceTypesCheckAll = (val) => {
+      experienceTypesIndeterminate.value = false;
+      if (val) {
+        profileForm.value.experience_types = experienceTypesOptions.value.map(type => type.value);
+      } else {
+        profileForm.value.experience_types = [];
+      }
+    };
 
     const availableBadges = [
       { id: 'xactimate', name: 'Xactimate Level 2+' },
@@ -864,6 +921,10 @@ export default {
       profileFormRef,
       rules,
       availableBadges,
+      experienceTypesOptions,
+      experienceTypesCheckAll,
+      experienceTypesIndeterminate,
+      handleExperienceTypesCheckAll,
       ResumeFileList,
       W9FileList,
       BackgroundCheckFileList,
@@ -898,3 +959,20 @@ export default {
   }
 };
 </script>
+
+<style>
+.custom-header {
+  .el-checkbox {
+    display: flex;
+    height: unset;
+    padding: 8px 12px;
+    border-bottom: 1px solid #e4e7ed;
+    margin: 0;
+  }
+  
+  .el-checkbox__label {
+    font-weight: 600;
+    color: #606266;
+  }
+}
+</style>
