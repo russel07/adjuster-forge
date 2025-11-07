@@ -257,45 +257,47 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="Carrier Experience" prop="carrier_experience">
-                                <el-select v-model="profileForm.carrier_experience" multiple placeholder="Select carriers">
-                                    <el-option label="State Farm" value="State Farm" />
-                                    <el-option label="Allstate" value="Allstate" />
-                                    <el-option label="Citizens" value="Citizens" />
-                                    <el-option label="Renfroe" value="Renfroe" />
-                                    <el-option label="Pilot" value="Pilot" />
-                                    <el-option label="Other" value="Other" />
+                                <el-select 
+                                    v-model="profileForm.carrier_experience" 
+                                    multiple 
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    :reserve-keyword="false"
+                                    placeholder="Search or add carriers"
+                                    style="width: 100%"
+                                >
+                                    <el-option 
+                                        v-for="carrier in carrierOptions" 
+                                        :key="carrier.value"
+                                        :label="carrier.label" 
+                                        :value="carrier.value" 
+                                    />
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="Employers / IA Firms" prop="employers_ia_firms">
-                                <el-input 
-                                    v-model="profileForm.employers_ia_firms" 
-                                    type="textarea" 
-                                    :rows="3"
-                                    placeholder="List prior firms, roles, and years"
-                                ></el-input>
-                            </el-form-item>
+                          <el-form-item label="Employers / IA Firms" prop="employers_ia_firms">
+                              <el-select 
+                                  v-model="profileForm.employers_ia_firms" 
+                                  multiple 
+                                  filterable
+                                  allow-create
+                                  default-first-option
+                                  :reserve-keyword="false"
+                                  placeholder="Search or add IA firms"
+                                  style="width: 100%"
+                              >
+                                  <el-option 
+                                      v-for="firm in iaFirmOptions" 
+                                      :key="firm.value"
+                                      :label="firm.label" 
+                                      :value="firm.value" 
+                                  />
+                              </el-select>
+                          </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-form-item label="Upload Work Samples (optional)" prop="work_samples">
-                        <el-upload
-                            class="upload-box"
-                            :on-change="workSamplesFileChange"
-                            :file-list="WorkSamplesFileList"
-                            :auto-upload="false"
-                            accept=".pdf,.jpg,.png,.zip"
-                            :limit="5"
-                            multiple
-                            drag
-                        >
-                            <el-icon><Document /></el-icon>
-                            <div>Click or drag work samples to upload</div>
-                            <template #tip>
-                                <div class="helper-text">Examples: photos, sample reports, Xactimate exports</div>
-                            </template>
-                        </el-upload>
-                    </el-form-item>
                 </div>
 
                 <el-divider content-position="left">Verification Documents</el-divider>
@@ -457,6 +459,34 @@ export default {
       { value: 'Field Adjuster', label: 'Field Adjuster' },
     ]);
 
+    // Carrier Options
+    const carrierOptions = ref([
+      { value: 'State Farm', label: 'State Farm' },
+      { value: 'Allstate', label: 'Allstate' },
+      { value: 'Progressive', label: 'Progressive' },
+      { value: 'Farmers', label: 'Farmers' },
+      { value: 'Geico', label: 'Geico' },
+      { value: 'Liberty Mutual', label: 'Liberty Mutual' },
+      { value: 'USAA', label: 'USAA' },
+      { value: 'Travelers', label: 'Travelers' },
+      { value: 'American Family Insurance', label: 'American Family Insurance' },
+      { value: 'Tower Hill', label: 'Tower Hill' },
+    ]);
+
+    const iaFirmOptions = ref([
+      { value: 'EA Renfroe', label: 'EA Renfroe' },
+      { value: 'Pilot', label: 'Pilot' },
+      { value: 'Crawford', label: 'Crawford' },
+      { value: 'Best IRS', label: 'Best IRS' },
+      { value: 'Vericlaim', label: 'Vericlaim' },
+      { value: 'Alacrity', label: 'Alacrity' },
+      { value: 'Eberl', label: 'Eberl' },
+      { value: 'QA Claims', label: 'QA Claims' },
+      { value: 'CNC Claims', label: 'CNC Claims' },
+      { value: 'Sedgwick', label: 'Sedgwick' },
+      { value: 'Hancock Claims', label: 'Hancock Claims' },
+    ]);
+
     // Select All functionality for Experience Types
     const experienceTypesCheckAll = ref(false);
     const experienceTypesIndeterminate = ref(false);
@@ -476,7 +506,6 @@ export default {
       badge_proofs: {},
       carrier_experience: '',
       employers_ia_firms: '',
-      work_samples: [],
       resume: '',
       w9: '',
       insurance_proof: '',
@@ -512,13 +541,16 @@ export default {
     };
 
     const availableBadges = [
-      { id: 'xactimate', name: 'Xactimate Level 2+' },
+      { id: 'xactimate1', name: 'Xactimate 1' },
+      { id: 'xactimate2', name: 'Xactimate Level 2+' },
       { id: 'haag', name: 'HAAG' },
       { id: 'nfip', name: 'NFIP' },
       { id: 'rope', name: 'Rope & Harness' },
       { id: 'drone', name: 'Drone Part 107' },
-      { id: 'multistate', name: 'Multi-State Licensed' },
       { id: 'flood', name: 'Flood Certified' },
+      { id: 'symbility', name: 'Symbility' },
+      { id: 'ccc_one', name: 'CCC One' },
+      { id: 'sf_certification', name: 'SF Certification' },
     ];
 
     const rules = {
@@ -720,7 +752,6 @@ export default {
         return false;
       }
       WorkSamplesFileList.value = uploadedFiles;
-      profileForm.value.work_samples = uploadedFiles.map(f => f.raw);
     };
 
     const badgeProofFileChange = (file, uploadedFiles, badgeId) => {
@@ -809,12 +840,7 @@ export default {
         });
         // Carrier & IA Experience
         formData.append('carrier_experience', profileForm.value.carrier_experience);
-        formData.append('employers_ia_firms', profileForm.value.employers_ia_firms);
-        // Work samples
-        profileForm.value.work_samples.forEach((file, idx) => {
-          formData.append(`work_sample_${idx}`, file);
-        });
-        
+        formData.append('employers_ia_firms', profileForm.value.employers_ia_firms);        
         // Documents
         formData.append('resume', profileForm.value.resume);
         formData.append('w9', profileForm.value.w9);
@@ -922,6 +948,8 @@ export default {
       rules,
       availableBadges,
       experienceTypesOptions,
+      carrierOptions,
+      iaFirmOptions,
       experienceTypesCheckAll,
       experienceTypesIndeterminate,
       handleExperienceTypesCheckAll,

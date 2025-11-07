@@ -817,6 +817,9 @@
         }
     }
 
+    input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type=reset], input[type=tel], input[type=date], select {
+        height: 33px;
+    }
     /* Requirements Checklist */
     .requirements-checklist {
         margin-top: 12px;
