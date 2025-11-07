@@ -161,7 +161,11 @@
                                   v-model="license.expiration" 
                                   type="date" 
                                   placeholder="Expiration date"
+                                  :disabled-date="disablePastDates"
                                   :required="idx < 2"
+                                  format="YYYY-MM-DD"
+                                  value-format="YYYY-MM-DD"
+                                  :clearable="false"
                                   style="width: 100%"
                               />
                           </el-col>
@@ -181,8 +185,9 @@
                           </el-upload>
                       </el-form-item>
                   </div>
-                  <el-button type="primary" @click="addLicense" style="margin-top: 10px;">
-                      + Add License
+                  <el-button type="primary" @click="addLicense" class="primary-button" style="margin-top: 10px;">
+                      <el-icon><CirclePlus /></el-icon>
+                      Add License
                   </el-button>
                 </div>
 
@@ -396,8 +401,9 @@
                         </el-row>
                         <div v-if="refError(index)" class="field-error">{{ refError(index) }}</div>
                     </div>
-                    <el-button type="primary" @click="addReference" style="margin-top: 30px;">
-                        + Add Reference
+                    <el-button type="primary" @click="addReference" class="primary-button" style="margin-top: 30px;">
+                        <el-icon><CirclePlus /></el-icon>
+                        Add Reference
                     </el-button>
                 </el-form-item>
 
@@ -868,6 +874,13 @@ export default {
       profileForm.value.phone = value;
     };
 
+    // Disable past dates for license expiration
+    const disablePastDates = (time) => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to start of today
+      return time.getTime() < today.getTime();
+    };
+
     // Reference field error helper
     const refError = (index) => {
       const ref = profileForm.value.references[index];
@@ -973,6 +986,7 @@ export default {
       badgeProofFileChange,
       getBadgeProofFileList,
       formatPhoneNumber,
+      disablePastDates,
       refError,
       Delete,
       Document,

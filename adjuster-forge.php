@@ -3,7 +3,7 @@ defined('ABSPATH') || exit; // Prevent direct access
 /**
  * Plugin Name:       Adjuster Forge
  * Description:       A simple plugin to manage adjusters and companies.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Requires at least: 5.2
  * Requires PHP:      7.4
  * Author:            Md. Russel Hussain
@@ -17,7 +17,7 @@ const ADJUSTER_FORGE_PLUGIN_ASSET_ID = 'adjuster-forge';
 const ADJUSTER_FORGE_PLUGIN_ASSET_VARS = 'adjuster_forge';
 
 // Define the plugin constant PLUGIN_VERSION if not already defined.
-defined('ADJUSTER_FORGE_VERSION') || define('ADJUSTER_FORGE_VERSION', '1.0.4');
+defined('ADJUSTER_FORGE_VERSION') || define('ADJUSTER_FORGE_VERSION', '1.0.5');
 
 // Define the plugin constant PLUGIN_PATH if not already defined.
 defined('ADJUSTER_FORGE_PLUGIN_PATH') || define('ADJUSTER_FORGE_PLUGIN_PATH', __FILE__);
