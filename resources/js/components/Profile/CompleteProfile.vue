@@ -80,6 +80,7 @@ export default {
       user_type,
       submitProfile,
       loading,
+      error
     };
   },
 };

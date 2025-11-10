@@ -390,13 +390,18 @@
                         </div>
                         <el-row :gutter="10">
                             <el-col :xs="24" :sm="8">
-                                <el-input v-model="ref.name" placeholder="Full name" />
+                              <el-input v-model="ref.name" placeholder="Full name" />
                             </el-col>
                             <el-col :xs="24" :sm="8">
-                                <el-input v-model="ref.phone" placeholder="Phone or email" />
+                              <el-input 
+                                v-model="ref.phone" 
+                                placeholder="(888) 321-9895"
+                                @input="(value) => formatReferencePhoneNumber(value, index)"
+                                maxlength="14"
+                            ></el-input>
                             </el-col>
                             <el-col :xs="24" :sm="8">
-                                <el-input v-model="ref.relationship" placeholder="E.g., Manager at Company X" />
+                              <el-input v-model="ref.relationship" placeholder="E.g., Manager at Company X" />
                             </el-col>
                         </el-row>
                         <div v-if="refError(index)" class="field-error">{{ refError(index) }}</div>
@@ -609,6 +614,20 @@ export default {
               const ref = value[i];
               if (!ref.name || !ref.phone) {
                 return callback(new Error(`Reference #${i + 1} is incomplete`));
+              }
+              
+              // Validate phone/email format
+              const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
+              
+              if (ref.phone.includes('@')) {
+                if (!emailPattern.test(ref.phone)) {
+                  return callback(new Error(`Reference #${i + 1} has an invalid email format`));
+                }
+              } else {
+                if (!phonePattern.test(ref.phone)) {
+                  return callback(new Error(`Reference #${i + 1} has an invalid phone format. Use US phone format: (888) 321-9895`));
+                }
               }
             }
             return callback();
@@ -874,6 +893,29 @@ export default {
       profileForm.value.phone = value;
     };
 
+    // Reference phone number formatting (supports both phone and email)
+    const formatReferencePhoneNumber = (value, index) => {
+      // Check if it looks like an email (contains @ symbol)
+      if (value.includes('@')) {
+        // If it's an email, don't format it
+        profileForm.value.references[index].phone = value;
+        return;
+      }
+      
+      // If it contains only numbers, format as phone
+      let numericValue = value.replace(/\D/g, ''); // Remove all non-digits
+      
+      if (numericValue.length >= 6) {
+        numericValue = `(${numericValue.slice(0, 3)}) ${numericValue.slice(3, 6)}-${numericValue.slice(6, 10)}`;
+      } else if (numericValue.length >= 3) {
+        numericValue = `(${numericValue.slice(0, 3)}) ${numericValue.slice(3)}`;
+      } else if (numericValue.length > 0) {
+        numericValue = `(${numericValue}`;
+      }
+      
+      profileForm.value.references[index].phone = numericValue.length > 0 ? numericValue : value;
+    };
+
     // Disable past dates for license expiration
     const disablePastDates = (time) => {
       const today = new Date();
@@ -891,8 +933,18 @@ export default {
       // Check if it's an email or phone format
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
-      if (!emailPattern.test(ref.phone) && !phonePattern.test(ref.phone)) {
-        return 'Invalid contact format (use email or US phone format: (888) 321-9895)';
+      const partialPhonePattern = /^\(\d{1,3}\)?[\s\d\-]*$/; // Allow partial phone formatting
+      
+      // If it contains @, treat as email
+      if (ref.phone.includes('@')) {
+        if (!emailPattern.test(ref.phone)) {
+          return 'Invalid email format';
+        }
+      } else {
+        // If it doesn't contain @, treat as phone
+        if (!phonePattern.test(ref.phone) && !partialPhonePattern.test(ref.phone)) {
+          return 'Invalid phone format. Use US phone format: (888) 321-9895';
+        }
       }
       return '';
     };
@@ -913,9 +965,19 @@ export default {
         // Check if it's an email or phone format
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
-        if (!emailPattern.test(ref.phone) && !phonePattern.test(ref.phone)) {
-          error(`Reference #${i + 1} has an invalid contact format. Use email or US phone format: (888) 321-9895`);
-          return false;
+        
+        // If it contains @, validate as email
+        if (ref.phone.includes('@')) {
+          if (!emailPattern.test(ref.phone)) {
+            error(`Reference #${i + 1} has an invalid email format.`);
+            return false;
+          }
+        } else {
+          // If it doesn't contain @, validate as phone
+          if (!phonePattern.test(ref.phone)) {
+            error(`Reference #${i + 1} has an invalid phone format. Use US phone format: (888) 321-9895`);
+            return false;
+          }
         }
       }
       return true;
@@ -986,6 +1048,7 @@ export default {
       badgeProofFileChange,
       getBadgeProofFileList,
       formatPhoneNumber,
+      formatReferencePhoneNumber,
       disablePastDates,
       refError,
       Delete,
