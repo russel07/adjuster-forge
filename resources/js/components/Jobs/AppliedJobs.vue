@@ -55,11 +55,11 @@
                                     size="large"
                                 >
                                     <el-option label="All Status" value="" />
+                                    <el-option label="Hired" value="hired" />
                                     <el-option label="Pending" value="pending" />
+                                    <el-option label="Rejected" value="rejected" />
                                     <el-option label="Reviewing" value="reviewing" />
                                     <el-option label="Shortlisted" value="shortlisted" />
-                                    <el-option label="Rejected" value="rejected" />
-                                    <el-option label="Hired" value="hired" />
                                 </el-select>
                             </div>
                         </div>

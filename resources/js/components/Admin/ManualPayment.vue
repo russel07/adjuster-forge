@@ -29,13 +29,13 @@
                         <el-option label="adjuster Yearly Fees" value="adjuster Yearly Fees"></el-option>
                       </template>
                       <template v-else-if="form.user_type === 'company'">
-                        <el-option label="Standard" value="Standard"></el-option>
                         <el-option label="Premium" value="Premium"></el-option>
+                        <el-option label="Standard" value="Standard"></el-option>
                       </template>
                       <template v-else>
                         <el-option label="Basic" value="Basic"></el-option>
-                        <el-option label="Premium" value="Premium"></el-option>
                         <el-option label="Company Premium" value="Company Premium"></el-option>
+                        <el-option label="Premium" value="Premium"></el-option>
                       </template>
                     </el-select>
                   </el-form-item>

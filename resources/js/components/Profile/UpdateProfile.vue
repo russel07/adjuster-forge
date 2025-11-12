@@ -69,8 +69,8 @@
                         <el-select v-model="form.availability" multiple placeholder="Select availability">
                           <el-option label="Available" value="available" />
                           <el-option label="Contractual" value="contractual" />
-                          <el-option label="Permanent" value="permanent" />
                           <el-option label="Not Available" value="not-available" />
+                          <el-option label="Permanent" value="permanent" />
                         </el-select>
                       </el-form-item>
                     </el-col>
@@ -85,15 +85,15 @@
                     <el-col :span="12">
                       <el-form-item label="Experience Types" prop="experience_types">
                         <el-select v-model="form.experience_types" multiple placeholder="Select your experience types" style="width: 100%">
-                          <el-option label="Contents" value="Contents" />
                           <el-option label="Auto" value="Auto" />
-                          <el-option label="Property" value="Property" />
-                          <el-option label="Large Loss" value="Large Loss" />
-                          <el-option label="Commercial" value="Commercial" />
-                          <el-option label="Worker Comp" value="Worker Comp" />
                           <el-option label="CAT" value="CAT" />
+                          <el-option label="Commercial" value="Commercial" />
+                          <el-option label="Contents" value="Contents" />
                           <el-option label="Desk Adjuster" value="Desk Adjuster" />
                           <el-option label="Field Adjuster" value="Field Adjuster" />
+                          <el-option label="Large Loss" value="Large Loss" />
+                          <el-option label="Property" value="Property" />
+                          <el-option label="Worker Comp" value="Worker Comp" />
                         </el-select>
                       </el-form-item>
                     </el-col>
@@ -178,12 +178,12 @@
                     <el-col :span="12">
                       <el-form-item label="Carrier Experience" prop="carrier_experience">
                         <el-select v-model="form.carrier_experience" multiple placeholder="Select carriers" style="width: 100%">
-                          <el-option label="State Farm" value="State Farm" />
                           <el-option label="Allstate" value="Allstate" />
                           <el-option label="Citizens" value="Citizens" />
-                          <el-option label="Renfroe" value="Renfroe" />
-                          <el-option label="Pilot" value="Pilot" />
                           <el-option label="Other" value="Other" />
+                          <el-option label="Pilot" value="Pilot" />
+                          <el-option label="Renfroe" value="Renfroe" />
+                          <el-option label="State Farm" value="State Farm" />
                         </el-select>
                       </el-form-item>
                     </el-col>
@@ -300,13 +300,13 @@ export default {
     
     // Available badges for adjusters
     const availableBadges = [
-      { id: 'xactimate', name: 'Xactimate Level 2+' },
+      { id: 'drone', name: 'Drone Part 107' },
+      { id: 'flood', name: 'Flood Certified' },
       { id: 'haag', name: 'HAAG' },
+      { id: 'multistate', name: 'Multi-State Licensed' },
       { id: 'nfip', name: 'NFIP' },
       { id: 'rope', name: 'Rope & Harness' },
-      { id: 'drone', name: 'Drone Part 107' },
-      { id: 'multistate', name: 'Multi-State Licensed' },
-      { id: 'flood', name: 'Flood Certified' },
+      { id: 'xactimate', name: 'Xactimate Level 2+' },
     ];
     const form = ref({
       first_name: '',

@@ -51,8 +51,8 @@
                             <el-select v-model="profileForm.availability" multiple placeholder="Select availability">
                                 <el-option label="Available" value="available" />
                                 <el-option label="Contractual" value="contractual" />
-                                <el-option label="Permanent" value="permanent" />
                                 <el-option label="Not Available" value="not-available" />
+                                <el-option label="Permanent" value="permanent" />
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -89,7 +89,11 @@
                                     multiple 
                                     clearable
                                     collapse-tags
-                                    placeholder="Select your experience types" 
+                                    filterable
+                                    allow-create
+                                    default-first-option
+                                    :reserve-keyword="false"
+                                    placeholder="Search or add experience types" 
                                     popper-class="custom-header"
                                     :max-collapse-tags="2"
                                     style="width: 100%"
@@ -135,7 +139,7 @@
                           <span>Minimum <strong>2 High Demand State licenses</strong> required (TX, FL, LA, CA, NY recommended)</span>
                       </div>
                   </div>
-                  <div v-for="(license, idx) in profileForm.licenses" :key="idx" class="license-entry">
+                  <div v-for="(license, idx) in profileForm.licenses" :key="license.id" class="license-entry">
                       <div class="license-header">
                           <span class="license-label">License {{ idx + 1 }}</span>
                           <el-tooltip v-if="idx > 1" content="Remove License" placement="top">
@@ -144,13 +148,19 @@
                       </div>
                       <el-row :gutter="10">
                           <el-col :span="8">
-                              <el-select v-model="license.state" placeholder="State" :required="idx < 2">
-                                  <el-option label="TX" value="TX" />
-                                  <el-option label="FL" value="FL" />
-                                  <el-option label="LA" value="LA" />
-                                  <el-option label="CA" value="CA" />
-                                  <el-option label="NY" value="NY" />
-                                  <el-option label="Other" value="Other" />
+                              <el-select 
+                                  v-model="license.state" 
+                                  placeholder="State" 
+                                  :required="idx < 2" 
+                                  clearable
+                                  style="width: 100%"
+                              >
+                                  <el-option 
+                                      v-for="state in stateOptions" 
+                                      :key="state.value"
+                                      :label="state.label" 
+                                      :value="state.value" 
+                                  />
                               </el-select>
                           </el-col>
                           <el-col :span="8">
@@ -440,7 +450,7 @@
     </div>
 </template>
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { Delete, Document, Picture, CircleCheck, CirclePlus } from '@element-plus/icons-vue';
 
 export default {
@@ -456,47 +466,78 @@ export default {
     const t_c_page_url = props.t_c_page_url;
     const loading = props.loading;
 
-    // Experience Types Options
-    const experienceTypesOptions = ref([
-      { value: 'Contents', label: 'Contents' },
-      { value: 'File Reviewer', label: 'File Reviewer' },
-      { value: 'Auto', label: 'Auto' },
+    // Experience Types Options - Base data (unsorted)
+    const experienceTypesData = [
       { value: 'Property', label: 'Property' },
-      { value: 'Large Loss', label: 'Large Loss' },
-      { value: 'Commercial', label: 'Commercial' },
+      { value: 'Auto', label: 'Auto' },
       { value: 'Worker Comp', label: 'Worker Comp' },
+      { value: 'Commercial', label: 'Commercial' },
+      { value: 'Contents', label: 'Contents' },
       { value: 'CAT', label: 'CAT' },
-      { value: 'Desk Adjuster', label: 'Desk Adjuster' },
+      { value: 'Large Loss', label: 'Large Loss' },
       { value: 'Field Adjuster', label: 'Field Adjuster' },
-    ]);
+      { value: 'Desk Adjuster', label: 'Desk Adjuster' },
+      { value: 'File Reviewer', label: 'File Reviewer' },
+    ];
 
-    // Carrier Options
-    const carrierOptions = ref([
+    // Computed property that returns experience types sorted alphabetically
+    const experienceTypesOptions = computed(() => {
+      return [...experienceTypesData].sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+    // Carrier Options - Base data (unsorted)
+    const carrierOptionsData = [
       { value: 'State Farm', label: 'State Farm' },
-      { value: 'Allstate', label: 'Allstate' },
-      { value: 'Progressive', label: 'Progressive' },
-      { value: 'Farmers', label: 'Farmers' },
-      { value: 'Geico', label: 'Geico' },
-      { value: 'Liberty Mutual', label: 'Liberty Mutual' },
       { value: 'USAA', label: 'USAA' },
+      { value: 'Progressive', label: 'Progressive' },
+      { value: 'Geico', label: 'Geico' },
       { value: 'Travelers', label: 'Travelers' },
-      { value: 'American Family Insurance', label: 'American Family Insurance' },
+      { value: 'Allstate', label: 'Allstate' },
       { value: 'Tower Hill', label: 'Tower Hill' },
-    ]);
+      { value: 'American Family Insurance', label: 'American Family Insurance' },
+      { value: 'Farmers', label: 'Farmers' },
+      { value: 'Liberty Mutual', label: 'Liberty Mutual' },
+    ];
 
-    const iaFirmOptions = ref([
-      { value: 'EA Renfroe', label: 'EA Renfroe' },
+    // Computed property that returns carriers sorted alphabetically
+    const carrierOptions = computed(() => {
+      return [...carrierOptionsData].sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+    // IA Firm Options - Base data (unsorted)
+    const iaFirmOptionsData = [
       { value: 'Pilot', label: 'Pilot' },
-      { value: 'Crawford', label: 'Crawford' },
-      { value: 'Best IRS', label: 'Best IRS' },
-      { value: 'Vericlaim', label: 'Vericlaim' },
-      { value: 'Alacrity', label: 'Alacrity' },
-      { value: 'Eberl', label: 'Eberl' },
-      { value: 'QA Claims', label: 'QA Claims' },
-      { value: 'CNC Claims', label: 'CNC Claims' },
       { value: 'Sedgwick', label: 'Sedgwick' },
+      { value: 'Crawford', label: 'Crawford' },
+      { value: 'EA Renfroe', label: 'EA Renfroe' },
+      { value: 'Vericlaim', label: 'Vericlaim' },
+      { value: 'QA Claims', label: 'QA Claims' },
+      { value: 'Alacrity', label: 'Alacrity' },
+      { value: 'Best IRS', label: 'Best IRS' },
+      { value: 'Eberl', label: 'Eberl' },
+      { value: 'CNC Claims', label: 'CNC Claims' },
       { value: 'Hancock Claims', label: 'Hancock Claims' },
-    ]);
+    ];
+
+    // Computed property that returns IA firms sorted alphabetically
+    const iaFirmOptions = computed(() => {
+      return [...iaFirmOptionsData].sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+    // State Options - Base data (unsorted) 
+    const stateOptionsData = [
+      { value: 'TX', label: 'TX' },
+      { value: 'FL', label: 'FL' },
+      { value: 'CA', label: 'CA' },
+      { value: 'NY', label: 'NY' },
+      { value: 'LA', label: 'LA' },
+      { value: 'Other', label: 'Other' },
+    ];
+
+    // Computed property that returns states sorted alphabetically
+    const stateOptions = computed(() => {
+      return [...stateOptionsData].sort((a, b) => a.label.localeCompare(b.label));
+    });
 
     // Select All functionality for Experience Types
     const experienceTypesCheckAll = ref(false);
@@ -510,13 +551,13 @@ export default {
       experience_types: [],
       bio: '',
       licenses: [
-        { state: '', number: '', expiration: '', file: null, fileList: [] },
-        { state: '', number: '', expiration: '', file: null, fileList: [] }
+        { id: 1, state: '', number: '', expiration: '', file: null, fileList: [] },
+        { id: 2, state: '', number: '', expiration: '', file: null, fileList: [] }
       ],
       badges: [], 
       badge_proofs: {},
-      carrier_experience: '',
-      employers_ia_firms: '',
+      carrier_experience: [],
+      employers_ia_firms: [],
       resume: '',
       w9: '',
       insurance_proof: '',
@@ -551,18 +592,24 @@ export default {
       }
     };
 
-    const availableBadges = [
-      { id: 'xactimate1', name: 'Xactimate 1' },
+    // Available Badges - Base data (unsorted)
+    const availableBadgesData = [
       { id: 'xactimate2', name: 'Xactimate Level 2+' },
       { id: 'haag', name: 'HAAG' },
+      { id: 'symbility', name: 'Symbility' },
       { id: 'nfip', name: 'NFIP' },
       { id: 'rope', name: 'Rope & Harness' },
       { id: 'drone', name: 'Drone Part 107' },
       { id: 'flood', name: 'Flood Certified' },
-      { id: 'symbility', name: 'Symbility' },
+      { id: 'xactimate1', name: 'Xactimate 1' },
       { id: 'ccc_one', name: 'CCC One' },
       { id: 'sf_certification', name: 'SF Certification' },
     ];
+
+    // Computed property that returns badges sorted alphabetically
+    const availableBadges = computed(() => {
+      return [...availableBadgesData].sort((a, b) => a.name.localeCompare(b.name));
+    });
 
     const rules = {
       phone: [
@@ -668,7 +715,8 @@ export default {
 
     // License methods
     const addLicense = () => {
-      profileForm.value.licenses.push({ state: '', number: '', expiration: '', file: null, fileList: [] });
+      const newId = Math.max(...profileForm.value.licenses.map(l => l.id)) + 1;
+      profileForm.value.licenses.push({ id: newId, state: '', number: '', expiration: '', file: null, fileList: [] });
     };
 
     const removeLicense = (idx) => {
@@ -1025,6 +1073,7 @@ export default {
       experienceTypesOptions,
       carrierOptions,
       iaFirmOptions,
+      stateOptions,
       experienceTypesCheckAll,
       experienceTypesIndeterminate,
       handleExperienceTypesCheckAll,
