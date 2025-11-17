@@ -99,7 +99,7 @@
                 <p style="margin: 28px 0 18px 0;"><a href="<?php echo esc_url($dashboard_url); ?>" style="background: #2E6668; color: #fff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">Get Started: Login to Your Dashboard</a></p>
                 <p>Thank you for joining the platform built to bring confidence, speed, and reliability back to the adjusting industry.</p>
                 <div class="support-info">
-                    <p><strong>Need help?</strong> If you have any questions, reply to this email or contact support at <a href="mailto:support@adjustersondemand.com" style="color: #2E6668;">support@adjustersondemand.com</a>.</p>
+                    <p><strong>Need help?</strong> If you have any questions, reply to this email or contact support at <a href="mailto:solutions@adjustersondemand.com" style="color: #2E6668;">solutions@adjustersondemand.com</a>.</p>
                 </div>
             </td>
         </tr>
